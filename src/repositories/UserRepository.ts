@@ -23,13 +23,14 @@ export class UserRepository implements IUserRepositoryInterface {
   async findByEmail(email: string): Promise<ResponseHttp> {
     return new  Promise((resolve, reject) => {
       const query = `SELECT * FROM users WHERE email = ?`
-      this.db.get(query, [email], (err, rows: any) => {
+      this.db.all(query, [email], (err, rows: any) => {
         if (err) {
           reject(err)
         }
         else {
           if(rows)
           {
+            console.log(rows)
             if(rows.lenght == 1)
               {
                 const user: User = {
@@ -56,7 +57,7 @@ export class UserRepository implements IUserRepositoryInterface {
           }
           else
           {
-            reject(new Error("User not found"))
+            reject(new Error("Erro no UserRepository.ts"))
           }
         }
       })
@@ -73,6 +74,7 @@ export class UserRepository implements IUserRepositoryInterface {
         //const userFinded = findByEmailResponse.body
         // Criando um hash seguro da senha
           const hashedPassword = await hashPassword(user.password);
+          console.log('chegou até aqui')
          /*  user = {
             id: uuidv4(),
             password: hashedPassword
