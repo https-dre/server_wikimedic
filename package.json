@@ -1,11 +1,11 @@
-{
-  "name": "server_wikimedic",
+{}
+  "name": "server",
   "version": "1.0.0",
   "description": "Http Server Wikimedic",
   "main": "Server.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "ts-node ./Server.ts"
+    "dev": "ts-node ./Server.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "André de Oliveira Dias",
   "license": "ISC",
