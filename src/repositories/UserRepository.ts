@@ -28,7 +28,7 @@ export class UserRepository implements IUserRepositoryInterface {
           reject(err)
         }
         else {
-          if (rows) {
+          if (rows.length > 0) {
             console.log(rows)
             if (rows.length == 1) {
               const user: User = {
@@ -43,11 +43,11 @@ export class UserRepository implements IUserRepositoryInterface {
               resolve(user)
             }
             else {
-              resolve({})
+              
             }
           }
           else {
-            reject(new Error("Erro no UserRepository.ts"))
+            resolve({})
           }
         }
       })
