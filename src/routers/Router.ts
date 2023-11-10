@@ -1,4 +1,4 @@
-import express from "express"
+import express, { response } from "express"
 
 import Controller from "../controllers/Controller"
 import { UserController } from "../controllers/UserController"
@@ -18,12 +18,21 @@ Router.post('/sign', async (req,res) => {
   const userController = new UserController(userRepository)
   
   try {
-    const response = await userController.postUser(req)
-    res.status(response.status).json(response.body)
+    const responseController =  await userController.postUser(req)
+    if(!responseController.body) // se o usuário for cadastrado, o body não será falso
+    {
+      res.status(400).json({message:"Usuário já existe"})
+    }
+    else if(responseController.body)
+    {
+      res.status(responseController.status).json(responseController.body)
+    }
+    
   }
   catch (err)
   {
     res.status(500).json({message: "Erro interno no servidor"})
+    throw err
   }
 })
 

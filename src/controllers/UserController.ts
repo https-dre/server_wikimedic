@@ -1,11 +1,14 @@
 import { UserRepository } from "../repositories/UserRepository"
 import { User } from "../models/User"
-import { Request, Response } from "express"
+import { Request, Response, response } from "express"
 
 import { IResponseHttp as ResponseHttp } from "../models/ResponseHttp"
+import { ParamsDictionary } from "express-serve-static-core";
+import { ParsedQs } from "qs";
 
 interface IUserController {
   postUser(req: Request, res: Response): Promise<ResponseHttp>;
+  //deleteUser(req: Request): Promise<ResponseHttp>;
 }
 
 export class UserController implements IUserController {
@@ -29,12 +32,23 @@ export class UserController implements IUserController {
     }
 
     try {
-      const userCreated = await this.userRepository.postUser(user)
-      const response: ResponseHttp = {
-        body: userCreated,
-        status: 201
+      const userFinded = this.userRepository.findByEmail(user.email)
+      if(!userFinded)
+      {
+        const userCreated = await this.userRepository.postUser(user)
+        const response: ResponseHttp = {
+          body: userCreated,
+          status: 201
+        }
+        return response
       }
-      return response
+      else {
+        const response : ResponseHttp = {
+          body: {},
+          status: 404
+        }
+        return response
+      }
     }
     catch (err)
     {
@@ -42,4 +56,30 @@ export class UserController implements IUserController {
       throw err
     }
   }
+  /* async deleteUser(req: Request) {
+    try {
+      const user = req.body
+      const userFinded = this.userRepository.findByEmail(user.email)
+      if(!userFinded)
+      {
+        const response : ResponseHttp = {
+          status: 400,
+          body: {message: "User Not Found"}
+        }
+        return response
+      }
+      else
+      {
+        //this.userRepository.deleteUser();
+        
+      }
+    }
+
+    
+  }
+  catch (err)
+  {
+    throw err
+  } */
+
 }
