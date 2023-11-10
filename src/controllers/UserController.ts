@@ -15,15 +15,14 @@ export class UserController implements IUserController {
 
   userRepository: UserRepository;
 
-  constructor(iuser : UserRepository)
-  {
+  constructor(iuser: UserRepository) {
     this.userRepository = iuser
     //this.postUser = this.postUser.bind(this);
     //console.log('UserController initialized')
   }
 
-  async postUser(req : Request, res: Response) {
-    const user : User = {
+  async postUser(req: Request, res: Response) {
+    const user: User = {
       id: "",
       name: req.body.name,
       email: req.body.email,
@@ -32,8 +31,9 @@ export class UserController implements IUserController {
     }
 
     try {
+      //valida se o email já existe
       const userFinded = this.userRepository.findByEmail(user.email)
-      if(!userFinded)
+      if (Object.keys(userFinded).length === 0) //se a pesquisa retornar um objeto vazio, não existe usuário com mesmo email
       {
         const userCreated = await this.userRepository.postUser(user)
         const response: ResponseHttp = {
@@ -43,17 +43,16 @@ export class UserController implements IUserController {
         res.status(response.status).json(response.body)
       }
       else {
-        const response : ResponseHttp = {
-          body: {message: "O usuário já existe"},
+        const response: ResponseHttp = {
+          body: { message: "O usuário já existe" },
           status: 404
         }
         res.status(response.status).json(response.body)
       }
     }
-    catch (err)
-    {
+    catch (err) {
       console.log(err)
-      res.status(500).json({message: "Erro interno o Servidor"})
+      res.status(500).json({ message: "Erro interno o Servidor" })
       throw err
     }
   }

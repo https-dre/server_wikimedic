@@ -6,7 +6,7 @@ import { IResponseHttp as ResponseHttp } from "../models/ResponseHttp"
 
 
 interface IUserRepositoryInterface {
-  postUser(user: User): Promise<any>;
+  postUser(user: User): Promise<User>;
   findByEmail(email: string): Promise<any>;
 }
 
@@ -28,23 +28,19 @@ export class UserRepository implements IUserRepositoryInterface {
           reject(err)
         }
         else {
+          console.log("emails: " + rows)
           if (rows.length > 0) {
             console.log(rows)
-            if (rows.length == 1) {
-              const user: User = {
-                id: rows[0].id,
-                name: rows[0].name,
-                email: rows[0].email,
-                email_reserva: rows[0].email_reserva,
-                password: rows[0].password
-              }
 
+            const user: User = {
+              id: rows[0].id,
+              name: rows[0].name,
+              email: rows[0].email,
+              email_reserva: rows[0].email_reserva,
+              password: rows[0].password
+            }
 
-              resolve(user)
-            }
-            else {
-              
-            }
+            resolve(user)
           }
           else {
             resolve({})
