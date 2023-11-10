@@ -4,7 +4,8 @@
   "description": "",
   "main": "Server.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "ts-node ./Server.ts"
   },
   "author": "André de Oliveira Dias",
   "license": "ISC",
