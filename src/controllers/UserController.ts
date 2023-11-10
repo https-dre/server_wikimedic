@@ -32,8 +32,8 @@ export class UserController implements IUserController {
 
     try {
       //valida se o email já existe
-      const userFinded = this.userRepository.findByEmail(user.email)
-      if (Object.keys(userFinded).length === 0) //se a pesquisa retornar um objeto vazio, não existe usuário com mesmo email
+      const users = await this.userRepository.findByEmail(user.email)
+      if (users.length == 0) //se a pesquisa retornar um array vazio, não existe usuário com mesmo email
       {
         const userCreated = await this.userRepository.postUser(user)
         const response: ResponseHttp = {
@@ -44,7 +44,7 @@ export class UserController implements IUserController {
       }
       else {
         const response: ResponseHttp = {
-          body: { message: "O usuário já existe" },
+          body: { message: "O email já existe" },
           status: 404
         }
         res.status(response.status).json(response.body)

@@ -6,7 +6,7 @@ import { IResponseHttp as ResponseHttp } from "../models/ResponseHttp"
 
 
 interface IUserRepositoryInterface {
-  postUser(user: User): Promise<User>;
+  postUser(user: User): Promise<User[]>;
   findByEmail(email: string): Promise<any>;
 }
 
@@ -20,7 +20,7 @@ export class UserRepository implements IUserRepositoryInterface {
     //console.log("IUserRepository initialized")
   }
 
-  async findByEmail(email: string): Promise<any> {
+  async findByEmail(email: string): Promise<User[]> {
     return new Promise((resolve, reject) => {
       const query = `SELECT * FROM users WHERE email = ?`
       this.db.all(query, [email], (err, rows: any) => {
@@ -28,22 +28,13 @@ export class UserRepository implements IUserRepositoryInterface {
           reject(err)
         }
         else {
-          console.log("emails: " + rows)
+          //console.log("emails: " + rows)
           if (rows.length > 0) {
-            console.log(rows)
-
-            const user: User = {
-              id: rows[0].id,
-              name: rows[0].name,
-              email: rows[0].email,
-              email_reserva: rows[0].email_reserva,
-              password: rows[0].password
-            }
-
-            resolve(user)
+            //console.log(rows)
+            resolve(rows)
           }
           else {
-            resolve({})
+            resolve([])
           }
         }
       })

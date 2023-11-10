@@ -16,6 +16,7 @@ Router.post('/sign', async (req,res) => {
   const userRepository = new UserRepository('./src/data/database.db')
 
   const userController = new UserController(userRepository)
+  userController.postUser(req, res)
 })
 
 
