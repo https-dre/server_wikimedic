@@ -13,7 +13,7 @@ Router.get('/', (__req, res)=>{
 Router.get('/getAllUsers', Controller.getAllUsers)
 
 Router.post('/sign', async (req,res) => {
-  const userRepository = new UserRepository('./src/data/data.db')
+  const userRepository = new UserRepository('./src/data/database.db')
 
   const userController = new UserController(userRepository)
   
