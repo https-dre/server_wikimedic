@@ -1,6 +1,6 @@
 import sqlite3 from "sqlite3"
 
-const db = new sqlite3.Database('src/data/data.db')
+const db = new sqlite3.Database('src/data/database.db')
 
 const query = `
   CREATE TABLE favoritos (
@@ -12,10 +12,11 @@ const query = `
   );
 `
 
-const delet = `
-  DELETE FROM users WHERE email = "diaso.andre@outlook.com"
-`
+
+
 // FK notation: FOREIGN KEY(trackartist) REFERENCES artist(artistid)
-db.run(delet)
+//db.run()
+
+
 
 export default db
