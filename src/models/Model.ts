@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from 'uuid';
 import hashPassword from "../crypt/crypt"
 
 const getAllUsers = async () => {
-  const db = new Database('./src/data/data.db');
+  const db = new Database('./src/data/database.db');
   const query = "SELECT * FROM users";
 
   return new Promise((resolve, reject) => {
