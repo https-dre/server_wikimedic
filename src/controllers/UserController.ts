@@ -58,7 +58,7 @@ export class UserController implements IUserController {
   }
   async deleteUser(req : Request, res : Response): Promise<void> {
       try {
-        const {id} = req.body
+        const id = req.params.id
         const userFinded = await this.userRepository.findById(id)
         if(!userFinded)
         {
