@@ -7,6 +7,7 @@ import { IResponseHttp as ResponseHttp } from "../models/ResponseHttp"
 
 interface IUserRepositoryInterface {
   postUser(user: User): Promise<User>;
+  deleteUser(id : string) : Promise<User>;
   findByEmail(email: string): Promise<any>;
   findById(id  : string):Promise<User[]>
 }
@@ -42,7 +43,7 @@ export class UserRepository implements IUserRepositoryInterface {
     })
   }
 
-  async postUser(user: User): Promise<any> {
+  async postUser(user: User): Promise<User> {
     try {
       //const userFinded = findByEmailResponse.body
       // Criando um hash seguro da senha
@@ -74,6 +75,40 @@ export class UserRepository implements IUserRepositoryInterface {
       throw err;
     }
   }
+  async deleteUser(id: string): Promise<User> {
+      try {
+        let userR : User
+        return new Promise((resolve, reject)=>{
+            const query = "SELECT * FROM users WHERE id = ?"
+            this.db.get(query, [id], (err, row: any) => {
+            if (err) {
+              reject(err)
+            }
+            else {
+              if (row) {
+                userR  =  {
+                  id: row.id,
+                  name: row.name,
+                  email: row.email,
+                  email_reserva: row.email_reserva,
+                  password: row.password
+                }
+              }
+            }
+          })
+
+          this.db.serialize(()=>{
+            const query = `DELETE FROM users WHERE id = ${id}`
+            this.db.run(query);
+          })
+          resolve(userR)
+        })
+      }
+      catch (err)
+      {
+        throw err
+      }
+  }
 
   async findById(id: string): Promise<User[]> {
     return new Promise((resolve, reject) => {
@@ -95,7 +130,4 @@ export class UserRepository implements IUserRepositoryInterface {
       })
     })
   }
-
-
-
 }
