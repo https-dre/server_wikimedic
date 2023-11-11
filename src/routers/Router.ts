@@ -31,6 +31,8 @@ Router.delete('/users/delete:id', async (req, res)=>{
   userController.deleteUser(req, res)
 })
 
+Router.post('/comments/register')
+
 
 
 export default Router
