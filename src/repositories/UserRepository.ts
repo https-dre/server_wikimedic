@@ -6,8 +6,9 @@ import { IResponseHttp as ResponseHttp } from "../models/ResponseHttp"
 
 
 interface IUserRepositoryInterface {
-  postUser(user: User): Promise<User[]>;
+  postUser(user: User): Promise<User>;
   findByEmail(email: string): Promise<any>;
+  findById(id  : string):Promise<User[]>
 }
 
 
@@ -72,6 +73,27 @@ export class UserRepository implements IUserRepositoryInterface {
       console.log(err);
       throw err;
     }
+  }
+
+  async findById(id: string): Promise<User[]> {
+    return new Promise((resolve, reject) => {
+      const query = `SELECT * FROM users WHERE id = ?`
+      this.db.all(query, [id], (err, rows: any) => {
+        if (err) {
+          reject(err)
+        }
+        else {
+          //console.log("emails: " + rows)
+          if (rows.length > 0) {
+            //console.log(rows)
+            resolve(rows)
+          }
+          else {
+            resolve([])
+          }
+        }
+      })
+    })
   }
 
 
