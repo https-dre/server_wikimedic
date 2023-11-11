@@ -3,6 +3,7 @@ import express, { response } from "express"
 import Controller from "../controllers/Controller"
 import { UserController } from "../controllers/UserController"
 import { UserRepository } from "../repositories/UserRepository"
+import { Autentication } from "../filters/Autentication"
 
 const Router = express.Router()
 
@@ -10,15 +11,21 @@ Router.get('/', (__req, res)=>{
   res.send("<h1>httpServer to Wikimedic</h1>")
 })
 
-Router.get('/getAllUsers', Controller.getAllUsers)
+Router.get('/users', Controller.getAllUsers)
 
-Router.post('/sign', async (req,res) => {
+Router.get('/users/login', Autentication.AuthUser, (req, res)=>{
+  //console.log('Usuário autenticado')
+  res.status(200).json({message: "Usuário Autenticado"})
+})
+
+Router.post('/users/register', async (req,res) => {
   const userRepository = new UserRepository('./src/data/database.db')
 
   const userController = new UserController(userRepository)
   userController.postUser(req, res)
 })
-Router.delete('/users/delete/:id', async (req, res)=>{
+
+Router.delete('/users/delete:id', async (req, res)=>{
   const userRepository = new UserRepository('./src/data/database.db')
   const userController = new UserController(userRepository)
   userController.deleteUser(req, res)

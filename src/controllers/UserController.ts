@@ -45,7 +45,7 @@ export class UserController implements IUserController {
       else {
         const response: ResponseHttp = {
           body: { message: "O email já existe" },
-          status: 404
+          status: 401
         }
         res.status(response.status).json(response.body)
       }
