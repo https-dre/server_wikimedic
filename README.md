@@ -1,3 +1,3 @@
-# server_wikimedic
+# Http Server to Wikimedic
 
-Servidor Http que servirá a wikimedic
+Servidor Http que servirá a Wikimedic
