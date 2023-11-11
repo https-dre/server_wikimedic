@@ -46,7 +46,7 @@ export class UserRepository implements IUserRepositoryInterface {
       //const userFinded = findByEmailResponse.body
       // Criando um hash seguro da senha
       const hashedPassword = await hashPassword(user.password);
-      console.log('Senha criptografada: ', hashedPassword)
+      //console.log('Senha criptografada: ', hashedPassword)
       /*  user = {
          id: uuidv4(),
          password: hashedPassword

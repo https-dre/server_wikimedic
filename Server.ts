@@ -19,5 +19,5 @@ app.use(Router)
 //https://serverwikimedic.andredias52.repl.co/
 
 httpServer.listen(port || 3030, ()=>{
-  console.log("httpServer listening https://serverwikimedic.andredias52.repl.co/ in" + port)
+  console.log("httpServer listening in " + port)
 })
