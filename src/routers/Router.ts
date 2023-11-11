@@ -18,6 +18,7 @@ Router.post('/sign', async (req,res) => {
   const userController = new UserController(userRepository)
   userController.postUser(req, res)
 })
+Router.delete('/users/delete?id')
 
 
 

@@ -8,7 +8,7 @@ import { ParsedQs } from "qs";
 
 interface IUserController {
   postUser(req: Request, res: Response): Promise<void>;
-  //deleteUser(req: Request): Promise<ResponseHttp>;
+  deleteUser(req: Request, res : Response): Promise<void>;
 }
 
 export class UserController implements IUserController {
@@ -56,30 +56,35 @@ export class UserController implements IUserController {
       throw err
     }
   }
-  /* async deleteUser(req: Request) {
-    try {
-      const user = req.body
-      const userFinded = this.userRepository.findByEmail(user.email)
-      if(!userFinded)
-      {
-        const response : ResponseHttp = {
-          status: 400,
-          body: {message: "User Not Found"}
+  async deleteUser(req : Request, res : Response): Promise<void> {
+      try {
+        const {id} = req.body
+        const userFinded = await this.userRepository.findById(id)
+        if(!userFinded)
+        {
+          res.status(404).json({message: "O usuário não existe"})
         }
-        return response
-      }
-      else
-      {
-        //this.userRepository.deleteUser();
+        else
+        {
+          const userDeleted = await this.userRepository.deleteUser(userFinded.id)
+          const response = {
+            id : userDeleted.id,
+            name : userDeleted.name,
+            email : userDeleted.email,
+            email_reserva : userDeleted.email_reserva,
+            password : userDeleted.password,
+            deleted : true
+          }
+          res.status(200).json({response})
+        }
         
       }
-    }
-
-    
+      catch (err)
+      {
+        console.log(err)
+        res.status(500).json({message: "Erro Interno no servidor"})
+      }
   }
-  catch (err)
-  {
-    throw err
-  } */
+  
 
 }
