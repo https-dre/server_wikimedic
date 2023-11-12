@@ -3,7 +3,7 @@ import express, { response } from "express"
 import Controller from "../controllers/Controller"
 import { UserController } from "../controllers/UserController"
 import { UserRepository } from "../repositories/UserRepository"
-import { Autentication } from "../filters/Autentication"
+import { Autentication } from '../filters/Autentication';
 import { MedRepository } from "../repositories/MedRepository"
 import { MedController } from "../controllers/MedController"
 import { PostgreController } from "../data/Client"
@@ -48,6 +48,9 @@ Router.post('/medicamentos/register',(req,res)=>{
   medController.postMed(req, res)
 })
 
+Router.post('/favoritos/register', Autentication.AuthUser, (req,res)=>{
+  res.status(200).json({message:"Você passou na autenticação"})
+})
 
 
 export default Router

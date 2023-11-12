@@ -8,7 +8,7 @@ import { PostgreController } from "../data/Client";
 interface IUserRepositoryInterface {
   postUser(user: User): Promise<User>;
   //deleteUser(id : string) : Promise<User>;
-  findByEmail(email: string): Promise<any>;
+  findByEmail(email: string): Promise<User | false>;
   findById(id  : string):Promise<any>
   getAllUsers(): Promise<User[]>;
 }
@@ -21,7 +21,7 @@ export class UserRepository implements IUserRepositoryInterface {
     this.db = pgController
   }
 
-  async findByEmail(email: string): Promise<any> {
+  async findByEmail(email: string): Promise<User | false> {
     const query = `SELECT * FROM users WHERE email = '${email}'`
     const result = await this.db.get(query)
 

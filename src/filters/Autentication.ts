@@ -11,7 +11,7 @@ export class Autentication {
         const userRepository = new UserRepository(pgController)
 
         const usersFinded = await userRepository.findByEmail(req.body.auth.email)
-        if(usersFinded)
+        if(!usersFinded)
         {
             res.status(404).json({message: "User Not Found"})
         }
