@@ -9,6 +9,7 @@ import { ParsedQs } from "qs";
 interface IUserController {
   postUser(req: Request, res: Response): Promise<void>;
   //deleteUser(req: Request, res : Response): Promise<void>;
+  getAllUsers(req : Request, res : Response): Promise<void>;
 }
 
 export class UserController implements IUserController {
@@ -45,7 +46,7 @@ export class UserController implements IUserController {
       else {
         const response: ResponseHttp = {
           body: { message: "O email já existe" },
-          status: 404
+          status: 400
         }
         res.status(response.status).json(response.body)
       }
@@ -85,6 +86,17 @@ export class UserController implements IUserController {
         res.status(500).json({message: "Erro Interno no servidor"})
       }
   } */
+  async getAllUsers(req: Request, res: Response): Promise<void> {
+      try {
+        const users = await this.userRepository.getAllUsers()
+        res.status(200).json(users)
+      }
+      catch (err)
+      {
+        console.log(err)
+        res.status(500).json({message : "Erro Interno No Servidor"})
+      }
+  }
   
 
 }

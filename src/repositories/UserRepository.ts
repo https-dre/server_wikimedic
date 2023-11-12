@@ -10,6 +10,7 @@ interface IUserRepositoryInterface {
   //deleteUser(id : string) : Promise<User>;
   findByEmail(email: string): Promise<any>;
   findById(id  : string):Promise<any>
+  getAllUsers(): Promise<User[]>;
 }
 
 export class UserRepository implements IUserRepositoryInterface {
@@ -83,5 +84,18 @@ export class UserRepository implements IUserRepositoryInterface {
     {
       throw err;
     }    
+  }
+
+  async getAllUsers(): Promise<User[]> {
+      try 
+      {
+        const users = await this.db.get("SELECT * FROM users")
+        console.log(users)
+        return users
+      }
+      catch (err)
+      {
+        throw err
+      }
   }
 }

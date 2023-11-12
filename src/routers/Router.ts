@@ -14,7 +14,12 @@ Router.get('/', (__req, res)=>{
   res.send("<h1>httpServer to Wikimedic</h1>")
 })
 
-Router.get('/users', Controller.getAllUsers)
+Router.get('/users', (req, res)=>{
+  const pgController = new PostgreController()
+  const userRepository = new UserRepository(pgController)
+  const userController = new UserController(userRepository)
+  userController.getAllUsers(req, res)
+})
 
 Router.get('/users/login', Autentication.AuthUser, (req, res)=>{
   //console.log('Usuário autenticado')
@@ -36,12 +41,12 @@ Router.post('/users/register', async (req,res) => {
   userController.deleteUser(req, res)
 }) */
 
-/* Router.post('/comments/register',(req,res)=>{
+Router.post('/medicamentos/register',(req,res)=>{
   const pgController = new PostgreController()
   const medRepository = new MedRepository(pgController)
   const medController = new MedController(medRepository)
   medController.postMed(req, res)
-}) */
+})
 
 
 
