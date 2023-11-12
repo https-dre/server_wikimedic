@@ -9,7 +9,8 @@ import { MedRepository } from '../repositories/MedRepository';
 
 
 interface IFavController {
-    postFav(req : Request, res : Response):Promise<void>;
+    postFav(req : Request, res : Response): Promise<void>;
+    getFav(req : Request, res : Response): Promise<void>;
 }
 
 export class FavController implements IFavController
@@ -46,7 +47,7 @@ export class FavController implements IFavController
             }
             else if(!medFinded)
             {
-                res.status(404).json({message : "User Not Found"})
+                res.status(404).json({message : "Medicamento Not Found"})
             }
             
         }
@@ -55,4 +56,16 @@ export class FavController implements IFavController
             res.status(500).json({message:"Erro Interno no Servidor"})
         }
     }
+
+    async getFav(req: Request, res: Response): Promise<void> {
+        try
+        {
+            const idUser = req.params
+        }
+        catch (err)
+        {
+
+        }
+    }
+
 }
