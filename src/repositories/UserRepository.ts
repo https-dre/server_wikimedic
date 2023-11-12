@@ -3,45 +3,36 @@ import { v4 as uuidv4 } from 'uuid';
 import hashPassword from "../crypt/crypt"
 import { User } from "../models/User"
 import { client } from "../data/postgre"
-
-
+import { PostgreController } from "../data/Client";
 
 interface IUserRepositoryInterface {
   postUser(user: User): Promise<User>;
-  deleteUser(id : string) : Promise<User>;
-  findByEmail(email: string): Promise<User[]>;
-  findById(id  : string):Promise<User | any>
+  //deleteUser(id : string) : Promise<User>;
+  findByEmail(email: string): Promise<User | false>;
+  findById(id  : string):Promise<User | false>
 }
-
 
 export class UserRepository implements IUserRepositoryInterface {
 
-  private db: Database
+  private db: PostgreController
 
-  constructor(dbpath: string) {
-    this.db = new Database(dbpath);
-    //console.log("IUserRepository initialized")
+  constructor(pgController : PostgreController) {
+    this.db = pgController
+    
   }
 
-  async findByEmail(email: string): Promise<User[]> {
-    return new Promise((resolve, reject) => {
-      const query = `SELECT * FROM users WHERE email = ?`
-      this.db.all(query, [email], (err, rows: any) => {
-        if (err) {
-          reject(err)
-        }
-        else {
-          //console.log("emails: " + rows)
-          if (rows.length > 0) {
-            //console.log(rows)
-            resolve(rows)
-          }
-          else {
-            resolve([])
-          }
-        }
-      })
-    })
+  async findByEmail(email: string): Promise<User | false> {
+    const query = `SELECT * FROM users WHERE email = ${email}`
+    const result = await this.db.get(query)
+
+    if(result.length > 0)
+    {
+      return result[0]
+    }
+    else
+    {
+      return false
+    }
   }
 
   async postUser(user: User): Promise<User> {
@@ -58,10 +49,10 @@ export class UserRepository implements IUserRepositoryInterface {
         password: hashedPassword
       }
 
-      this.db.serialize(() => {
-        const query = `INSERT INTO users (id, name, email, email_reserva, password) VALUES('${formatedUser.id}', '${formatedUser.name}', '${formatedUser.email}', '${formatedUser.email_reserva}', '${formatedUser.password}')`;
-        this.db.run(query);
-      });
+      const query = `SELECT * FROM users (id,name,email,email_reserva,password)
+        VALUES ("${formatedUser.id}","${formatedUser.name}","${formatedUser.email}","${formatedUser.email_reserva}","${formatedUser.password}")
+      `
+      await this.db.run(query)
 
       //this.db.close();
       return formatedUser
@@ -72,59 +63,19 @@ export class UserRepository implements IUserRepositoryInterface {
       throw err;
     }
   }
-  async deleteUser(id: string): Promise<User> {
-      try {
-        let userR : User
-        return new Promise((resolve, reject)=>{
-            const query = "SELECT * FROM users WHERE id = ?"
-            this.db.get(query, [id], (err, row: any) => {
-            if (err) {
-              reject(err)
-            }
-            else {
-              if (row) {
-                userR  =  {
-                  id: row.id,
-                  name: row.name,
-                  email: row.email,
-                  email_reserva: row.email_reserva,
-                  password: row.password
-                }
-              }
-            }
-          })
 
-          this.db.serialize(()=>{
-            const query = `DELETE FROM users WHERE id = ${id}`
-            this.db.run(query);
-          })
-          resolve(userR)
-        })
-      }
-      catch (err)
-      {
-        throw err
-      }
-  }
 
-  async findById(id: string): Promise<User | any> {
-    return new Promise((resolve, reject) => {
-      const query = `SELECT * FROM users WHERE id = ?`
-      this.db.get(query, [id], (err, row: any) => {
-        if (err) {
-          reject(err)
-        }
-        else {
-          console.log(row)
-          if (row) {
-            //console.log(rows)
-            resolve(row)
-          }
-          else {
-            resolve(false)
-          }
-        }
-      })
-    })
+  async findById(id: string): Promise<User | false> {
+    const query = `SELECT * FROM users WHERE id = ${id}`
+    const result = await this.db.get(query)
+
+    if(result.length > 0)
+    {
+      return result[0]
+    }
+    else
+    {
+      return false
+    }
   }
 }

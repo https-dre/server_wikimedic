@@ -1,6 +1,7 @@
 import { Client } from "pg";
 
 const host = "hansken.db.elephantsql.com"
+
 export const client = new Client({
   user: "cbcroqaa",
   host: host,
@@ -10,12 +11,4 @@ export const client = new Client({
 });
 
 
-const main = async () => {
-  await client.connect();
 
-  console.log('Sucesso')
-
-  await client.end()
-}
-
-main()
