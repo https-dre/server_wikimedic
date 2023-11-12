@@ -1,12 +1,13 @@
-import express, { response } from "express"
+import express from "express"
 
-import Controller from "../controllers/Controller"
+import { UserRepository } from "../repositories/UserRepository";
 import { UserController } from "../controllers/UserController"
-import { UserRepository } from "../repositories/UserRepository"
 import { Autentication } from '../filters/Autentication';
-import { MedRepository } from "../repositories/MedRepository"
+import { MedRepository } from '../repositories/MedRepository';
 import { MedController } from "../controllers/MedController"
 import { PostgreController } from "../data/Client"
+import { FavController } from '../controllers/FavController';
+import { FavRepository } from "../repositories/FavoritoRepository";
 
 const Router = express.Router()
 
@@ -49,7 +50,19 @@ Router.post('/medicamentos/register',(req,res)=>{
 })
 
 Router.post('/favoritos/register', Autentication.AuthUser, (req,res)=>{
-  res.status(200).json({message:"Você passou na autenticação"})
+  const pg = new PostgreController()
+  const userRepository = new UserRepository(pg)
+  const favRepository = new FavRepository(pg)
+  const medRepository = new MedRepository(pg)
+  const favController = new FavController(favRepository, userRepository, medRepository)
+  favController.postFav(req, res)
+})
+
+Router.post('/medicamentos/validate', (req, res)=>{
+  const pgController = new PostgreController()
+  const medRepository = new MedRepository(pgController)
+  const medController = new MedController(medRepository)
+  medController.validateMed(req, res)
 })
 
 
