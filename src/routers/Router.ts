@@ -4,6 +4,8 @@ import Controller from "../controllers/Controller"
 import { UserController } from "../controllers/UserController"
 import { UserRepository } from "../repositories/UserRepository"
 import { Autentication } from "../filters/Autentication"
+import { MedRepository } from "../repositories/MedRepository"
+import { MedController } from "../controllers/MedController"
 
 const Router = express.Router()
 
@@ -31,7 +33,11 @@ Router.delete('/users/delete:id', async (req, res)=>{
   userController.deleteUser(req, res)
 })
 
-Router.post('/comments/register')
+Router.post('/comments/register',(req,res)=>{
+  const medRepository = new MedRepository('./src/data/database.db')
+  const medController = new MedController(medRepository)
+  medController.postMed(req, res)
+})
 
 
 

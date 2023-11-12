@@ -5,13 +5,13 @@ import { User } from "../models/User"
 import { Medicamento } from "../models/Medicamento";
 
 interface IMedRepository {
-    //findByNumProcess(numProcesso : string) : Promise<Medicamento>;
+    findByNumProcess(numProcesso : string) : Promise<any>;
     postMed(med : Medicamento) : Promise<Medicamento>;
 }
 
 export class MedRepository implements IMedRepository {
     db : Database
-    constructor(dbpath)
+    constructor(dbpath : string)
     {
         this.db = new Database(dbpath)
     }
@@ -34,5 +34,26 @@ export class MedRepository implements IMedRepository {
         {
             throw err
         }
+    }
+
+    async findByNumProcess(numProcesso: string): Promise<any> {
+        return new Promise((resolve, reject) => {
+            const query = `SELECT * FROM medicamentos WHERE numProcesso = ?`
+            this.db.get(query, [numProcesso], (err, row: any) =>{
+                if(err)
+                {
+                    reject(err)
+                }
+                else if(row)
+                {
+                    //console.log(row)
+                    resolve(row)
+                }
+                else
+                {
+                    resolve({})
+                }
+            })
+        })
     }
 }

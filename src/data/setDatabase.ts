@@ -14,27 +14,38 @@ const default_queries = `
     name CHAR(200),
     numProcesso CHAR(200)
   );
-  
-  CREATE TABLE favoritos (
-    id CHAR(60) PRIMARY KEY,
-    idUser CHAR(60),
-    FOREIGN KEY (idUser) REFERENCES users(id),
-    idMed CHAR(60),
-    FOREIGN KEY (idMed) REFERENCES medicamentos(id)
-  );
 `
 
 async function createDatabase() {
-    try {
-      const db = new sqlite3.Database("src/data/database.db")
-      db.serialize(() => {
-        db.run(default_queries)
-      })
-    }
-    catch (err) {
-      console.log(err)
-    }
-  
+  try {
+      const db = new sqlite3.Database("src/data/database.db");
+      const queryes = default_queries.split(";");
+      for(let i = 0 ; i < queryes.length; i++) {
+          await new Promise((resolve, reject) => {
+              db.run(queryes[i], function(err) {
+                 if (err) {
+                     reject(err);
+                 } else {
+                     resolve({});
+                 }
+              });
+          });
+      }
+
+      await new Promise((resolve, reject) => {
+          db.all(`SELECT * FROM medicamentos`, (err, rows) => {
+              if(err) {
+                 reject(err);
+              } else {
+                 console.log(rows);
+                 resolve(rows);
+              }
+          });
+      });
+  }
+  catch (err) {
+      console.log(err);
+  }
 }
 
 
