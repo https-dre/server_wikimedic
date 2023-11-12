@@ -1,14 +1,21 @@
 import { Client } from "pg";
 
-const host = "postgresql://adm_wikimedic:9Bu79lkLaJalPFEc66G2RVag20FeZNoH@dpg-cl23qq0p2gis73819140-a.oregon-postgres.render.com/wikimedic_db"
-const client = new Client({
-  user: "adm_wikimedic",
+const host = "hansken.db.elephantsql.com"
+export const client = new Client({
+  user: "cbcroqaa",
   host: host,
-  database: "wikimedic_db",
-  password: "9Bu79lkLaJalPFEc66G2RVag20FeZNoH",
+  database: "cbcroqaa",
+  password: "jeGbAvNbK3Ic5bdEKozWHD5jNI7i7pee",
   port: 5432,
 });
 
-client.connect();
 
-export default client;
+const main = async () => {
+  await client.connect();
+
+  console.log('Sucesso')
+
+  await client.end()
+}
+
+main()

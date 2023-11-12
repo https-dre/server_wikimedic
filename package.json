@@ -6,11 +6,13 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "ts-node ./Server.ts",
-    "setDB": "ts-node ./src/data/setDatabase.ts"
+    "setDB": "ts-node ./src/data/setDatabase.ts",
+    "postgres": "ts-node ./src/data/postgre.ts"
   },
   "author": "André de Oliveira Dias",
   "license": "ISC",
   "dependencies": {
+    "@types/pg": "^8.10.9",
     "bcrypt": "^5.1.1",
     "cors": "^2.8.5",
     "express": "^4.18.2",

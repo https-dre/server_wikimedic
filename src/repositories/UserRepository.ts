@@ -2,6 +2,7 @@ import { Database } from "sqlite3"
 import { v4 as uuidv4 } from 'uuid';
 import hashPassword from "../crypt/crypt"
 import { User } from "../models/User"
+import { client } from "../data/postgre"
 
 
 
@@ -49,10 +50,6 @@ export class UserRepository implements IUserRepositoryInterface {
       // Criando um hash seguro da senha
       const hashedPassword = await hashPassword(user.password);
       //console.log('Senha criptografada: ', hashedPassword)
-      /*  user = {
-         id: uuidv4(),
-         password: hashedPassword
-       } */
       const formatedUser: User = {
         id: uuidv4(),
         name: user.name,
