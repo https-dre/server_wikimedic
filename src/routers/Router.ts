@@ -6,6 +6,7 @@ import { UserRepository } from "../repositories/UserRepository"
 import { Autentication } from "../filters/Autentication"
 import { MedRepository } from "../repositories/MedRepository"
 import { MedController } from "../controllers/MedController"
+import { PostgreController } from "../data/Client"
 
 const Router = express.Router()
 
@@ -21,23 +22,26 @@ Router.get('/users/login', Autentication.AuthUser, (req, res)=>{
 })
 
 Router.post('/users/register', async (req,res) => {
-  const userRepository = new UserRepository('./src/data/database.db')
 
+  const pgController = new PostgreController()
+  const userRepository = new UserRepository(pgController)
   const userController = new UserController(userRepository)
   userController.postUser(req, res)
 })
 
-Router.delete('/users/delete:id', async (req, res)=>{
-  const userRepository = new UserRepository('./src/data/database.db')
+/* Router.delete('/users/delete:id', async (req, res)=>{
+  const pgController = new PostgreController()
+  const userRepository = new UserRepository(pgController)
   const userController = new UserController(userRepository)
   userController.deleteUser(req, res)
-})
+}) */
 
-Router.post('/comments/register',(req,res)=>{
-  const medRepository = new MedRepository('./src/data/database.db')
+/* Router.post('/comments/register',(req,res)=>{
+  const pgController = new PostgreController()
+  const medRepository = new MedRepository(pgController)
   const medController = new MedController(medRepository)
   medController.postMed(req, res)
-})
+}) */
 
 
 

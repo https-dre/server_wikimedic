@@ -8,7 +8,7 @@ import { ParsedQs } from "qs";
 
 interface IUserController {
   postUser(req: Request, res: Response): Promise<void>;
-  deleteUser(req: Request, res : Response): Promise<void>;
+  //deleteUser(req: Request, res : Response): Promise<void>;
 }
 
 export class UserController implements IUserController {
@@ -32,8 +32,8 @@ export class UserController implements IUserController {
 
     try {
       //valida se o email já existe
-      const users = await this.userRepository.findByEmail(user.email)
-      if (users.length == 0) //se a pesquisa retornar um array vazio, não existe usuário com mesmo email
+      const userFinded = await this.userRepository.findByEmail(user.email)
+      if (!userFinded) // se o usuário não existir, será false
       {
         const userCreated = await this.userRepository.postUser(user)
         const response: ResponseHttp = {
@@ -45,7 +45,7 @@ export class UserController implements IUserController {
       else {
         const response: ResponseHttp = {
           body: { message: "O email já existe" },
-          status: 401
+          status: 404
         }
         res.status(response.status).json(response.body)
       }
@@ -56,7 +56,7 @@ export class UserController implements IUserController {
       throw err
     }
   }
-  async deleteUser(req : Request, res : Response): Promise<void> {
+  /* async deleteUser(req : Request, res : Response): Promise<void> {
       try {
         const id = req.params.id
         const userFinded = await this.userRepository.findById(id)
@@ -84,7 +84,7 @@ export class UserController implements IUserController {
         console.log(err)
         res.status(500).json({message: "Erro Interno no servidor"})
       }
-  }
+  } */
   
 
 }
