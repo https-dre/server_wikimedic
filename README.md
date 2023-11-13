@@ -2,4 +2,4 @@
 
 Servidor Http que servirá a Wikimedic
 
-*Server using PostgreSQL --> Elephant SQL*
+**Server using MongoDB**
