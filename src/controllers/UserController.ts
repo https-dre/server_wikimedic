@@ -1,4 +1,4 @@
-import { IUserRepository } from "../repositories/protocols/UserProtocol"
+import { IUserRepository } from "../repositories/protocols/IUserRepository"
 import { User } from "../models/User"
 import { Request, Response } from "express"
 

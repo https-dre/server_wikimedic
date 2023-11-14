@@ -1,13 +1,9 @@
 import { Favorito } from "../models/Favorito";
 import { PostgreController } from "../data/Client";
 import { v4 as uuidv4 } from 'uuid';
+import { IFavoritoRepository } from './protocols/IFavoritoRepository'
 
-interface IFavRepository {
-    postFav(fav : Favorito): Promise<Favorito>;
-    findByIdUser(id : string): Promise<Favorito[] | false>;
-}
-
-export class FavRepository implements IFavRepository {
+export class FavRepository implements IFavoritoRepository {
     db : PostgreController
 
     constructor(pg : PostgreController)

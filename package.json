@@ -2,9 +2,8 @@
   "name": "server",
   "version": "1.0.0",
   "description": "",
-  "main": "Server.ts",
+  "main": "./Server.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "ts-node ./Server.ts",
     "setDB": "ts-node ./src/data/mongoDB/conn.ts",
     "postgres": "ts-node ./src/data/postgre.ts"

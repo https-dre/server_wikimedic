@@ -14,18 +14,19 @@ import { mongo as ClientMongo } from "./src/data/mongoDB/conn"
 //import { mongo } from "mongoose"
 
 const main = async () => {
-  ClientMongo.conn() // conectando ao banco de dados antes de iniciar a aplicação
+  await ClientMongo.conn() // conectando ao banco de dados antes de iniciar a aplicação
   app.use(express.json())
-  //app.use(Middle)
-  app.use(cors({ origin: "*" })) // permitindo qualquer origem se conectar ao banco de dados
+  //app.use(Middle) //Middleware é um filtro de Acesso para o Servidor 
+  app.use(cors({ origin: "*" })) // permitindo qualquer origem se conectar ao ao Servidor
 
   app.use(Router) // colocando o arquivo ./src/routers/Router.ts para gerenciar as rotas da aplicação
 
   //https://serverwikimedic.andredias52.repl.co/
 
   httpServer.listen(port || 3030, () => {
-    console.log("httpServer listening in " + port)
+    console.log("\nhttpServer listening in " + port)
   })
 }
 
+main()
 

@@ -4,7 +4,7 @@ import hashPassword from "../crypt/crypt"
 import { User } from "../models/User"
 import { clientModel } from "../data/postgre"
 import { PostgreController } from "../data/Client";
-import { IUserRepository } from "./protocols/UserProtocol"
+import { IUserRepository } from "./protocols/IUserRepository"
 
 export class UserRepository implements IUserRepository {
 

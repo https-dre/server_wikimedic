@@ -4,12 +4,7 @@ import hashPassword from "../crypt/crypt"
 import { User } from "../models/User"
 import { Medicamento } from "../models/Medicamento";
 import { PostgreController } from "../data/Client";
-
-interface IMedRepository {
-    findByNumProcess(numProcesso : string) : Promise<Medicamento | false>;
-    postMed(med : Medicamento) : Promise<Medicamento>;
-    findById(id : string): Promise<Medicamento | false>;
-}
+import { IMedRepository } from "./protocols/IMedRepository"
 
 export class MedRepository implements IMedRepository {
     db : PostgreController

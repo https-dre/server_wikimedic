@@ -13,9 +13,9 @@ export const mongo = {
       await client.connect();
       console.log('MongoDB connected')
 
-      const db = client.db('myDatabase');
+      const db = client.db('cluster0');
       this.db = db;
-      console.log('db client created and mongoDB connected')
+      console.log('Db client created and mongoDB connected')
     } 
     catch (error) {
       console.error("Error connecting to MongoDB", error);
