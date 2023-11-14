@@ -16,11 +16,11 @@ export const mongo = {
       const db = client.db('myDatabase');
       this.db = db;
       console.log('db client created and mongoDB connected')
-    } catch (error) {
+    } 
+    catch (error) {
       console.error("Error connecting to MongoDB", error);
     }
    }
-   
 }
 
 /* const mongoURI = 'mongodb+srv://root:WvEyLSoepVJz6KbU@cluster0.ioeey37.mongodb.net/';
