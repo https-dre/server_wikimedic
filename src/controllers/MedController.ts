@@ -1,6 +1,6 @@
 import { Request, Response } from "express"
 import { Medicamento } from "../models/Medicamento"
-import { MedRepository } from "../repositories/MedRepository"
+import { IMedRepository } from "../repositories/protocols/IMedRepository"
 import { ParamsDictionary } from "express-serve-static-core";
 import { ParsedQs } from "qs";
 import { v4 as uuidv4 } from 'uuid';
@@ -11,9 +11,9 @@ interface IMedController {
 }
 
 export class MedController implements IMedController {
-    medRepository : MedRepository
+    medRepository : IMedRepository
 
-    constructor(med : MedRepository)
+    constructor(med : IMedRepository)
     {
         this.medRepository = med
     }

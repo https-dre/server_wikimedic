@@ -1,6 +1,6 @@
 import { ParamsDictionary } from 'express-serve-static-core';
 import { ParsedQs } from 'qs';
-import { FavRepository } from '../repositories/FavoritoRepository';
+import { IFavRepository } from '../repositories/protocols/IFavoritoRepository';
 import { Request, Response } from 'express';
 import { v4 as uuidv4 } from 'uuid';
 import { Favorito } from '../models/Favorito';
