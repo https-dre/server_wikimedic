@@ -1,4 +1,4 @@
-import { UserRepository } from "../repositories/UserRepository"
+import { IUserRepository } from "../repositories/protocols/UserProtocol"
 import { User } from "../models/User"
 import { Request, Response } from "express"
 
@@ -14,9 +14,9 @@ interface IUserController {
 
 export class UserController implements IUserController {
 
-  userRepository: UserRepository;
+  userRepository: IUserRepository;
 
-  constructor(iuser: UserRepository) {
+  constructor(iuser: IUserRepository) {
     this.userRepository = iuser
     //this.postUser = this.postUser.bind(this);
     //console.log('UserController initialized')

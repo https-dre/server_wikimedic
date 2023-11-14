@@ -4,16 +4,9 @@ import hashPassword from "../crypt/crypt"
 import { User } from "../models/User"
 import { clientModel } from "../data/postgre"
 import { PostgreController } from "../data/Client";
+import { IUserRepository } from "./protocols/UserProtocol"
 
-interface IUserRepositoryInterface {
-  postUser(user: User): Promise<User>;
-  //deleteUser(id : string) : Promise<User>;
-  findByEmail(email: string): Promise<User | false>;
-  findById(id  : string):Promise<User | false>
-  getAllUsers(): Promise<User[]>;
-}
-
-export class UserRepository implements IUserRepositoryInterface {
+export class UserRepository implements IUserRepository {
 
   private db: PostgreController
 
@@ -90,7 +83,7 @@ export class UserRepository implements IUserRepositoryInterface {
       try 
       {
         const users = await this.db.get("SELECT * FROM users")
-        console.log(users)
+        //console.log(users)
         return users
       }
       catch (err)
