@@ -1,6 +1,6 @@
 import express from "express"
 
-import { UserRepository } from "../repositories/UserRepository";
+import { UserRepository } from "../repositories/mongo/UserRepository";
 import { UserController } from "../controllers/UserController"
 import { Autentication } from '../filters/Autentication';
 import { MedRepository } from '../repositories/MedRepository';
@@ -16,8 +16,7 @@ Router.get('/', (__req, res)=>{
 })
 
 Router.get('/users', (req, res)=>{
-  const pgController = new PostgreController()
-  const userRepository = new UserRepository(pgController)
+  const userRepository = new UserRepository()
   const userController = new UserController(userRepository)
   userController.getAllUsers(req, res)
 })
@@ -28,9 +27,7 @@ Router.get('/users/login', Autentication.AuthUser, (req, res)=>{
 })
 
 Router.post('/users/register', async (req,res) => {
-
-  const pgController = new PostgreController()
-  const userRepository = new UserRepository(pgController)
+  const userRepository = new UserRepository()
   const userController = new UserController(userRepository)
   userController.postUser(req, res)
 })
