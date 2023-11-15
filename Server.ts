@@ -15,6 +15,8 @@ import { mongo as ClientMongo } from "./src/data/mongoDB/conn"
 
 const main = async () => {
   await ClientMongo.conn() // conectando ao banco de dados antes de iniciar a aplicação
+  await ClientMongo.db.createCollection("User")
+  await ClientMongo.db.createCollection("Medicamentos")
   app.use(express.json())
   //app.use(Middle) //Middleware é um filtro de Acesso para o Servidor 
   app.use(cors({ origin: "*" })) // permitindo qualquer origem se conectar ao ao Servidor
