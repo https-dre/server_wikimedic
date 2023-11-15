@@ -5,6 +5,7 @@ import { Request, Response } from "express"
 import { IResponseHttp as ResponseHttp } from "../models/ResponseHttp"
 import { ParamsDictionary } from "express-serve-static-core";
 import { ParsedQs } from "qs";
+import { v4 as uuidv4 } from 'uuid';
 
 interface IUserController {
   postUser(req: Request, res: Response): Promise<void>;
@@ -24,7 +25,7 @@ export class UserController implements IUserController {
 
   async postUser(req: Request, res: Response) {
     const user: User = {
-      id: "",
+      id: uuidv4(),
       name: req.body.name,
       email: req.body.email,
       email_reserva: req.body.email_reserva,
