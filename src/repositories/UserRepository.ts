@@ -6,7 +6,7 @@ import { clientModel } from "../data/postgre"
 import { PostgreController } from "../data/Client";
 import { IUserRepository } from "./protocols/IUserRepository"
 
-export class UserRepository implements IUserRepository {
+export class UserRepository /* implements IUserRepository */ {
 
   private db: PostgreController
 
@@ -91,4 +91,5 @@ export class UserRepository implements IUserRepository {
         throw err
       }
   }
+  
 }
