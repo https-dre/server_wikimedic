@@ -76,7 +76,7 @@ export class UserRepository implements IUserRepository { //UserRepository usando
     async getAllUsers(): Promise<User[]> {
         const UserCollection = mongo.db.collection('User')
         const docs = await UserCollection.find().toArray();
-        const users = docs.map(doc => toUser(doc));
+        const users = docs.map((doc: any) => toUser(doc));
         return users;
     }
 
