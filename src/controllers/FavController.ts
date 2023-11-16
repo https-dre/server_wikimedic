@@ -34,9 +34,9 @@ export class FavController implements IFavController
             {
                 const newFav : Favorito = {
                     id : uuidv4(),
-                    idUser : req.body.idUser,
-                    idMed: req.body.idMed,
-                    numProcesso : req.body.numProcesso
+                    idUser : userFinded.id,
+                    idMed: medFinded.id,
+                    numProcesso : medFinded.numProcesso
                 }
                 const fav = await this.favRepository.postFav(newFav)
                 res.status(201).json(fav)
