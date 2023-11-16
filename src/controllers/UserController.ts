@@ -61,12 +61,12 @@ export class UserController implements IUserController {
   }
   async deleteUser(req : Request, res : Response): Promise<void> {
       try {
-        console.log(req.params.id)
+        //console.log(req.params.id)
         if(req.params.id)
         {
           const id = req.params.id
           const userFinded = await this.userRepository.findById(id)
-          console.log(userFinded)
+          //console.log(userFinded)
           if(userFinded)
           {
             await this.userRepository.deleteUser(userFinded.id)
