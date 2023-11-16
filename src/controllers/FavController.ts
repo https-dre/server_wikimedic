@@ -1,11 +1,11 @@
-import { ParamsDictionary } from 'express-serve-static-core';
-import { ParsedQs } from 'qs';
-import { IFavRepository } from '../repositories/protocols/IFavoritoRepository';
 import { Request, Response } from 'express';
 import { v4 as uuidv4 } from 'uuid';
+
 import { Favorito } from '../models/Favorito';
-import { UserRepository } from '../repositories/UserRepository';
-import { MedRepository } from '../repositories/MedRepository';
+
+import { IUserRepository } from '../repositories/protocols/IUserRepository';
+import { IMedRepository as IMedicamentoRepository } from '../repositories/protocols/IMedRepository';
+import { IFavoritoRepository } from '../repositories/protocols/IFavoritoRepository';
 
 
 interface IFavController {
@@ -15,10 +15,10 @@ interface IFavController {
 
 export class FavController implements IFavController
 {
-    favRepository : FavRepository
-    userRepository : UserRepository
-    medRepository : MedRepository
-    constructor(rep : FavRepository, repUser : UserRepository, md : MedRepository)
+    favRepository : IFavoritoRepository
+    userRepository : IUserRepository
+    medRepository : IMedicamentoRepository
+    constructor(rep : IFavoritoRepository, repUser : IUserRepository, md : IMedicamentoRepository)
     {
         this.favRepository = rep
         this.userRepository = repUser
@@ -30,7 +30,7 @@ export class FavController implements IFavController
         {
             const userFinded = await this.userRepository.findById(req.body.idUser)
             const medFinded = await this.medRepository.findByNumProcess(req.body.numProcesso)
-            if(userFinded && medFinded)
+            if(userFinded != null && medFinded != null)
             {
                 const newFav : Favorito = {
                     id : uuidv4(),
@@ -41,11 +41,11 @@ export class FavController implements IFavController
                 const fav = await this.favRepository.postFav(newFav)
                 res.status(201).json(fav)
             }
-            else if(!userFinded)
+            else if(userFinded == null)
             {
                 res.status(404).json({message : "User Not Found"})
             }
-            else if(!medFinded)
+            else if(medFinded == null)
             {
                 res.status(404).json({message : "Medicamento Not Found"})
             }

@@ -1,13 +1,18 @@
 import express from "express"
 
 import { UserRepository } from "../repositories/mongo/UserRepository";
-import { UserController } from "../controllers/UserController"
-import { Autentication } from '../filters/Autentication';
 import { MedicamentoRepository } from '../repositories/mongo/MedicamentoRepository';
+import { FavoritoRepository } from "../repositories/mongo/FavoritoRepository";
+
+import { UserController } from "../controllers/UserController"
 import { MedController } from "../controllers/MedController"
-import { PostgreController } from "../data/Client"
 import { FavController } from '../controllers/FavController';
-import { FavRepository } from "../repositories/FavoritoRepository";
+
+import { Autentication } from '../filters/Autentication';
+
+import { PostgreController } from "../data/Client"
+
+
 
 const Router = express.Router()
 
@@ -72,5 +77,12 @@ Router.post('/medicamentos/validate', (req, res)=>{
   medController.validateMed(req, res)
 })
 
-
+//Favorito
+Router.post('/favoritos/register', (req, res)=>{
+  const medRepository = new MedicamentoRepository()
+  const favRepository = new FavoritoRepository()
+  const userRepository = new UserRepository()
+  const favController = new FavController(favRepository,userRepository, medRepository)
+  favController.postFav(req, res)
+})
 export default Router

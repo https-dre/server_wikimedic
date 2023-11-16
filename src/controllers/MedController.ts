@@ -9,7 +9,7 @@ interface IMedController {
     postMed(req : Request, res : Response) : Promise<void>;
     validateMed(req : Request, res : Response) : Promise<void>;
     getAll(req : Request, res : Response) : Promise<void>;
-    deleteByNumProcesso( req : Resquest, res : Response) : Promise<void>
+    deleteByNumProcesso( req : Request, res : Response) : Promise<void>
 }
 
 export class MedController implements IMedController {
