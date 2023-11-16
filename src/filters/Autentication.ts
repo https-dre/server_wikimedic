@@ -1,17 +1,14 @@
 import { Request, Response, NextFunction } from "express"
-import { UserRepository } from "../repositories/UserRepository"
+import { UserRepository } from "../repositories/mongo/UserRepository"
 import * as bcrypt from 'bcrypt';
-import { PostgreController } from "../data/Client";
-import { User } from "../models/User";
 
 export class Autentication {
 
     static async AuthUser(req : Request, res : Response, next : NextFunction): Promise<void> {
-        const pgController = new PostgreController()
-        const userRepository = new UserRepository(pgController)
+        const userRepository = new UserRepository()
 
         const usersFinded = await userRepository.findByEmail(req.body.auth.email)
-        if(!usersFinded)
+        if(usersFinded == null)
         {
             res.status(404).json({message: "User Not Found"})
         }
