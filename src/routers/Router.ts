@@ -3,7 +3,7 @@ import express from "express"
 import { UserRepository } from "../repositories/mongo/UserRepository";
 import { UserController } from "../controllers/UserController"
 import { Autentication } from '../filters/Autentication';
-import { MedRepository } from '../repositories/MedRepository';
+import { MedicamentoRepository } from '../repositories/mongo/MedicamentoRepository';
 import { MedController } from "../controllers/MedController"
 import { PostgreController } from "../data/Client"
 import { FavController } from '../controllers/FavController';
@@ -37,11 +37,16 @@ Router.delete('/users/delete/:id', async (req, res)=>{
   const userController = new UserController(userRepository)
   userController.deleteUser(req, res)
 })
+// Medicamentos
 
+Router.get('/medicamentos', (req, res)=>{
+  const medRepository = new MedicamentoRepository()
+  const medController = new MedController(medRepository)
+  medController.getAll(req, res)
+})
 
 Router.post('/medicamentos/register',(req,res)=>{
-  const pgController = new PostgreController()
-  const medRepository = new MedRepository(pgController)
+  const medRepository = new MedicamentoRepository()
   const medController = new MedController(medRepository)
   medController.postMed(req, res)
 })
@@ -56,8 +61,7 @@ Router.post('/medicamentos/register',(req,res)=>{
 }) */
 
 Router.post('/medicamentos/validate', (req, res)=>{
-  const pgController = new PostgreController()
-  const medRepository = new MedRepository(pgController)
+  const medRepository = new MedicamentoRepository()
   const medController = new MedController(medRepository)
   medController.validateMed(req, res)
 })
