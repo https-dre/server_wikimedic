@@ -1,4 +1,4 @@
-import { User } from "../../models/User";
+import { User } from '../../models/User';
 import { IUserRepository } from "../protocols/IUserRepository";
 import { mongo } from "../../data/mongoDB/conn"
 import { ObjectId } from "mongodb";
@@ -41,7 +41,7 @@ export class UserRepository implements IUserRepository { //UserRepository usando
         
     }
 
-    async findByEmail(Email: string): Promise<User | false> {
+    async findByEmail(Email: string): Promise<User | null> {
         const UserCollection = mongo.db.collection('User')
         const result = await UserCollection.findOne({email : Email})
 
@@ -52,14 +52,15 @@ export class UserRepository implements IUserRepository { //UserRepository usando
         } 
         else 
         {
-            return false;
+            return null;
         }
         
     }
 
-    async findById(Id: string): Promise<User | false> {
+    async findById(Id: string): Promise<User | null> {
         const UserCollection = mongo.db.collection('User')
-        const result = await UserCollection.findOne({id : Id})
+        const result = await UserCollection.findOne({_id : Id as unknown as ObjectId})
+        //console.log(result)
 
         if (result) 
         {
@@ -68,7 +69,7 @@ export class UserRepository implements IUserRepository { //UserRepository usando
         } 
         else 
         {
-            return false;
+            return null;
         }
     }
 
@@ -77,5 +78,10 @@ export class UserRepository implements IUserRepository { //UserRepository usando
         const docs = await UserCollection.find().toArray();
         const users = docs.map(doc => toUser(doc));
         return users;
+    }
+
+    async deleteUser(Id: string): Promise<void> {
+        const UserCollection = mongo.db.collection('User')
+        await UserCollection.deleteOne({_id : Id as unknown as ObjectId})
     }
 }
