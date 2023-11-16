@@ -85,4 +85,10 @@ Router.post('/favoritos/register', (req, res)=>{
   const favController = new FavController(favRepository,userRepository, medRepository)
   favController.postFav(req, res)
 })
+
+Router.get('/favoritos/getByIdUser/:id', (req,res)=>{
+  const favRepository = new FavoritoRepository()
+  const favController = new FavController(favRepository)
+  favController.findByIdUser(req, res)
+})
 export default Router

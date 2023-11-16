@@ -9,20 +9,28 @@ export class FavoritoRepository implements IFavoritoRepository
     async postFav(fav : Favorito): Promise<Favorito>
     {
         try {
-            const FavoritoRepository = mongo.db.collection('Favorito')
-            const doc = await FavoritoRepository.insertOne({
+            const FavoritoCollection = mongo.db.collection('Favorito')
+            await FavoritoCollection.deleteMany({_id : null as unknown as ObjectId, idUser : null})
+
+            const doc = await FavoritoCollection.insertOne({
                 _id : fav.id as unknown as ObjectId,
                 idUser : fav.idUser,
                 idMed : fav.idMed,
                 numProcesso : fav.numProcesso
             })
-            const medic = toFavorito(doc)
-            return medic
+
+            return {
+                id : doc.insertedId as unknown as string,
+                idUser : fav.idUser,
+                idMed : fav.idMed,
+                numProcesso : fav.numProcesso
+            }
         } 
         catch (err) {
             throw err;
         }
     }
+
     async findByIdUser(id : string): Promise<Favorito[] | null>
     {
         try {
@@ -41,4 +49,5 @@ export class FavoritoRepository implements IFavoritoRepository
             throw error
         }
     }
+    
 }
