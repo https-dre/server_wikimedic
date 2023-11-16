@@ -83,4 +83,28 @@ export class MedicamentoRepository implements IMedRepository
             throw err
         }
     }
+    async delete(Id : string) : Promise<void>
+    {
+        try
+        {
+            const MedicamentoCollection = mongo.db.collection('Medicamento')
+            await MedicamentoCollection.deleteOne({_id : Id as unknown as ObjectId})
+        }
+        catch (err)
+        {
+            throw err
+        }
+    }
+    async deleteByNumProcesso(NumProcesso : string) : Promise<void>
+    {
+        try
+        {
+            const MedicamentoCollection = mongo.db.collection('Medicamento')
+            await MedicamentoCollection.deleteOne({ numProcesso : NumProcesso})
+        }
+        catch (err)
+        {
+            throw err
+        }
+    }
 }

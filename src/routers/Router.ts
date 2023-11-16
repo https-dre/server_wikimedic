@@ -51,6 +51,12 @@ Router.post('/medicamentos/register',(req,res)=>{
   medController.postMed(req, res)
 })
 
+Router.delete('/medicamentos/delete/numProcesso/:numProcesso', (req, res)=>{
+  const medRepository = new MedicamentoRepository()
+  const medController = new MedController(medRepository)
+  medController.deleteByNumProcesso(req, res)
+})
+
 /* Router.post('/favoritos/register', Autentication.AuthUser, (req,res)=>{
   const pg = new PostgreController()
   const userRepository = new UserRepository(pg)
