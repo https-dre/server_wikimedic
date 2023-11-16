@@ -12,3 +12,5 @@ Servidor Http que servirá a Wikimedic
 /users/register -- registrar usuário 
 
 /users/login -- autenticar usuário
+
+/users/delete/:id -- deletar usuário
