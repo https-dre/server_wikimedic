@@ -10,11 +10,12 @@ export class MedicamentoRepository implements IMedRepository
     {
         try {
             const MedicamentoCollection = mongo.db.collection('Medicamento')
-            const doc = await MedicamentoCollection.findOne({numProcesso : NumProcesso as unknown as ObjectId})
+            const doc = await MedicamentoCollection.findOne({numProcesso : NumProcesso})
             if(doc)
             {
+                
                 const medic = toMedic(doc)
-                return null
+                return medic
             }
             else
             {

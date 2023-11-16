@@ -28,8 +28,13 @@ export class FavController implements IFavController
     async postFav(req: Request, res: Response): Promise<void> {
         try
         {
+            //console.log(req.body.numProcesso)
+            //console.log(req.body.idUser)
+            
             const userFinded = await this.userRepository.findById(req.body.idUser)
             const medFinded = await this.medRepository.findByNumProcess(req.body.numProcesso)
+            console.log(userFinded)
+            console.log(medFinded)
             if(userFinded != null && medFinded != null)
             {
                 const newFav : Favorito = {
