@@ -32,12 +32,12 @@ Router.post('/users/register', async (req,res) => {
   userController.postUser(req, res)
 })
 
-/* Router.delete('/users/delete:id', async (req, res)=>{
-  const pgController = new PostgreController()
-  const userRepository = new UserRepository(pgController)
+Router.delete('/users/delete/:id', async (req, res)=>{
+  const userRepository = new UserRepository()
   const userController = new UserController(userRepository)
   userController.deleteUser(req, res)
-}) */
+})
+
 
 Router.post('/medicamentos/register',(req,res)=>{
   const pgController = new PostgreController()
