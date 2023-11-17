@@ -2,12 +2,12 @@
 
 Servidor Http que servirá a Wikimedic
 
-**Server using MongoDB**
+**Server with MongoDB**
 
 
 # Rotas
 
-*Usuários*
+**Usuários**
 
 /users -- get Users 
 
@@ -17,7 +17,7 @@ Servidor Http que servirá a Wikimedic
 
 /users/delete/:id -- deletar usuário
 
-*Medicamentos*
+**Medicamentos**
 
 /medicamentos -- get medicamentos
 
@@ -26,7 +26,7 @@ Servidor Http que servirá a Wikimedic
 /medicamentos/validate -- validar e registrar medicamento
 
 
-*Favoritos*
+**Favoritos**
 
 /favoritos -- get favoritos
 
