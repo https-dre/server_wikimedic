@@ -8,6 +8,8 @@ import { v4 as uuidv4 } from 'uuid';
 interface IMedController {
     postMed(req : Request, res : Response) : Promise<void>;
     validateMed(req : Request, res : Response) : Promise<void>;
+    getAll(req : Request, res : Response) : Promise<void>;
+    deleteByNumProcesso( req : Request, res : Response) : Promise<void>
 }
 
 export class MedController implements IMedController {
@@ -22,7 +24,7 @@ export class MedController implements IMedController {
         try 
         {
             const medFinded = await this.medRepository.findByNumProcess(req.body.numProcesso)
-            if(!medFinded)
+            if(medFinded == null)
             {
                 //console.log(medFinded)
                 const med : Medicamento = {
@@ -51,7 +53,7 @@ export class MedController implements IMedController {
             const medFinded = await this.medRepository.findByNumProcess(req.body.numProcesso)
             let status = "";
             let medResponse : Medicamento;
-            if(!medFinded)
+            if(medFinded == null)
             {
                 //console.log(medFinded)
                 const med : Medicamento = {
@@ -81,6 +83,45 @@ export class MedController implements IMedController {
         {
             console.log(err)
             res.status(500).json({message :"Erro Interno no Servidor, Provável Erro de Conexões Limitadas"})
+        }
+    }
+    async getAll( req : Request, res : Response) : Promise<void>
+    {
+        try
+        {
+            const medics = await this.medRepository.getAll()
+            res.status(200).json(medics)
+        }
+        catch (err)
+        {
+            console.log(err)
+            res.status(500).json({message : "Erro Interno no Servidor"})
+        }
+    }
+    async deleteByNumProcesso(req : Request, res : Response)
+    {
+        try
+        {
+            if(req.params.numProcesso)
+            {
+                const medic = await this.medRepository.findByNumProcess(req.params.numProcesso)
+                if(medic == null)
+                {
+                    res.status(404).json({message : "Medicamento Not Found"})
+                }
+                else
+                {
+                    await this.medRepository.deleteByNumProcesso(req.params.numProcesso)
+                }
+            }
+            else
+            {
+                res.status(400).json({ message : "Insira o numProcesso do Medicamento"})
+            }
+        }
+        catch (err)
+        {
+
         }
     }
 

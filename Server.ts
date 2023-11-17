@@ -18,6 +18,8 @@ const main = async () => {
   // criando coleções no banco de dados
   //await ClientMongo.db.createCollection("User")
   //await ClientMongo.db.createCollection("Medicamentos")
+  //await ClientMongo.db.createCollection("Favorito")
+  
   app.use(express.json())
   //app.use(Middle) //Middleware é um filtro de Acesso para o Servidor 
   app.use(cors({ origin: "*" })) // permitindo qualquer origem se conectar ao ao Servidor

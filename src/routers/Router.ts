@@ -1,13 +1,18 @@
 import express from "express"
 
 import { UserRepository } from "../repositories/mongo/UserRepository";
+import { MedicamentoRepository } from '../repositories/mongo/MedicamentoRepository';
+import { FavoritoRepository } from "../repositories/mongo/FavoritoRepository";
+
 import { UserController } from "../controllers/UserController"
-import { Autentication } from '../filters/Autentication';
-import { MedRepository } from '../repositories/MedRepository';
 import { MedController } from "../controllers/MedController"
-import { PostgreController } from "../data/Client"
 import { FavController } from '../controllers/FavController';
-import { FavRepository } from "../repositories/FavoritoRepository";
+
+import { Autentication } from '../filters/Autentication';
+
+import { PostgreController } from "../data/Client"
+
+
 
 const Router = express.Router()
 
@@ -37,13 +42,24 @@ Router.delete('/users/delete/:id', async (req, res)=>{
   const userController = new UserController(userRepository)
   userController.deleteUser(req, res)
 })
+// Medicamentos
 
+Router.get('/medicamentos', (req, res)=>{
+  const medRepository = new MedicamentoRepository()
+  const medController = new MedController(medRepository)
+  medController.getAll(req, res)
+})
 
 Router.post('/medicamentos/register',(req,res)=>{
-  const pgController = new PostgreController()
-  const medRepository = new MedRepository(pgController)
+  const medRepository = new MedicamentoRepository()
   const medController = new MedController(medRepository)
   medController.postMed(req, res)
+})
+
+Router.delete('/medicamentos/delete/numProcesso/:numProcesso', (req, res)=>{
+  const medRepository = new MedicamentoRepository()
+  const medController = new MedController(medRepository)
+  medController.deleteByNumProcesso(req, res)
 })
 
 /* Router.post('/favoritos/register', Autentication.AuthUser, (req,res)=>{
@@ -56,11 +72,23 @@ Router.post('/medicamentos/register',(req,res)=>{
 }) */
 
 Router.post('/medicamentos/validate', (req, res)=>{
-  const pgController = new PostgreController()
-  const medRepository = new MedRepository(pgController)
+  const medRepository = new MedicamentoRepository()
   const medController = new MedController(medRepository)
   medController.validateMed(req, res)
 })
 
+//Favorito
+Router.post('/favoritos/register', (req, res)=>{
+  const medRepository = new MedicamentoRepository()
+  const favRepository = new FavoritoRepository()
+  const userRepository = new UserRepository()
+  const favController = new FavController(favRepository,userRepository, medRepository)
+  favController.postFav(req, res)
+})
 
+Router.get('/favoritos/getByIdUser/:id', (req,res)=>{
+  const favRepository = new FavoritoRepository()
+  const favController = new FavController(favRepository)
+  favController.findByIdUser(req, res)
+})
 export default Router
