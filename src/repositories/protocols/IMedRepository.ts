@@ -1,3 +1,5 @@
+import { Medicamento } from "../../models/Medicamento";
+
 export interface IMedRepository {
     findByNumProcess(numProcesso : string) : Promise<Medicamento | null>;
     postMed(med : Medicamento) : Promise<Medicamento>;
