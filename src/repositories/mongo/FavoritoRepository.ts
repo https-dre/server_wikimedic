@@ -75,5 +75,18 @@ export class FavoritoRepository implements IFavoritoRepository
             throw error
         }
     }
+    async getAll(): Promise<Favorito[]> {
+        try
+        {
+            const FavoritoCollection = mongo.db.collection('Favorito')
+            const docs = await FavoritoCollection.find().toArray()
+            const favs = docs.map(doc => toFavorito(doc))
+            return favs
+        }
+        catch (err)
+        {
+            throw err
+        }
+    }
     
 }
