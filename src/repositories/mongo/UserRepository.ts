@@ -3,7 +3,6 @@ import { IUserRepository } from "../protocols/IUserRepository";
 import { mongo } from "../../data/mongoDB/conn"
 import { ObjectId } from "mongodb";
 import { toUser } from "../../utils/ToUser"
-import { Db } from "mongodb"
 
 export class UserRepository implements IUserRepository { //UserRepository usando MongoDb
 
