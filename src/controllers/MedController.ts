@@ -112,6 +112,7 @@ export class MedController implements IMedController {
                 else
                 {
                     await this.medRepository.deleteByNumProcesso(req.params.numProcesso)
+                    res.status(200).json({message : "Medicamento Deletado"})
                 }
             }
             else
@@ -121,7 +122,7 @@ export class MedController implements IMedController {
         }
         catch (err)
         {
-
+            throw err
         }
     }
 
