@@ -15,6 +15,7 @@ interface IFavController {
     getFav(req : Request, res : Response): Promise<void>;
     findByIdUser(req : Request, res : Response) : Promise<void>;
     delete( req : Request, res : Response): Promise<void>;
+    getAll(req : Request, res : Response): Promise<void>;
 }
 
 export class FavController implements IFavController
@@ -118,7 +119,17 @@ export class FavController implements IFavController
         try {
             if(req.params.id)
             {
-                
+                const doc = await this.favRepository.findById(req.params.id)
+                if(doc != null)
+                {
+                    await this.favRepository.delete(doc.id)
+                    res.status(200).json({message : "Favorito deletado"})
+                }
+                else
+                {
+                    res.status(404).json({message : "Favorito not found"})
+                }
+
             }
             else
             {
@@ -126,6 +137,18 @@ export class FavController implements IFavController
             }
         } catch (error) {
             
+        }
+    }
+    async getAll(req: Request, res: Response): Promise<void> {
+        try
+        {
+            const favs = await this.favRepository.getAll()
+            res.status(200).json(favs)
+        }
+        catch (error)
+        {
+            console.log(error)
+            res.status(500).json({message : "Erro Interno no Servidor!!"})
         }
     }
 
