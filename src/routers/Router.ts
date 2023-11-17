@@ -69,6 +69,13 @@ Router.post('/medicamentos/validate', (req, res)=>{
 })
 
 //Favorito
+
+Router.get('/favoritos', (req, res)=>{
+  const favRepository = new FavoritoRepository()
+  const favControler = new FavController(favRepository)
+  favControler.getAll(req, res)
+})
+
 Router.post('/favoritos/register', (req, res)=>{
   const medRepository = new MedicamentoRepository()
   const favRepository = new FavoritoRepository()
@@ -81,5 +88,11 @@ Router.get('/favoritos/getByIdUser/:id', (req,res)=>{
   const favRepository = new FavoritoRepository()
   const favController = new FavController(favRepository)
   favController.findByIdUser(req, res)
+})
+
+Router.delete('/favoritos/delete/:id',(req, res)=>{
+  const favRepository = new FavoritoRepository()
+  const favController = new FavController(favRepository)
+  favController.delete(req ,res)
 })
 export default Router
