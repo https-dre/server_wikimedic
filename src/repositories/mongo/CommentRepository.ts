@@ -12,13 +12,15 @@ export class CommentRepository implements ICommentRepository
             const result = await CommentCollection.insertOne({
                 _id : comment.id as unknown as ObjectId,
                 idUser : comment.idUser,
-                idMed : comment.idMed
+                idMed : comment.idMed,
+                content : comment.content
             })
 
             const commentResult : Comment = {
                 id : result.insertedId as unknown as string,
                 idUser : comment.idUser,
-                idMed : comment.idMed
+                idMed : comment.idMed,
+                content : comment.content
             }
             return commentResult
         } catch (error) {
@@ -31,7 +33,7 @@ export class CommentRepository implements ICommentRepository
             const docs = await CommentCollection.find({ idMed : IdMed }).toArray()
             const comments = docs.map(doc => toComment(doc))
             return comments
-            
+
         } catch (error) {
             throw error
         }
