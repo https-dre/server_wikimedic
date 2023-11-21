@@ -80,7 +80,6 @@ export class CommentController {
                 if(req.params.id)
                 {
                     const med = await this.medRepository.findById(req.params.id)
-                    let resultado = []
                     if(med != null)
                     {
                         const comments = await this.commentRepository.findByIdMed(req.params.id)
