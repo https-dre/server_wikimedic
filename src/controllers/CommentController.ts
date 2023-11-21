@@ -80,23 +80,21 @@ export class CommentController {
                 if(req.params.id)
                 {
                     const med = await this.medRepository.findById(req.params.id)
-                    const resultado = []
+                    let resultado = []
                     if(med != null)
                     {
                         const comments = await this.commentRepository.findByIdMed(req.params.id)
                         
-                        comments.forEach(async  (comment) =>{
-                            const user = await this.userRepository?.findById(comment.idUser)
-                            if(user)
-                            {
-                                const item = {
-                                    id : comment.id,
-                                    username : user.name,
-                                    content : comment.content
-                                }
-                                resultado.push(item)
+                        const resultado = comments.map(async (c)=> {
+                            const user = await this.userRepository?.findById(c.idUser)
+                            const item = {
+                                id : c.id,
+                                username : user?.name,
+                                content : c.content
                             }
+                            return item
                         })
+                        res.status(200).json(resultado)
                     }
                 }
             } catch (error) {
