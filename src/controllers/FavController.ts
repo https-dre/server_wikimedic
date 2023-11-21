@@ -6,8 +6,6 @@ import { Favorito } from '../models/Favorito';
 import { IUserRepository } from '../repositories/protocols/IUserRepository';
 import { IMedRepository as IMedicamentoRepository } from '../repositories/protocols/IMedRepository';
 import { IFavoritoRepository } from '../repositories/protocols/IFavoritoRepository';
-import { ParamsDictionary } from 'express-serve-static-core';
-import { ParsedQs } from 'qs';
 
 
 interface IFavController {

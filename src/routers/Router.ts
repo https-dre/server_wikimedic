@@ -12,11 +12,6 @@ import { CommentController } from "../controllers/CommentController";
 
 import { Autentication } from '../filters/Autentication';
 
-import { PostgreController } from "../data/Client"
-
-
-
-
 const Router = express.Router()
 
 Router.get('/', (__req, res)=>{
@@ -105,7 +100,7 @@ Router.post('/comentarios/register', (req, res)=>{
   const medRepository = new MedicamentoRepository()
   const commentRepository = new CommentRepository()
 
-  const commentController = new CommentController(commentRepository)
+  const commentController = new CommentController(commentRepository, userRepository, medRepository)
   commentController.postComment(req, res)
 })
 

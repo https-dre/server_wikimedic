@@ -59,7 +59,6 @@ export class UserRepository implements IUserRepository { //UserRepository usando
     async findById(Id: string): Promise<User | null> {
         const UserCollection = mongo.db.collection('User')
         const result = await UserCollection.findOne({_id : Id as unknown as ObjectId})
-        //console.log(result)
 
         if (result) 
         {
