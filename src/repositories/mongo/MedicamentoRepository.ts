@@ -54,7 +54,7 @@ export class MedicamentoRepository implements IMedRepository
         try
         {
             const MedicamentoCollection = mongo.db.collection('Medicamento')
-            const doc = MedicamentoCollection.findOne({_id : Id as unknown as ObjectId})
+            const doc = await MedicamentoCollection.findOne({_id : Id as unknown as ObjectId})
             if(doc)
             {
                 const medic = toMedic(doc)
@@ -76,7 +76,7 @@ export class MedicamentoRepository implements IMedRepository
         {
             const MedicamentoCollection = mongo.db.collection('Medicamento')
             const docs = await MedicamentoCollection.find().toArray();
-            const medicamentos = docs.map(doc => toMedic(doc))
+            const medicamentos = docs.map((doc: any) => toMedic(doc))
             return medicamentos
         }
         catch (err)
