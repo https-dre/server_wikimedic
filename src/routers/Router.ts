@@ -3,14 +3,17 @@ import express from "express"
 import { UserRepository } from "../repositories/mongo/UserRepository";
 import { MedicamentoRepository } from '../repositories/mongo/MedicamentoRepository';
 import { FavoritoRepository } from "../repositories/mongo/FavoritoRepository";
+import { CommentRepository } from "../repositories/mongo/CommentRepository";
 
 import { UserController } from "../controllers/UserController"
 import { MedController } from "../controllers/MedController"
 import { FavController } from '../controllers/FavController';
+import { CommentController } from "../controllers/CommentController";
 
 import { Autentication } from '../filters/Autentication';
 
 import { PostgreController } from "../data/Client"
+
 
 
 
@@ -95,4 +98,15 @@ Router.delete('/favoritos/delete/:id',(req, res)=>{
   const favController = new FavController(favRepository)
   favController.delete(req ,res)
 })
+
+// comentários
+Router.post('/commentarios/register', (req, res)=>{
+  const userRepository = new UserRepository()
+  const medRepository = new MedicamentoRepository()
+  const commentRepository = new CommentRepository()
+
+  const commentController = new CommentController(commentRepository)
+  commentController.postComment(req, res)
+})
+
 export default Router
