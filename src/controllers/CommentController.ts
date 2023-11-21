@@ -85,12 +85,15 @@ export class CommentController {
                     {
                         const comments = await this.commentRepository.findByIdMed(req.params.id)
                         
-                        comments.forEach(async function (comment){
-                            const user = await this.userRepository.findById(comment.idUser)
-                            const item = {
-                                id : comment.id,
-                                username : user.name,
-                                content : comment.content
+                        comments.forEach(async  (comment) =>{
+                            const user = await this.userRepository?.findById(comment.idUser)
+                            if(user)
+                            {
+                                const item = {
+                                    id : comment.id,
+                                    username : user.name,
+                                    content : comment.content
+                                }
                             }
                         })
                     }
