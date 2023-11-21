@@ -42,7 +42,8 @@ export class CommentController {
                             id : uuidv4(),
                             idUser : req.body.idUser,
                             idMed : req.body.idMed,
-                            content : req.body.content
+                            content : req.body.content,
+                            created_at : new Date().toUTCString()
                         }
                         const result = await this.commentRepository.postComment(comment)
                         res.status(201).json(result)
