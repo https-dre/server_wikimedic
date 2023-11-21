@@ -72,4 +72,32 @@ export class CommentController {
             res.status(500).json({message : "Erro interno no Servidor, aguarde ou contate o administrador"})
         }
     }
+    async findByIdMed(req : Request, res : Response) : Promise<void>
+    {
+        if(this.medRepository != null && this.userRepository != null)
+        {
+            try {
+                if(req.params.id)
+                {
+                    const med = await this.medRepository.findById(req.params.id)
+                    const resultado = []
+                    if(med != null)
+                    {
+                        const comments = await this.commentRepository.findByIdMed(req.params.id)
+                        
+                        comments.forEach(async function (comment){
+                            const user = await this.userRepository.findById(comment.idUser)
+                            const item = {
+                                id : comment.id,
+                                username : user.name,
+                                content : comment.content
+                            }
+                        })
+                    }
+                }
+            } catch (error) {
+                
+            }
+        }
+    }
 }
