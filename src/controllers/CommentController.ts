@@ -90,7 +90,8 @@ export class CommentController {
                             const item = {
                                 id: c.id,
                                 username: user?.name,
-                                content: c.content
+                                content: c.content,
+                                created_at : c.created_at
                             };
                             return item;
                          }));
