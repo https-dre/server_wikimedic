@@ -13,14 +13,16 @@ export class CommentRepository implements ICommentRepository
                 _id : comment.id as unknown as ObjectId,
                 idUser : comment.idUser,
                 idMed : comment.idMed,
-                content : comment.content
+                content : comment.content,
+                created_at : comment.created_at
             })
 
             const commentResult : Comment = {
                 id : result.insertedId as unknown as string,
                 idUser : comment.idUser,
                 idMed : comment.idMed,
-                content : comment.content
+                content : comment.content,
+                created_at : comment.created_at
             }
             return commentResult
         } catch (error) {

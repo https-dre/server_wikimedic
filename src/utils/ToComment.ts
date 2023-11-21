@@ -6,6 +6,7 @@ export function toComment(obj : any) : Comment
         id : obj._id,
         idUser : obj.idUser,
         idMed : obj.idMed,
-        content : obj.content
+        content : obj.content,
+        created_at : obj.created_at
     }
 }
