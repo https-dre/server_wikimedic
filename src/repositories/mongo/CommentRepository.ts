@@ -2,6 +2,7 @@ import { ICommentRepository } from "../protocols/ICommentRepository";
 import { Comment } from "../../models/Comment"
 import { mongo } from "../../data/mongoDB/conn"
 import { ObjectId } from "mongodb";
+import { toComment } from "../../utils/ToComment";
 
 export class CommentRepository implements ICommentRepository
 {
@@ -20,6 +21,17 @@ export class CommentRepository implements ICommentRepository
                 idMed : comment.idMed
             }
             return commentResult
+        } catch (error) {
+            throw error
+        }
+    }
+    async findByIdMed(IdMed: string): Promise<Comment[]> {
+        try {
+            const CommentCollection = mongo.db.collection('Comment')
+            const docs = await CommentCollection.find({ idMed : IdMed }).toArray()
+            const comments = docs.map(doc => toComment(doc))
+            return comments
+            
         } catch (error) {
             throw error
         }
