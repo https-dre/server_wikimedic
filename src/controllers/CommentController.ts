@@ -84,15 +84,16 @@ export class CommentController {
                     {
                         const comments = await this.commentRepository.findByIdMed(req.params.id)
                         
-                        const resultado = comments.map(async (c)=> {
-                            const user = await this.userRepository?.findById(c.idUser)
+                        const resultado = await Promise.all(comments.map(async (c) => {
+                            const user = await this.userRepository?.findById(c.idUser);
                             const item = {
-                                id : c.id,
-                                username : user?.name,
-                                content : c.content
-                            }
-                            return item
-                        })
+                                id: c.id,
+                                username: user?.name,
+                                content: c.content
+                            };
+                            return item;
+                         }));
+                         
                         res.status(200).json(resultado)
                     }
                 }
