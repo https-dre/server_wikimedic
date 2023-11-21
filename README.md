@@ -35,3 +35,13 @@ Servidor Http que servirá a Wikimedic
 /favoritos/getByIdUser/:id -- get favoritos por usuário
 
 /favoritos/delete/:id -- deletar favorito por id
+
+**Comentários**
+
+/comentarios/register -- registrar comentário
+
+/comentarios/numProcesso/:numProcesso -- get comentário por medicamento usando numProcesso
+
+/comentarios/getByIdMed/:id -- get comentário por medicamento usando id do medicamento
+
+/comentarios/delete/:id -- deletar comentário por id
