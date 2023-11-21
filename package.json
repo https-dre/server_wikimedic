@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "ts-node ./Server.ts",
     "setDB": "ts-node ./src/data/mongoDB/conn.ts",
-    "postgres": "ts-node ./src/data/postgre.ts",
+    "testEmail" : "ts-node ./src/email/Transporter.ts",
     "build": "tsc"
   },
   "author": "André de Oliveira Dias",
