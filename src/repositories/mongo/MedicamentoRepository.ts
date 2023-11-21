@@ -11,9 +11,9 @@ export class MedicamentoRepository implements IMedRepository
         try {
             const MedicamentoCollection = mongo.db.collection('Medicamento')
             const doc = await MedicamentoCollection.findOne({numProcesso : NumProcesso})
+            console.log(doc)
             if(doc)
             {
-                
                 const medic = toMedic(doc)
                 return medic
             }
