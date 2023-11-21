@@ -7,7 +7,7 @@
     "dev": "ts-node ./Server.ts",
     "setDB": "ts-node ./src/data/mongoDB/conn.ts",
     "postgres": "ts-node ./src/data/postgre.ts",
-    "build":"tsc"
+    "build": "tsc"
   },
   "author": "André de Oliveira Dias",
   "license": "ISC",
@@ -26,6 +26,7 @@
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",
     "@types/cors": "^2.8.16",
+    "@types/dotenv": "^8.2.0",
     "@types/express": "^4.17.21",
     "@types/mongodb": "^4.0.7",
     "@types/mongoose": "^5.11.97",
