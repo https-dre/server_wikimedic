@@ -94,6 +94,7 @@ export class CommentController {
                                     username : user.name,
                                     content : comment.content
                                 }
+                                resultado.push(item)
                             }
                         })
                     }
