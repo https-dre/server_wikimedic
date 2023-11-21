@@ -100,7 +100,7 @@ Router.delete('/favoritos/delete/:id',(req, res)=>{
 })
 
 // comentários
-Router.post('/commentarios/register', (req, res)=>{
+Router.post('/comentarios/register', (req, res)=>{
   const userRepository = new UserRepository()
   const medRepository = new MedicamentoRepository()
   const commentRepository = new CommentRepository()
