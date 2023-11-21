@@ -115,7 +115,7 @@ export class CommentController {
             try {
                 if(req.params.numProcesso)
                 {
-                    const med = await this.medRepository.findByNumProcess(req.params.id)
+                    const med = await this.medRepository.findByNumProcess(req.params.numProcesso)
                     
                     if(med != null)
                     {
