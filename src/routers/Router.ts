@@ -104,4 +104,22 @@ Router.post('/comentarios/register', (req, res)=>{
   commentController.postComment(req, res)
 })
 
+Router.get('/comentarios/getByIdMed/:id', (req, res)=>{
+  const userRepository = new UserRepository()
+  const medRepository = new MedicamentoRepository()
+  const commentRepository = new CommentRepository()
+
+  const commentController = new CommentController(commentRepository, userRepository, medRepository)
+  commentController.findByIdMed(req, res)
+})
+
+Router.get('/comentarios/numProcesso/:numProcesso', (req, res)=>{
+  const userRepository = new UserRepository()
+  const medRepository = new MedicamentoRepository()
+  const commentRepository = new CommentRepository()
+
+  const commentController = new CommentController(commentRepository, userRepository, medRepository)
+  commentController.findByNumProcesso(req, res)
+})
+
 export default Router

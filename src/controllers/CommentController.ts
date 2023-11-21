@@ -82,7 +82,7 @@ export class CommentController {
                     const med = await this.medRepository.findById(req.params.id)
                     if(med != null)
                     {
-                        const comments = await this.commentRepository.findByIdMed(req.params.id)
+                        const comments = await this.commentRepository.findByIdMed(med.id)
                         
                         const resultado = await Promise.all(comments.map(async (c) => {
                             const user = await this.userRepository?.findById(c.idUser);
@@ -96,9 +96,53 @@ export class CommentController {
                          
                         res.status(200).json(resultado)
                     }
+                    else
+                    {
+                        res.send('Medicamento not Found. Status : '+ 404).status(404)
+                    }
+                }
+                
+            } catch (error) {
+                res.send("Erro Interno no Servidor, aguade ou contate o administrador")
+            }
+        }
+    }
+
+    async findByNumProcesso(req : Request, res : Response) : Promise<void>
+    {
+        if(this.medRepository != null && this.userRepository != null)
+        {
+            try {
+                if(req.params.numProcesso)
+                {
+                    const med = await this.medRepository.findByNumProcess(req.params.id)
+                    if(med != null)
+                    {
+                        const comments = await this.commentRepository.findByIdMed(med.id)
+                        
+                        const resultado = await Promise.all(comments.map(async (c) => {
+                            const user = await this.userRepository?.findById(c.idUser);
+                            const item = {
+                                id: c.id,
+                                username: user?.name,
+                                content: c.content
+                            };
+                            return item;
+                         }));
+                         
+                        res.status(200).json(resultado)
+                    }
+                    else
+                    {
+                        res.send("Medicamento not found").status(404)
+                    }
+                }
+                else
+                {
+                    res.send("Preencha todos os campos").status(400)
                 }
             } catch (error) {
-                
+                res.send("Erro interno no Servidor, aguarde ou contate o administrador").status(500)
             }
         }
     }
