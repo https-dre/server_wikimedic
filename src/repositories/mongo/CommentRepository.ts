@@ -38,4 +38,12 @@ export class CommentRepository implements ICommentRepository
             throw error
         }
     }
+    async deleteById(Id: string): Promise<void> {
+        try {
+            const CommentCollection = mongo.db.collection("Comment")
+            await CommentCollection.deleteOne({ _id : Id as unknown as ObjectId})
+        } catch (error) {
+            throw error
+        }
+    }
 }
