@@ -1,4 +1,5 @@
 import { Comment } from "../models/Comment"
+
 import { ICommentRepository } from "../repositories/protocols/ICommentRepository"
 import { IMedRepository } from "../repositories/protocols/IMedRepository"
 import { IUserRepository } from "../repositories/protocols/IUserRepository"
@@ -26,25 +27,48 @@ export class CommentController {
 
     async postComment(req : Request, res : Response): Promise<void>
     {
-        try {
-            if(req.body.idUser != null && req.body.idMed != null && req.body.content != null)
-            {
-                const comment : Comment = {
-                    id : uuidv4(),
-                    idUser : req.body.idUser,
-                    idMed : req.body.idMed,
-                    content : req.body.content
-                }
-
-                const result = await this.commentRepository.postComment(comment)
-                res.status(201).json(result)
-            }
-            else
-            {
-                res.status(400).json({ message : "Preencha todos os campos"})
-            }
-        } catch (error) 
+        if( this.userRepository != null && this.medRepository != null)
         {
+            try {
+                if(req.body.idUser != null && req.body.idMed != null && req.body.content != null)
+                {
+                    
+                    const user = await this.userRepository.findById(req.body.idUser)
+                    const med = await this.medRepository.findById(req.body.idMed)
+                    
+                    if(user != null && med != null)
+                    {
+                        const comment : Comment = {
+                            id : uuidv4(),
+                            idUser : req.body.idUser,
+                            idMed : req.body.idMed,
+                            content : req.body.content
+                        }
+                        const result = await this.commentRepository.postComment(comment)
+                        res.status(201).json(result)
+                    }
+                    else if (user == null)
+                    {
+                        res.status(404).json({message : "User not found"})
+                        
+                    }
+                    else if (med == null)
+                    {
+                        res.status(404).json({message : "Medicamento not found"})
+                    }
+                }
+                else
+                {
+                    res.status(400).json({ message : "Preencha todos os campos"})
+                }
+            } catch (error) 
+            {
+                res.status(500).json({message : "Erro interno no Servidor, aguarde ou contate o administrador"})
+            }
+        }
+        else
+        {
+
             res.status(500).json({message : "Erro interno no Servidor, aguarde ou contate o administrador"})
         }
     }
