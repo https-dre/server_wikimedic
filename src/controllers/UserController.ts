@@ -5,11 +5,14 @@ import { Request, Response } from "express"
 import { IResponseHttp as ResponseHttp } from "../models/ResponseHttp"
 import { v4 as uuidv4 } from 'uuid';
 import hashPassword from "../crypt/crypt";
+import { ParamsDictionary } from "express-serve-static-core";
+import { ParsedQs } from "qs";
 
 interface IUserController {
   postUser(req: Request, res: Response): Promise<void>;
   deleteUser(req: Request, res : Response): Promise<void>;
   getAllUsers(req : Request, res : Response): Promise<void>;
+  updateUser(req : Request, res : Response): Promise<void>;
 }
 
 export class UserController implements IUserController {
@@ -98,6 +101,22 @@ export class UserController implements IUserController {
         console.log(err)
         res.status(500).json({message : "Erro Interno No Servidor"})
       }
+  }
+  async updateUser(req: Request, res: Response): Promise<void> {
+    try {
+      const user = await this.userRepository.findById(req.body.user.id)
+      if(user != null)
+      {
+        const result = await this.userRepository.updateUser(user)
+        res.status(201).json(result)
+      }
+      else
+      {
+        res.send('User not found').status(404)
+      }
+    } catch (error) {
+      res.send('Erro interno no servidor, aguarde ou contate o administrador').status(500)
+    }
   }
   
 
