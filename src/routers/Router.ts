@@ -18,6 +18,12 @@ Router.get('/', (__req, res)=>{
   res.send("<h1>httpServer to Wikimedic</h1>")
 })
 
+Router.post('/users/register', async (req,res) => {
+  const userRepository = new UserRepository()
+  const userController = new UserController(userRepository)
+  userController.postUser(req, res)
+})
+
 Router.get('/users', (req, res)=>{
   const userRepository = new UserRepository()
   const userController = new UserController(userRepository)
@@ -29,17 +35,17 @@ Router.get('/users/login', Autentication.AuthUser, (req, res)=>{
   res.status(200).json({message: "Usuário Autenticado"})
 })
  
-Router.post('/users/register', async (req,res) => {
-  const userRepository = new UserRepository()
-  const userController = new UserController(userRepository)
-  userController.postUser(req, res)
-})
-
 Router.delete('/users/delete/:id', async (req, res)=>{
   const userRepository = new UserRepository()
   const userController = new UserController(userRepository)
   userController.deleteUser(req, res)
 })
+
+Router.put('/users/update', (req, res)=>{
+  const userRepository = new UserRepository()
+  const userController = new UserController(userRepository)
+})
+
 // Medicamentos
 
 Router.get('/medicamentos', (req, res)=>{
@@ -121,5 +127,7 @@ Router.get('/comentarios/numProcesso/:numProcesso', (req, res)=>{
   const commentController = new CommentController(commentRepository, userRepository, medRepository)
   commentController.findByNumProcesso(req, res)
 })
+
+
 
 export default Router
