@@ -1,16 +1,18 @@
 import { IUserRepository } from "../repositories/protocols/IUserRepository"
+import { FavoritoRepository } from "../repositories/mongo/FavoritoRepository";
+import { CommentRepository } from "../repositories/mongo/CommentRepository";
+
 import { User } from "../models/User"
+
 import { Request, Response } from "express"
 
 import { IResponseHttp as ResponseHttp } from "../models/ResponseHttp"
 import { v4 as uuidv4 } from 'uuid';
 import hashPassword from "../crypt/crypt";
-import { ParamsDictionary } from "express-serve-static-core";
-import { ParsedQs } from "qs";
 
 interface IUserController {
   postUser(req: Request, res: Response): Promise<void>;
-  deleteUser(req: Request, res : Response): Promise<void>;
+  deleteUser(req: Request, res : Response, fav : FavoritoRepository, comment : CommentRepository): Promise<void>;
   getAllUsers(req : Request, res : Response): Promise<void>;
   getUserById(req : Request, res : Response): Promise<void>;
   updateUser(req : Request, res : Response): Promise<void>;
@@ -64,7 +66,7 @@ export class UserController implements IUserController {
       throw err
     }
   }
-  async deleteUser(req : Request, res : Response): Promise<void> {
+  async deleteUser(req : Request, res : Response, fav : FavoritoRepository, comment : CommentRepository): Promise<void> {
       try {
         //console.log(req.params.id)
         if(req.params.id)
@@ -74,8 +76,10 @@ export class UserController implements IUserController {
           //console.log(userFinded)
           if(userFinded)
           {
+            await fav.deleteByIdUser(userFinded.id)
+            await fav.deleteByIdUser(userFinded.id)
             await this.userRepository.deleteUser(userFinded.id)
-            res.status(200).json({message : "Usuário deletado!"})
+            res.status(200).json({message : "Usuário, favoritos e comentários deletados!"})
             
           }
           else
