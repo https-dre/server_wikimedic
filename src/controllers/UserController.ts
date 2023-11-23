@@ -12,6 +12,7 @@ interface IUserController {
   postUser(req: Request, res: Response): Promise<void>;
   deleteUser(req: Request, res : Response): Promise<void>;
   getAllUsers(req : Request, res : Response): Promise<void>;
+  getUserById(req : Request, res : Response): Promise<void>;
   updateUser(req : Request, res : Response): Promise<void>;
   updatePassword(req : Request, res : Response) : Promise<void>;
 }
@@ -186,6 +187,24 @@ export class UserController implements IUserController {
       res.send('Informe credenciais do usuário para a atualização').status(400)
     }
     
+  }
+  async getUserById(req: Request, res: Response): Promise<void> {
+    if(req.params.id)
+    {
+      try
+      {
+        const user = await this.userRepository.findById(req.params.id)
+        res.status(200).json(user)
+      }
+      catch (error)
+      {
+        res.send("Erro interno no Servidor, aguarde ou contate o administrador")
+      }
+    }
+    else
+    {
+      res.send("Informe um id do Usuário no parâmetro da requisição").status(400)
+    }
   }
 
 }
