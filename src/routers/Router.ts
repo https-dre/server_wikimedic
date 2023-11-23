@@ -77,6 +77,12 @@ Router.post('/medicamentos/register',(req,res)=>{
   medController.postMed(req, res)
 })
 
+Router.get('/medicamentos/id/:id', (req, res)=>{
+  const medRepository = new MedicamentoRepository()
+  const medController = new MedController(medRepository)
+  medController.getById(req, res)
+})
+
 Router.delete('/medicamentos/delete/numProcesso/:numProcesso', (req, res)=>{
   const medRepository = new MedicamentoRepository()
   const medController = new MedController(medRepository)
