@@ -103,20 +103,30 @@ export class UserController implements IUserController {
       }
   }
   async updateUser(req: Request, res: Response): Promise<void> {
-    try {
-      const user = await this.userRepository.findById(req.body.user.id)
-      if(user != null)
-      {
-        const result = await this.userRepository.updateUser(user)
-        res.status(201).json(result)
+    if(req.body.user)
+    {
+      try {
+        const user = await this.userRepository.findById(req.body.user.id)
+        //console.log(user)
+        if(user != null)
+        {
+          const result = await this.userRepository.updateUser(req.body.user)
+          res.status(201).json(result)
+        }
+        else
+        {
+          res.send('User not found').status(404)
+        }
+      } catch (error) {
+        res.send('Erro interno no servidor, aguarde ou contate o administrador').status(500)
+        console.log(error)
       }
-      else
-      {
-        res.send('User not found').status(404)
-      }
-    } catch (error) {
-      res.send('Erro interno no servidor, aguarde ou contate o administrador').status(500)
     }
+    else
+    {
+      res.send("Informe um objecto User no corpo da Requisição").status(400)
+    }
+    
   }
   
 

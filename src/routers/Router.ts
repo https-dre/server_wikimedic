@@ -44,6 +44,7 @@ Router.delete('/users/delete/:id', async (req, res)=>{
 Router.put('/users/update', (req, res)=>{
   const userRepository = new UserRepository()
   const userController = new UserController(userRepository)
+  userController.updateUser(req, res)
 })
 
 // Medicamentos
