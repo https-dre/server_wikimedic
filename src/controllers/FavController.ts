@@ -8,15 +8,7 @@ import { IMedRepository as IMedicamentoRepository } from '../repositories/protoc
 import { IFavoritoRepository } from '../repositories/protocols/IFavoritoRepository';
 
 
-interface IFavController {
-    postFav(req : Request, res : Response): Promise<void>;
-    getFav(req : Request, res : Response): Promise<void>;
-    findByIdUser(req : Request, res : Response) : Promise<void>;
-    delete( req : Request, res : Response): Promise<void>;
-    getAll(req : Request, res : Response): Promise<void>;
-}
-
-export class FavController implements IFavController
+export class FavController
 {
     favRepository : IFavoritoRepository
     userRepository? : IUserRepository

@@ -1,19 +1,10 @@
 import { Request, Response } from "express"
 import { Medicamento } from "../models/Medicamento"
 import { IMedRepository } from "../repositories/protocols/IMedRepository"
-import { ParamsDictionary } from "express-serve-static-core";
-import { ParsedQs } from "qs";
+
 import { v4 as uuidv4 } from 'uuid';
 
-interface IMedController {
-    postMed(req : Request, res : Response) : Promise<void>;
-    validateMed(req : Request, res : Response) : Promise<void>;
-    getAll(req : Request, res : Response) : Promise<void>;
-    deleteByNumProcesso( req : Request, res : Response) : Promise<void>;
-    getById(req : Request, res : Response): Promise<void>;
-}
-
-export class MedController implements IMedController {
+export class MedController {
     medRepository : IMedRepository
 
     constructor(med : IMedRepository)

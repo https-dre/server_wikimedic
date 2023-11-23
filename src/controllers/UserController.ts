@@ -10,16 +10,7 @@ import { IResponseHttp as ResponseHttp } from "../models/ResponseHttp"
 import { v4 as uuidv4 } from 'uuid';
 import hashPassword from "../crypt/crypt";
 
-interface IUserController {
-  postUser(req: Request, res: Response): Promise<void>;
-  deleteUser(req: Request, res : Response, fav : FavoritoRepository, comment : CommentRepository): Promise<void>;
-  getAllUsers(req : Request, res : Response): Promise<void>;
-  getUserById(req : Request, res : Response): Promise<void>;
-  updateUser(req : Request, res : Response): Promise<void>;
-  updatePassword(req : Request, res : Response) : Promise<void>;
-}
-
-export class UserController implements IUserController {
+export class UserController {
 
   userRepository: IUserRepository;
 
