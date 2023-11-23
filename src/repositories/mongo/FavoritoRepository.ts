@@ -88,5 +88,13 @@ export class FavoritoRepository implements IFavoritoRepository
             throw err
         }
     }
+    async deleteByIdUser(IdUser: string): Promise<void> {
+        try {
+            const FavoritoCollection = mongo.db.collection('Favorito')
+            await FavoritoCollection.deleteMany({ idUser : IdUser})
+        } catch (error) {
+            throw error
+        }
+    }
     
 }

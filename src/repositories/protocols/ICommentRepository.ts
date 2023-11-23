@@ -5,4 +5,5 @@ export interface ICommentRepository
     postComment(comment : Comment): Promise<Comment>;
     findByIdMed(Id : string): Promise<Comment[]>;
     deleteById(Id : string) : Promise<void>;
+    deleteByIdUser(IdUser : string) : Promise<void>;
 }

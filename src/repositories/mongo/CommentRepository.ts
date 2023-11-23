@@ -48,4 +48,15 @@ export class CommentRepository implements ICommentRepository
             throw error
         }
     }
+    async deleteByIdUser(IdUser: string): Promise<void> {
+        try
+        {
+            const CommentCollection = mongo.db.collection("Comment")
+            await CommentCollection.deleteMany({ idUser : IdUser })
+        }
+        catch (error)
+        {
+            throw error
+        }
+    }
 }

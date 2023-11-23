@@ -6,5 +6,6 @@ export interface IFavoritoRepository {
     findByIdUser(id : string): Promise<Favorito[] | null>;
     //findOneByIdUser(id : string) : Promise <Favorito | null>;
     delete( id : string) : Promise<void>;
+    deleteByIdUser(IdUser : string) : Promise<void>;
     getAll() : Promise<Favorito[]>;
 }
