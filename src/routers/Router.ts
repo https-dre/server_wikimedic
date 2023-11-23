@@ -34,6 +34,12 @@ Router.get('/users/login', Autentication.AuthUser, (req, res)=>{
   //console.log('Usuário autenticado')
   res.status(200).json({message: "Usuário Autenticado"})
 })
+
+Router.get('/users/id/:id', (req, res)=>{
+  const userRepository = new UserRepository()
+  const userController = new UserController(userRepository)
+  userController.getUserById(req, res)
+})
  
 Router.delete('/users/delete/:id', async (req, res)=>{
   const userRepository = new UserRepository()
