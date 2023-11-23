@@ -111,20 +111,37 @@ export class UserController implements IUserController {
         //console.log(user)
         if(user != null)
         {
-          const result = await this.userRepository.updateUser({
-            id : user.id,
-            name : req.body.user.name,
-            email : req.body.user.email,
-            email_reserva : req.body.user.email_reserva,
-            password : user.password
-          })
-          res.status(201).json(result)
+
+          if(req.body.user.email != "")
+          {
+            const emailUser = await this.userRepository.findByEmail(req.body.user.email)
+            if(emailUser == null)
+            {
+              const result = await this.userRepository.updateUser({
+                id : user.id,
+                name : req.body.user.name,
+                email : req.body.user.email,
+                email_reserva : req.body.user.email_reserva,
+                password : user.password
+              })
+              res.status(201).json(result)
+            }
+            else
+            {
+              res.send('Email já existe').status(400)
+            }
+          }
+          else
+          {
+            res.send('Informe o cabeçalho user.email corretamente').status(400)
+          }
         }
         else
         {
           res.send('User not found').status(404)
         }
-      } catch (error) {
+      } catch (error) 
+      {
         res.send('Erro interno no servidor, aguarde ou contate o administrador').status(500)
         console.log(error)
       }

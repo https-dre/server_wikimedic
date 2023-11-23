@@ -41,16 +41,20 @@ Router.delete('/users/delete/:id', async (req, res)=>{
   userController.deleteUser(req, res)
 })
 
-Router.put('/users/update', (req, res)=>{
+Router.put('/users/update', Autentication.AuthUser, (req, res)=>{
   const userRepository = new UserRepository()
   const userController = new UserController(userRepository)
   userController.updateUser(req, res)
 })
 
-Router.put('/users/update/password', (req, res)=>{
+Router.put('/users/update/password', Autentication.AuthUser, (req, res)=>{
   const userRepository = new UserRepository()
   const userController = new UserController(userRepository)
   userController.updatePassword(req, res)
+})
+
+Router.put('/users/recuperar', Autentication.AuthUser,(req, res)=>{
+  res.send('<h4>Recuperar Senha<h4>')
 })
 
 // Medicamentos
