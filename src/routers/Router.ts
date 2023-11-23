@@ -43,8 +43,10 @@ Router.get('/users/id/:id', (req, res)=>{
  
 Router.delete('/users/delete/:id', async (req, res)=>{
   const userRepository = new UserRepository()
+  const favRepository = new FavoritoRepository()
+  const commentRepository = new CommentRepository()
   const userController = new UserController(userRepository)
-  userController.deleteUser(req, res)
+  userController.deleteUser(req, res, favRepository, commentRepository)
 })
 
 Router.put('/users/update', Autentication.AuthUser, (req, res)=>{

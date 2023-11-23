@@ -69,7 +69,6 @@ export class CommentController {
         }
         else
         {
-
             res.status(500).json({message : "Erro interno no Servidor, aguarde ou contate o administrador"})
         }
     }

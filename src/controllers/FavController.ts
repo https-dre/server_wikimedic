@@ -33,9 +33,6 @@ export class FavController
         {
             try
             {
-                //console.log(req.body.numProcesso)
-                //console.log(req.body.idUser)
-
                 const userFinded = await this.userRepository.findById(req.body.idUser)
                 const medFinded = await this.medRepository.findByNumProcess(req.body.numProcesso)
                 //console.log(userFinded)
@@ -48,7 +45,7 @@ export class FavController
                         idMed: medFinded.id,
                         numProcesso : medFinded.numProcesso
                     }
-                    console.log("New Fav: \n", newFav)
+                    //console.log("New Fav: \n", newFav)
                     const fav = await this.favRepository.postFav(newFav)
                     //console.log(fav)
                     res.status(201).json(fav)
