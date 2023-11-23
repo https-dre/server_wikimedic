@@ -47,6 +47,12 @@ Router.put('/users/update', (req, res)=>{
   userController.updateUser(req, res)
 })
 
+Router.put('/users/update/password', (req, res)=>{
+  const userRepository = new UserRepository()
+  const userController = new UserController(userRepository)
+  userController.updatePassword(req, res)
+})
+
 // Medicamentos
 
 Router.get('/medicamentos', (req, res)=>{

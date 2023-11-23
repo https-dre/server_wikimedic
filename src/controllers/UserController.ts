@@ -13,6 +13,7 @@ interface IUserController {
   deleteUser(req: Request, res : Response): Promise<void>;
   getAllUsers(req : Request, res : Response): Promise<void>;
   updateUser(req : Request, res : Response): Promise<void>;
+  updatePassword(req : Request, res : Response) : Promise<void>;
 }
 
 export class UserController implements IUserController {
@@ -110,7 +111,13 @@ export class UserController implements IUserController {
         //console.log(user)
         if(user != null)
         {
-          const result = await this.userRepository.updateUser(req.body.user)
+          const result = await this.userRepository.updateUser({
+            id : user.id,
+            name : req.body.user.name,
+            email : req.body.user.email,
+            email_reserva : req.body.user.email_reserva,
+            password : user.password
+          })
           res.status(201).json(result)
         }
         else
@@ -126,8 +133,42 @@ export class UserController implements IUserController {
     {
       res.send("Informe um objecto User no corpo da Requisição").status(400)
     }
+  }
+  async updatePassword(req: Request, res: Response): Promise<void> {
+    if(req.body.password != null && req.body.id != null)
+    {
+      try {
+        const userFinded = await this.userRepository.findById(req.body.id)
+        if(userFinded)
+        {
+          const hash = await hashPassword(req.body.password)
+
+          const userDocUpdated : User = {
+            id : userFinded.id,
+            name : userFinded.name,
+            email : userFinded.email,
+            email_reserva : userFinded.email_reserva,
+            password : hash
+          }
+
+          await this.userRepository.updatePassword(userFinded.id, hash)
+          res.status(201).json(userDocUpdated)
+        }
+        else
+        {
+          res.send('User not found').status(404)
+        }
+      } 
+      catch (error) {
+        res.send('Erro interno no Servidor, aguarde ou contate o administrador')
+        console.log(error)
+      }
+    }
+    else if(req.body.id == null || req.body.password == null)
+    {
+      res.send('Informe credenciais do usuário para a atualização').status(400)
+    }
     
   }
-  
 
 }

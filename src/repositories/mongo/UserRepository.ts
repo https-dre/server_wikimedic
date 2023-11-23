@@ -91,8 +91,7 @@ export class UserRepository implements IUserRepository { //UserRepository usando
                 $set:{
                     name : user.name,
                     email : user.email,
-                    email_reserva : user.email_reserva,
-                    password : user.password
+                    email_reserva : user.email_reserva
                 }
             })
 
@@ -101,6 +100,22 @@ export class UserRepository implements IUserRepository { //UserRepository usando
             return user
         } 
         catch (error) {
+            throw error
+        }
+    }
+    async updatePassword(password: string, Id: string): Promise<void> {
+        try
+        {
+            const UserCollection = mongo.db.collection('User')
+            await UserCollection.updateOne({ _id : Id as unknown as ObjectId},
+                {
+                    $set:{
+                        password : password
+                    }
+                })
+        }
+        catch (error)
+        {
             throw error
         }
     }
