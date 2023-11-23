@@ -9,7 +9,8 @@ interface IMedController {
     postMed(req : Request, res : Response) : Promise<void>;
     validateMed(req : Request, res : Response) : Promise<void>;
     getAll(req : Request, res : Response) : Promise<void>;
-    deleteByNumProcesso( req : Request, res : Response) : Promise<void>
+    deleteByNumProcesso( req : Request, res : Response) : Promise<void>;
+    getById(req : Request, res : Response): Promise<void>;
 }
 
 export class MedController implements IMedController {
@@ -123,6 +124,19 @@ export class MedController implements IMedController {
         catch (err)
         {
             throw err
+        }
+    }
+    async getById(req: Request, res: Response): Promise<void> {
+        if(req.params.id)
+        {
+            try {
+                const medic = await this.medRepository.findById(req.params.id)
+                res.status(200).json(medic)
+            } 
+            catch (error) {
+                res.send('Erro interno no servidor, aguarde ou contate o administrador').status(500)
+                console.log(error)
+            }
         }
     }
 
