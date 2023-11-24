@@ -96,5 +96,22 @@ export class FavoritoRepository implements IFavoritoRepository
             throw error
         }
     }
+    async findByUser_Medic(idUser: string, idMed: string): Promise<Favorito | null> {
+        try {
+            const FavoritoCollection = mongo.db.collection('Favorito')
+            const doc = await FavoritoCollection.findOne({ idUser : idUser, idMed : idMed})
+            if(doc != null)
+            {
+                const fav = toFavorito(doc)
+                return fav
+            }
+            else
+            {
+                return null
+            }
+        } catch (error) {
+            throw error
+        }
+    }
     
 }

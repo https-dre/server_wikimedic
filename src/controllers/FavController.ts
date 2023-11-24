@@ -39,16 +39,24 @@ export class FavController
                 //console.log(medFinded)
                 if(userFinded != null && medFinded != null)
                 {
-                    const newFav : Favorito = {
-                        id : uuidv4(),
-                        idUser : userFinded.id,
-                        idMed: medFinded.id,
-                        numProcesso : medFinded.numProcesso
+                    const existente = await this.favRepository.findByUser_Medic(userFinded.id, medFinded.id)
+                    if(existente == null)
+                    {
+                        const newFav : Favorito = {
+                            id : uuidv4(),
+                            idUser : userFinded.id,
+                            idMed: medFinded.id,
+                            numProcesso : medFinded.numProcesso
+                        }
+                        //console.log("New Fav: \n", newFav)
+                        const fav = await this.favRepository.postFav(newFav)
+                        //console.log(fav)
+                        res.status(201).json(fav)
                     }
-                    //console.log("New Fav: \n", newFav)
-                    const fav = await this.favRepository.postFav(newFav)
-                    //console.log(fav)
-                    res.status(201).json(fav)
+                    else
+                    {
+                        res.send("O favorito já existe com o medicamento correspondente").status(400)
+                    }
                 }
                 else if(userFinded == null)
                 {
