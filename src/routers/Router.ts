@@ -11,6 +11,7 @@ import { FavController } from '../controllers/FavController';
 import { CommentController } from "../controllers/CommentController";
 
 import { Autentication } from '../filters/Autentication';
+import { EmailRepository } from "../repositories/mongo/EmailRepository";
 
 const Router = express.Router()
 
@@ -55,14 +56,19 @@ Router.put('/users/update', Autentication.AuthUser, (req, res)=>{
   userController.updateUser(req, res)
 })
 
-Router.put('/users/update/password', Autentication.AuthUser, (req, res)=>{
+Router.get('/users/solicitar/recuperacao', Autentication.AuthUser, (req, res)=>{
   const userRepository = new UserRepository()
+  const emailRepository = new EmailRepository()
   const userController = new UserController(userRepository)
-  userController.updatePassword(req, res)
+  
+  userController.solicitarUpdatePassword(req, res, emailRepository)
 })
 
 Router.put('/users/recuperar', Autentication.AuthUser,(req, res)=>{
-  res.send('<h4>Recuperar Senha<h4>')
+  const userRepository = new UserRepository()
+  const userController = new UserController(userRepository)
+  const emailRepository = new EmailRepository()
+  userController.updatePassword(req, res, emailRepository)
 })
 
 // Medicamentos
