@@ -9,6 +9,10 @@ import { Request, Response } from "express"
 import { IResponseHttp as ResponseHttp } from "../models/ResponseHttp"
 import { v4 as uuidv4 } from 'uuid';
 import hashPassword from "../crypt/crypt";
+import { EmailRepository } from '../repositories/mongo/EmailRepository';
+import { Email } from '../models/Email';
+
+import { transporter as EmailServive } from "../email/Transporter";
 
 export class UserController {
 
@@ -147,25 +151,40 @@ export class UserController {
       res.send("Informe um objecto User no corpo da Requisição").status(400)
     }
   }
-  async updatePassword(req: Request, res: Response): Promise<void> {
-    if(req.body.password != null && req.body.id != null)
+  async updatePassword(req: Request, res: Response, emailRepository : EmailRepository): Promise<void> {
+    if(req.body.password != null && req.body.email != null && req.body.token)
     {
       try {
-        const userFinded = await this.userRepository.findById(req.body.id)
+        const userFinded = await this.userRepository.findByEmail(req.body.email)
         if(userFinded)
         {
-          const hash = await hashPassword(req.body.password)
+          const email = await emailRepository.findByEmail(userFinded.email)
+          if(email)
+          {
+            if(email.type == 'recuperacao' && email.token == req.body.token)
+            {
+              const hash = await hashPassword(req.body.password)
 
-          const userDocUpdated : User = {
-            id : userFinded.id,
-            name : userFinded.name,
-            email : userFinded.email,
-            email_reserva : userFinded.email_reserva,
-            password : hash
+              const userDocUpdated : User = {
+                id : userFinded.id,
+                name : userFinded.name,
+                email : userFinded.email,
+                email_reserva : userFinded.email_reserva,
+                password : hash
+              }
+
+              await this.userRepository.updatePassword(userFinded.id, hash)
+              res.status(201).json(userDocUpdated)
+            }
+            else if(email.token != req.body.token)
+            {
+              res.send('O token não corresponde').status(400)
+            }
           }
-
-          await this.userRepository.updatePassword(userFinded.id, hash)
-          res.status(201).json(userDocUpdated)
+          else
+          {
+            res.send('Email not found').status(404)
+          }
         }
         else
         {
