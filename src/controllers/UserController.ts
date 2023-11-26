@@ -158,13 +158,14 @@ export class UserController {
     try {
       if(req.body.email)
       {
-        const userFinded = await this.userRepository.findByEmail(req.body.Email)
-        if(userFinded)
+        const userFinded = await this.userRepository.findByEmail(req.body.email)
+        
+        if(userFinded != null)
         {
           const mailFinded = await emailRepository.findByEmail(userFinded.email)
           if(mailFinded != null && mailFinded.type == 'recuperacao')
           {
-
+            await emailRepository.deleteByEmail(userFinded.email)
           }
           const email : Email = {
             id : uuidv4(),
@@ -181,7 +182,7 @@ export class UserController {
           }
           const doc = await emailRepository.save(email)
           await EmailServive.sendMail(mailOptions)
-          
+
           res.status(201).json({ 
             message : 'Email de recuperação enviado',
             email : email.to,
@@ -190,9 +191,13 @@ export class UserController {
         }
         else
         {
-          res.send('User not found').status(404)
+          res.status(404).send('User not found')
         }
         
+      }
+      else
+      {
+        res.send('Infome o email')
       }
     } catch (error) {
       console.log(error)
