@@ -4,50 +4,33 @@ import * as dotenv from "dotenv"
 
 dotenv.config()
 
-console.log(process.env.EMAIL,process.env.EMAIL_PASSWORD)
+//console.log(process.env.EMAIL,process.env.EMAIL_PASSWORD)
 const transporter = nodemailer.createTransport({
-  service: 'gmail',
-  host: 'smtp.gmail.com',
-  port: 465,
-  secure: true,
+  host: 'smtp.office365.com',
+  port : 587,
+  secure: false,
   auth: {
-   user: 'wikimedic.noreply@gmail.com',
-   pass: 'a'
+   user: 'wikimedic_no_reply@hotmail.com',
+   pass: 'aabeg2023'
   }
   });
-
-
-  /* var mailOptions = {
-    from: 'your-email@gmail.com',
-    to: 'receiver-email@gmail.com',
-    subject: 'Test Email',
-    text: 'Hello, this is a test email!'
-   };
-   
-   transporter.sendMail(mailOptions, function(error, info){
-    if (error) {
-      console.log(error);
-    } else {
-      console.log('Email sent: ' + info.response);
-    }
-   }); */
 
 const to = "deoliveiradiasandre@gmail.com"
 
 var mailOptions = {
-    from : process.env.EMAIL,
+    from : "wikimedic_no_reply@hotmail.com",
     to : to,
     subject : 'Test Email',
     text : "Email de Teste da Wikimedic"
 }
 
 transporter.sendMail(mailOptions, function(error, info){
-    if(error)
+    /* if(error)
     {
         console.log(error)
     }
     else
     {
         console.log(info)
-    }
+    } */
 })
