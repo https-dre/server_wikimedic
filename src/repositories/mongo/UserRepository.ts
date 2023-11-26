@@ -44,10 +44,10 @@ export class UserRepository implements IUserRepository { //UserRepository usando
         const UserCollection = mongo.db.collection('User')
         const result = await UserCollection.findOne({email : Email})
 
-        if (result) 
+        if (result != null) 
         {
             const user = toUser(result); // convertendo para User
-            return user;
+            return toUser(result);
         } 
         else 
         {
