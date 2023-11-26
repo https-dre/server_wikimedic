@@ -13,30 +13,23 @@ import { toEmail } from "../../utils/ToEmail";
 export class EmailRepository implements IEmailRepository
 {
 
-    async saveToken(mail : Email): Promise<Email> {
+    async save(mail : Email): Promise<Email> {
         try {
-            const emailModel : Email = {
-                id : uuidv4(),
-                to : mail.to,
-                token : getRandomInt(100, 200).toString(),
-                date : new Date().toUTCString(),
-                type : mail.type
-            }
             const EmailCollection = mongo.db.collection('Email')
             const result = await EmailCollection.insertOne({
-                _id : emailModel.id as unknown as ObjectId,
-                to : emailModel.to,
-                token : emailModel.token,
-                date : emailModel.date,
-                type : emailModel.type
+                _id : mail.id as unknown as ObjectId,
+                to : mail.to,
+                token : mail.token,
+                date : mail.date,
+                type : mail.type
             })
 
             const doc : Email = {
                 id : result.insertedId as unknown as string,
-                to : emailModel.to,
-                token : emailModel.token,
-                date : emailModel.date,
-                type : emailModel.type
+                to : mail.to,
+                token : mail.token,
+                date : mail.date,
+                type : mail.type
             }
             return doc
 
@@ -49,7 +42,7 @@ export class EmailRepository implements IEmailRepository
         try {
             const EmailCollection = mongo.db.collection('Email')
             const doc = await EmailCollection.findOne({
-                email : email
+                to : email
             })
             if(doc)
             {
@@ -60,6 +53,14 @@ export class EmailRepository implements IEmailRepository
             {
                 return null
             }
+        } catch (error) {
+            throw error
+        }
+    }
+    async deleteByEmail(email: string): Promise<void> {
+        try {
+            const EmailCollection = mongo.db.collection('Email')
+            await EmailCollection.deleteOne({ to : email})
         } catch (error) {
             throw error
         }
