@@ -1,7 +1,8 @@
 import { Email } from "../../models/Email";
 
 export interface IEmailRepository {
-    saveToken(mail : Email) : Promise<Email>
+    save(mail : Email) : Promise<Email>
     findByEmail(email  : string) : Promise<Email | null>
+    deleteByEmail(email : string) : Promise<void>;
 }
 
