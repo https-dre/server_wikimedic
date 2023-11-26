@@ -13,6 +13,7 @@ import { EmailRepository } from '../repositories/mongo/EmailRepository';
 import { Email } from '../models/Email';
 
 import { transporter as EmailServive } from "../email/Transporter";
+import { getRandomInt } from "../utils/RandomInt";
 
 export class UserController {
 
@@ -151,6 +152,54 @@ export class UserController {
       res.send("Informe um objecto User no corpo da Requisição").status(400)
     }
   }
+
+  async solicitarUpdatePassword( req : Request, res : Response, emailRepository : EmailRepository) : Promise<void>
+  {
+    try {
+      if(req.body.email)
+      {
+        const userFinded = await this.userRepository.findByEmail(req.body.Email)
+        if(userFinded)
+        {
+          const mailFinded = await emailRepository.findByEmail(userFinded.email)
+          if(mailFinded != null && mailFinded.type == 'recuperacao')
+          {
+
+          }
+          const email : Email = {
+            id : uuidv4(),
+            to : userFinded.email,
+            token : getRandomInt(100, 200).toString(),
+            date : new Date().toUTCString(),
+            type : 'recuperacao'
+          }
+          var mailOptions = {
+            from : process.env.EMAIL,
+            to : email.to,
+            subject : 'Recuperar Senha Wikimedic',
+            text : `Seu código de recuperação é : ${email.token}. \nNão Responda esse email`
+          }
+          const doc = await emailRepository.save(email)
+          await EmailServive.sendMail(mailOptions)
+          
+          res.status(201).json({ 
+            message : 'Email de recuperação enviado',
+            email : email.to,
+            date : email.date
+          })
+        }
+        else
+        {
+          res.send('User not found').status(404)
+        }
+        
+      }
+    } catch (error) {
+      console.log(error)
+      res.send('Erro interno no Servidor, aguarde ou contate o administrador.').status(500)
+    }
+  }
+
   async updatePassword(req: Request, res: Response, emailRepository : EmailRepository): Promise<void> {
     if(req.body.password != null && req.body.email != null && req.body.token)
     {
@@ -174,6 +223,7 @@ export class UserController {
               }
 
               await this.userRepository.updatePassword(userFinded.id, hash)
+              await emailRepository.deleteByEmail(userFinded.email) // deletando emails de recuperação do histórico
               res.status(201).json(userDocUpdated)
             }
             else if(email.token != req.body.token)
