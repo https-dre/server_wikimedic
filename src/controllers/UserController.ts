@@ -67,7 +67,7 @@ export class UserController {
       }
       else
       {
-        res.status(400).send('A senha deve ter no mínimo 8 caracteres')
+        res.status(400).json('A senha deve ter no mínimo 8 caracteres')
       }
     }
     else
