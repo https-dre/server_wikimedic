@@ -26,40 +26,53 @@ export class UserController {
   }
 
   async postUser(req: Request, res: Response) {
-
-    
-    const user: User = {
-      id: uuidv4(),
-      name: req.body.name,
-      email: req.body.email,
-      email_reserva: req.body.email_reserva,
-      password: await hashPassword(req.body.password)
-    }
-
-    try {
-      //valida se o email já existe
-      const userFinded = await this.userRepository.findByEmail(user.email)
-      if (userFinded == null) // se o usuário não existir, será nullo
+    if(req.body.email != null && req.body.password != null)
+    {
+      const password = req.body.password
+      if(password.length > 8)
       {
-        const userCreated = await this.userRepository.postUser(user)
-        const response: ResponseHttp = {
-          body: userCreated,
-          status: 201
+        const user: User = {
+          id: uuidv4(),
+          name: req.body.name,
+          email: req.body.email,
+          email_reserva: req.body.email_reserva,
+          password: await hashPassword(req.body.password)
         }
-        res.status(response.status).json(response.body)
+    
+        try {
+          //valida se o email já existe
+          const userFinded = await this.userRepository.findByEmail(user.email)
+          if (userFinded == null) // se o usuário não existir, será nullo
+          {
+            const userCreated = await this.userRepository.postUser(user)
+            const response: ResponseHttp = {
+              body: userCreated,
+              status: 201
+            }
+            res.status(response.status).json(response.body)
+          }
+          else {
+            const response: ResponseHttp = {
+              body: { message: "O email já existe" },
+              status: 400
+            }
+            res.status(response.status).json(response.body)
+          }
+        }
+        catch (err) {
+          console.log(err)
+          res.status(500).json({ message: "Erro interno o Servidor" })
+          throw err
+        }
       }
-      else {
-        const response: ResponseHttp = {
-          body: { message: "O email já existe" },
-          status: 400
-        }
-        res.status(response.status).json(response.body)
+      else
+      {
+        res.status(400).send('A senha deve ter no mínimo 8 caracteres')
       }
     }
-    catch (err) {
-      console.log(err)
-      res.status(500).json({ message: "Erro interno o Servidor" })
-      throw err
+    else
+    {
+      res.status(400).send('Preencha os cabeçalhos pelo menos: email e password')
     }
   }
   async deleteUser(req : Request, res : Response, fav : FavoritoRepository, comment : CommentRepository): Promise<void> {
