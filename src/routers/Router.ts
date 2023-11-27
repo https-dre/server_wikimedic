@@ -131,6 +131,13 @@ Router.delete('/favoritos/delete/:id',(req, res)=>{
   favController.delete(req ,res)
 })
 
+Router.get('/favoritos/validate', (req, res)=>{
+  const favRepository = new FavoritoRepository()
+  const medRepository = new MedicamentoRepository()
+  const favController = new FavController(favRepository)
+  favController.findFavorito(req ,res, medRepository)
+})
+
 // comentários
 Router.post('/comentarios/register', (req, res)=>{
   const userRepository = new UserRepository()
