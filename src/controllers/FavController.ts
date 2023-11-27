@@ -147,4 +147,31 @@ export class FavController
         }
     }
 
+    async findFavorito(req : Request, res : Response) : Promise<void>
+    {
+        try {
+            const idUser = req.query.idUser
+            const idMed = req.query.idMed
+
+            const fav = await this.favRepository.findByUser_Medic(idUser as unknown as string, idMed as unknown as string)
+            if(fav)
+            {
+                res.status(200).json({
+                    favorited : true,
+                    message : "Medicamento já favoritado"
+                })
+            }
+            else
+            {
+                res.status(200).json({
+                    favorited : false,
+                    message : "Medicamento não favoritado"
+                })
+            }
+        } catch (error) {
+            console.log(error)
+            res.status(500).send('Erro interno no Servidor, aguarde ou contate o administrador')
+        }
+    }
+
 }
