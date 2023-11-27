@@ -167,10 +167,11 @@ export class UserController {
           {
             await emailRepository.deleteByEmail(userFinded.email)
           }
+          const token = `${getRandomInt(0,10)}${getRandomInt(0,10)}${getRandomInt(0,10)}${getRandomInt(0,10)}${getRandomInt(0,10)}${getRandomInt(0,10)}`
           const email : Email = {
             id : uuidv4(),
             to : userFinded.email,
-            token : getRandomInt(100, 200).toString(),
+            token : token,
             date : new Date().toUTCString(),
             type : 'recuperacao'
           }
@@ -206,7 +207,7 @@ export class UserController {
   }
 
   async updatePassword(req: Request, res: Response, emailRepository : EmailRepository): Promise<void> {
-    if(req.body.password != null && req.body.email != null && req.body.token)
+    if(req.body.password != null && req.body.email != null && req.body.token != null)
     {
       try {
         const userFinded = await this.userRepository.findByEmail(req.body.email)
