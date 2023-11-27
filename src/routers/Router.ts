@@ -31,7 +31,7 @@ Router.get('/users', (req, res)=>{
   userController.getAllUsers(req, res)
 })
 
-Router.get('/users/login', Autentication.AuthUser, (req, res)=>{
+Router.post('/users/login', Autentication.AuthUser, (req, res)=>{
   //console.log('Usuário autenticado')
   res.status(200).json({message: "Usuário Autenticado"})
 })
