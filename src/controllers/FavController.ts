@@ -6,6 +6,7 @@ import { Favorito } from '../models/Favorito';
 import { IUserRepository } from '../repositories/protocols/IUserRepository';
 import { IMedRepository as IMedicamentoRepository } from '../repositories/protocols/IMedRepository';
 import { IFavoritoRepository } from '../repositories/protocols/IFavoritoRepository';
+import { MedicamentoRepository } from '../repositories/mongo/MedicamentoRepository';
 
 
 export class FavController
@@ -147,27 +148,38 @@ export class FavController
         }
     }
 
-    async findFavorito(req : Request, res : Response) : Promise<void>
+    async findFavorito(req : Request, res : Response, medRepository : MedicamentoRepository) : Promise<void>
     {
         try {
             const idUser = req.query.idUser
-            const idMed = req.query.idMed
+            const numProcesso = req.query.numProcesso
 
-            const fav = await this.favRepository.findByUser_Medic(idUser as unknown as string, idMed as unknown as string)
-            if(fav)
+            const med = await medRepository.findByNumProcess(numProcesso as unknown as string)
+
+            if(med)
             {
-                res.status(200).json({
-                    favorited : true,
-                    message : "Medicamento já favoritado"
-                })
+                const fav = await this.favRepository.findByUser_Medic(idUser as unknown as string, med.id)
+                if(fav)
+                {
+                    res.status(200).json({
+                        favorited : true,
+                        message : "Medicamento já favoritado"
+                    })
+                }
+                else
+                {
+                    res.status(200).json({
+                        favorited : false,
+                        message : "Medicamento não favoritado"
+                    })
+                }
             }
             else
             {
-                res.status(200).json({
-                    favorited : false,
-                    message : "Medicamento não favoritado"
-                })
+                res.status(404).send('Medicamento not found')
             }
+
+            
         } catch (error) {
             console.log(error)
             res.status(500).send('Erro interno no Servidor, aguarde ou contate o administrador')
