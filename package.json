@@ -1,12 +1,12 @@
 {
-  "name": "server",
+  "name": "HttpServerWikimedic",
   "version": "1.0.0",
   "description": "",
   "main": "./Server.ts",
   "scripts": {
-    "dev": "ts-node ./Server.ts",
+    "dev": "nodemon --exec ts-node Server.ts",
     "setDB": "ts-node ./src/data/mongoDB/conn.ts",
-    "testEmail" : "ts-node ./src/email/Transporter.ts",
+    "testEmail": "ts-node ./src/email/Transporter.ts",
     "build": "tsc"
   },
   "author": "André de Oliveira Dias",
@@ -34,6 +34,7 @@
     "@types/typescript": "^2.0.0",
     "@types/uuid": "^9.0.7",
     "eslint": "^8.53.0",
+    "nodemon": "^3.0.1",
     "ts-node": "^10.9.1"
   }
 }
