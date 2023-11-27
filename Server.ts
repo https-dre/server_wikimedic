@@ -12,25 +12,31 @@ import Router from "./src/routers/Router"
 
 import { mongo as ClientMongo } from "./src/data/mongoDB/conn"
 
-const main = async () => {
-  try
-  {
-    await ClientMongo.conn() // conectando ao banco de dados antes de iniciar a aplicação
-    app.use(express.json())
-    //app.use(Middle) //Middleware é um filtro de Acesso para o Servidor 
-    app.use(cors({ origin: "*" })) // permitindo qualquer origem se conectar ao ao Servidor
+const configureCORS = () => {
+  app.use(cors());
+  app.use(function (req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+  });
+};
 
-    app.use(Router) // colocando o arquivo ./src/routers/Router.ts para gerenciar as rotas da aplicação
+const main = async () => {
+  try {
+    await ClientMongo.conn(); // Conectando ao banco de dados antes de iniciar a aplicação
+    configureCORS(); // Configuração do CORS
+    app.use(express.json());
+    // app.use(Middle); // Middleware é um filtro de Acesso para o Servidor
+    app.use(Router); // Colocando o arquivo ./src/routers/Router.ts para gerenciar as rotas da aplicação
 
     httpServer.listen(port || 3030, () => {
-      console.log("\nhttpServer listening in " + port)
-    })
+      console.log("\nhttpServer listening in " + port);
+    });
+  } catch (err) {
+    console.log(err);
   }
-  catch (err)
-  {
-    console.log(err)
-  }
-}
+};
 
-main()
+main();
 
