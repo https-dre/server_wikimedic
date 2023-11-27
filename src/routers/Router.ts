@@ -144,8 +144,8 @@ Router.post('/comentarios/register', (req, res)=>{
   const medRepository = new MedicamentoRepository()
   const commentRepository = new CommentRepository()
 
-  const commentController = new CommentController(commentRepository, userRepository, medRepository)
-  commentController.postComment(req, res)
+  const commentController = new CommentController(commentRepository)
+  commentController.postComment(req, res, userRepository, medRepository)
 })
 
 Router.get('/comentarios/getByIdMed/:id', (req, res)=>{
@@ -153,8 +153,8 @@ Router.get('/comentarios/getByIdMed/:id', (req, res)=>{
   const medRepository = new MedicamentoRepository()
   const commentRepository = new CommentRepository()
 
-  const commentController = new CommentController(commentRepository, userRepository, medRepository)
-  commentController.findByIdMed(req, res)
+  const commentController = new CommentController(commentRepository)
+  commentController.findByIdMed(req, res, userRepository, medRepository)
 })
 
 Router.get('/comentarios/numProcesso/:numProcesso', (req, res)=>{
@@ -162,10 +162,8 @@ Router.get('/comentarios/numProcesso/:numProcesso', (req, res)=>{
   const medRepository = new MedicamentoRepository()
   const commentRepository = new CommentRepository()
 
-  const commentController = new CommentController(commentRepository, userRepository, medRepository)
-  commentController.findByNumProcesso(req, res)
+  const commentController = new CommentController(commentRepository)
+  commentController.findByNumProcesso(req, res, medRepository, userRepository)
 })
-
-
 
 export default Router

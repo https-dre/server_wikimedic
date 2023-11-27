@@ -1,4 +1,6 @@
 import { Comment } from "../models/Comment"
+import { MedicamentoRepository } from "../repositories/mongo/MedicamentoRepository"
+import { UserRepository } from '../repositories/mongo/UserRepository';
 
 import { ICommentRepository } from "../repositories/protocols/ICommentRepository"
 import { IMedRepository } from "../repositories/protocols/IMedRepository"
@@ -12,29 +14,20 @@ export class CommentController {
     medRepository? : IMedRepository
     userRepository? : IUserRepository
 
-    constructor(comment : ICommentRepository, user? : IUserRepository, med? : IMedRepository)
+    constructor(comment : ICommentRepository)
     {
         this.commentRepository = comment
-        if(user)
-        {
-            this.userRepository = user
-        }
-        if(med)
-        {
-            this.medRepository = med
-        }
     }
 
-    async postComment(req : Request, res : Response): Promise<void>
+    async postComment(req : Request, res : Response, userRepository : UserRepository, medRepository : MedicamentoRepository): Promise<void>
     {
-        if( this.userRepository != null && this.medRepository != null)
-        {
+        
             try {
                 if(req.body.idUser != null && req.body.idMed != null && req.body.content != null)
                 {
                     
-                    const user = await this.userRepository.findById(req.body.idUser)
-                    const med = await this.medRepository.findById(req.body.idMed)
+                    const user = await userRepository.findById(req.body.idUser)
+                    const med = await medRepository.findById(req.body.idMed)
                     
                     if(user != null && med != null)
                     {
@@ -65,27 +58,21 @@ export class CommentController {
             } catch (error) 
             {
                 res.status(500).json({message : "Erro interno no Servidor, aguarde ou contate o administrador"})
-            }
-        }
-        else
-        {
-            res.status(500).json({message : "Erro interno no Servidor, aguarde ou contate o administrador"})
-        }
     }
-    async findByIdMed(req : Request, res : Response) : Promise<void>
+    }
+
+    async findByIdMed(req : Request, res : Response, userRepository : UserRepository, medRepository : MedicamentoRepository) : Promise<void>
     {
-        if(this.medRepository != null && this.userRepository != null)
-        {
             try {
                 if(req.params.id)
                 {
-                    const med = await this.medRepository.findById(req.params.id)
+                    const med = await medRepository.findById(req.params.id)
                     if(med != null)
                     {
                         const comments = await this.commentRepository.findByIdMed(med.id)
                         
                         const resultado = await Promise.all(comments.map(async (c) => {
-                            const user = await this.userRepository?.findById(c.idUser);
+                            const user = await userRepository.findById(c.idUser);
                             const item = {
                                 id: c.id,
                                 username: user?.name,
@@ -106,30 +93,32 @@ export class CommentController {
             } catch (error) {
                 res.send("Erro Interno no Servidor, aguade ou contate o administrador")
             }
-        }
     }
 
-    async findByNumProcesso(req : Request, res : Response) : Promise<void>
+    async findByNumProcesso(req : Request, res : Response, medRepository : MedicamentoRepository, userRepository : UserRepository) : Promise<void>
     {
-        if(this.medRepository != null && this.userRepository != null)
-        {
+        
             try {
                 if(req.params.numProcesso)
                 {
-                    const med = await this.medRepository.findByNumProcess(req.params.numProcesso)
+                    const med = await medRepository.findByNumProcess(req.params.numProcesso)
                     
                     if(med != null)
                     {
                         const comments = await this.commentRepository.findByIdMed(med.id)
                         
                         const resultado = await Promise.all(comments.map(async (c) => {
-                            const user = await this.userRepository?.findById(c.idUser);
-                            const item = {
-                                id: c.id,
-                                username: user?.name,
-                                content: c.content
-                            };
-                            return item;
+                            const user = await userRepository.findById(c.idUser);
+                            if(user != null)
+                            {
+                                const item = {
+                                    id: c.id,
+                                    username: user.name,
+                                    content: c.content,
+                                    date : c.created_at
+                                };
+                                return item;
+                            }
                          }));
                          
                         res.status(200).json(resultado)
@@ -148,4 +137,3 @@ export class CommentController {
             }
         }
     }
-}
