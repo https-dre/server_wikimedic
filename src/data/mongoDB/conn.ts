@@ -9,7 +9,7 @@ export const mongo = {
 
   async conn(): Promise<void> {
     try {
-      const url = process.env.MONGO_URL
+      const url = process.env.MONGO_URL || "mongodb+srv://root:WvEyLSoepVJz6KbU@cluster0.ioeey37.mongodb.net/"
       if (!url) {
         throw new Error("A variável de ambiente MONGO_URL não está definida.");
       }
