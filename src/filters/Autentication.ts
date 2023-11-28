@@ -10,7 +10,7 @@ export class Autentication {
         const usersFinded = await userRepository.findByEmail(req.body.auth.email)
         if(usersFinded == null)
         {
-            res.status(404).json({message: "User Not Found"})
+            res.status(404).json("User Not Found")
         }
         else {
             const user = usersFinded
@@ -22,7 +22,7 @@ export class Autentication {
                     next()
                 } 
                 else {
-                    res.status(401).json({message : "Usuário não autenticado"})                
+                    res.status(401).json("Usuário não autenticado")                
                 }
             })
         }
