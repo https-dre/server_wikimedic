@@ -1,16 +1,15 @@
 {
     "version": 2,
-    "builds": [
-      {
-        "src": "./dist/Server.js",
-        "use": "@now/node"
-      }
-    ],
+    "build": {
+        "src":"dist/Server.js",
+        "use" : "@now/node"
+      },
     "routes": [
       {
         "src": "/(.*)",
-        "dest": "/dist/Server.js"
+        "dest": "/"
       }
     ],
-    "buildCommand":"npm run build"
+    "buildCommand": "npm run build",
+    "installCommand":"npm install"
   }
