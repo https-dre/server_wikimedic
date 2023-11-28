@@ -1,7 +1,7 @@
 {
   "name": "HttpServerWikimedic",
   "version": "1.0.0",
-  "description": "",
+  "description": "HttpServer para servir a Wikimedic",
   "main": "./dist/Server.js",
   "scripts": {
     "dev": "nodemon --exec ts-node Server.ts",
