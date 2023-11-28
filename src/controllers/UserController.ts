@@ -1,17 +1,16 @@
 import { IUserRepository } from "../repositories/protocols/IUserRepository"
-import { FavoritoRepository } from "../repositories/mongo/FavoritoRepository";
-import { CommentRepository } from '../repositories/mongo/CommentRepository';
+import { IEmailRepository } from "../repositories/protocols/IEmailRepository";
+import { IFavoritoRepository } from "../repositories/protocols/IFavoritoRepository";
+import { ICommentRepository } from "../repositories/protocols/ICommentRepository";
 
 import { User } from "../models/User"
-
-import { Request, Response } from "express"
-
-import { IResponseHttp as ResponseHttp } from "../models/ResponseHttp"
-import { v4 as uuidv4 } from 'uuid';
-import hashPassword from "../crypt/crypt";
-import { EmailRepository } from '../repositories/mongo/EmailRepository';
 import { Email } from '../models/Email';
 
+import { Request, Response } from "express"
+import { IResponseHttp as ResponseHttp } from "../models/ResponseHttp"
+
+import { v4 as uuidv4 } from 'uuid';
+import hashPassword from "../crypt/crypt";
 import { transporter as EmailServive } from "../email/Transporter";
 import { getRandomInt } from "../utils/RandomInt";
 
@@ -76,7 +75,7 @@ export class UserController {
       res.status(400).send('Preencha os cabeçalhos pelo menos: email e password')
     }
   }
-  async deleteUser(req : Request, res : Response, fav : FavoritoRepository, comment : CommentRepository): Promise<void> {
+  async deleteUser(req : Request, res : Response, fav : IFavoritoRepository, comment : ICommentRepository): Promise<void> {
       try {
         //console.log(req.params.id)
         if(req.params.id)
@@ -162,7 +161,7 @@ export class UserController {
     }
   }
 
-  async solicitarUpdatePassword( req : Request, res : Response, emailRepository : EmailRepository) : Promise<void>
+  async solicitarUpdatePassword( req : Request, res : Response, emailRepository : IEmailRepository) : Promise<void>
   {
     try {
       if(req.body.email)
@@ -216,7 +215,7 @@ export class UserController {
     }
   }
 
-  async updatePassword(req: Request, res: Response, emailRepository : EmailRepository): Promise<void> {
+  async updatePassword(req: Request, res: Response, emailRepository : IEmailRepository): Promise<void> {
     if(req.body.password != null && req.body.email != null && req.body.token != null)
     {
       try {
