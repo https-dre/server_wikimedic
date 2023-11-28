@@ -7,8 +7,8 @@
     "dev": "nodemon --exec ts-node Server.ts",
     "setDB": "ts-node ./src/data/mongoDB/conn.ts",
     "testEmail": "ts-node ./src/email/Transporter.ts",
-    "build": "tsc",
-    "start": "node Server.js"
+    "build":"tsc",
+    "start": "node /dist/Server.js"
   },
   "author": "André de Oliveira Dias",
   "license": "ISC",
