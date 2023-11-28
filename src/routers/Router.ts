@@ -73,7 +73,7 @@ Router.put('/users/update', Autentication.AuthUser, (req, res)=>{
   userController.updateUser(req, res)
 })
 
-Router.get('/users/solicitar/recuperacao', Autentication.AuthUser, (req, res)=>{
+Router.get('/users/solicitar/recuperacao', (req, res)=>{
   const userRepository = new UserRepository()
   const emailRepository = new EmailRepository()
   const userController = new UserController(userRepository)
@@ -81,7 +81,7 @@ Router.get('/users/solicitar/recuperacao', Autentication.AuthUser, (req, res)=>{
   userController.solicitarUpdatePassword(req, res, emailRepository)
 })
 
-Router.put('/users/recuperar', Autentication.AuthUser,(req, res)=>{
+Router.put('/users/recuperar',(req, res)=>{
   const userRepository = new UserRepository()
   const userController = new UserController(userRepository)
   const emailRepository = new EmailRepository()
