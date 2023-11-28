@@ -28,7 +28,7 @@ export class FavController
         }
     }
 
-    async postFav(req: Request, res: Response): Promise<void> {
+    async save(req: Request, res: Response): Promise<void> {
 
         if( this.userRepository != null && this.medRepository != null)
         {
@@ -50,7 +50,7 @@ export class FavController
                             numProcesso : medFinded.numProcesso
                         }
                         //console.log("New Fav: \n", newFav)
-                        const fav = await this.favRepository.postFav(newFav)
+                        const fav = await this.favRepository.save(newFav)
                         //console.log(fav)
                         res.status(201).json(fav)
                     }

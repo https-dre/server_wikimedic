@@ -44,7 +44,7 @@ export class UserController {
           const userFinded = await this.userRepository.findByEmail(user.email)
           if (userFinded == null) // se o usuário não existir, será nullo
           {
-            const userCreated = await this.userRepository.postUser(user)
+            const userCreated = await this.userRepository.save(user)
             const response: ResponseHttp = {
               body: userCreated,
               status: 201

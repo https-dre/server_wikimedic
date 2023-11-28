@@ -19,7 +19,7 @@ export class CommentController {
         this.commentRepository = comment
     }
 
-    async postComment(req : Request, res : Response, userRepository : UserRepository, medRepository : MedicamentoRepository): Promise<void>
+    async save(req : Request, res : Response, userRepository : UserRepository, medRepository : MedicamentoRepository): Promise<void>
     {
         
             try {
@@ -38,7 +38,7 @@ export class CommentController {
                             content : req.body.content,
                             created_at : new Date().toUTCString()
                         }
-                        const result = await this.commentRepository.postComment(comment)
+                        const result = await this.commentRepository.save(comment)
                         res.status(201).json(result)
                     }
                     else if (user == null)

@@ -6,7 +6,7 @@ import { toComment } from "../../utils/ToComment";
 
 export class CommentRepository implements ICommentRepository
 {
-    async postComment(comment: Comment): Promise<Comment> {
+    async save(comment: Comment): Promise<Comment> {
         try {
             const CommentCollection = mongo.db.collection('Comment')
             const result = await CommentCollection.insertOne({

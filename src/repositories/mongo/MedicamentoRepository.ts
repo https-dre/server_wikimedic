@@ -25,7 +25,7 @@ export class MedicamentoRepository implements IMedRepository
             throw error
         }
     }
-    async postMed(med : Medicamento): Promise<Medicamento>
+    async save(med : Medicamento): Promise<Medicamento>
     {
         try
         {

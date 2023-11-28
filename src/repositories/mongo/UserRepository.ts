@@ -10,7 +10,7 @@ export class UserRepository implements IUserRepository { //UserRepository usando
     {
         
     }
-    async postUser(user: User): Promise<User> {
+    async save(user: User): Promise<User> {
         try
         {
             const UserCollection = mongo.db.collection('User')

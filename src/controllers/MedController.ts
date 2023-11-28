@@ -12,7 +12,7 @@ export class MedController {
         this.medRepository = med
     }
 
-    async postMed(req: Request, res :Response): Promise<void> {
+    async save(req: Request, res :Response): Promise<void> {
         try 
         {
             const medFinded = await this.medRepository.findByNumProcess(req.body.numProcesso)
@@ -24,7 +24,7 @@ export class MedController {
                     name: req.body.name,
                     numProcesso : req.body.numProcesso
                 }
-                const medformated = await this.medRepository.postMed(med);
+                const medformated = await this.medRepository.save(med);
                 res.status(201).json(medformated)
             }
             else
@@ -53,7 +53,7 @@ export class MedController {
                     name: req.body.name,
                     numProcesso : req.body.numProcesso
                 }
-                const medformated = await this.medRepository.postMed(med);
+                const medformated = await this.medRepository.save(med);
                 status = "Medicamento Registrado Agora"
                 medResponse = medformated
                 //res.status(201).json(medformated)

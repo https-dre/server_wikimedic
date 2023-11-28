@@ -6,7 +6,7 @@ import { toFavorito } from "../../utils/ToFavorito"
 
 export class FavoritoRepository implements IFavoritoRepository
 {
-    async postFav(fav : Favorito): Promise<Favorito>
+    async save(fav : Favorito): Promise<Favorito>
     {
         try {
             const FavoritoCollection = mongo.db.collection('Favorito')

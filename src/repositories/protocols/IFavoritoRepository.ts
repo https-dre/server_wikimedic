@@ -1,7 +1,7 @@
 import { Favorito } from "../../models/Favorito";
 
 export interface IFavoritoRepository {
-    postFav(fav : Favorito): Promise<Favorito>;
+    save(fav : Favorito): Promise<Favorito>;
     findById( Id : string) : Promise<Favorito | null>;
     findByIdUser(id : string): Promise<Favorito[] | null>;
     findByUser_Medic(idUser : string, idMed : string): Promise<Favorito | null>;

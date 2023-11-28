@@ -99,7 +99,7 @@ Router.get('/medicamentos', (req, res)=>{
 Router.post('/medicamentos/register',(req,res)=>{
   const medRepository = new MedicamentoRepository()
   const medController = new MedController(medRepository)
-  medController.postMed(req, res)
+  medController.save(req, res)
 })
 
 Router.get('/medicamentos/id/:id', (req, res)=>{
@@ -133,7 +133,7 @@ Router.post('/favoritos/register', (req, res)=>{
   const favRepository = new FavoritoRepository()
   const userRepository = new UserRepository()
   const favController = new FavController(favRepository,userRepository, medRepository)
-  favController.postFav(req, res)
+  favController.save(req, res)
 })
 
 Router.get('/favoritos/getByIdUser/:id', (req,res)=>{
@@ -162,7 +162,7 @@ Router.post('/comentarios/register', (req, res)=>{
   const commentRepository = new CommentRepository()
 
   const commentController = new CommentController(commentRepository)
-  commentController.postComment(req, res, userRepository, medRepository)
+  commentController.save(req, res, userRepository, medRepository)
 })
 
 Router.get('/comentarios/getByIdMed/:id', (req, res)=>{
