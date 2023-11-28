@@ -53,7 +53,13 @@ export class CommentController {
                 }
                 else
                 {
-                    res.status(400).json("Preencha todos os campos")
+                    res.status(400).json({ message : "Preencha todos os campos",
+                        req : {
+                            email : req.body.email,
+                            numProcesso : req.body.numProcesso,
+                            content : req.body.content
+                        }
+                    })
                 }
             } catch (error) 
             {
