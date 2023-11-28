@@ -29,14 +29,14 @@ export class MedController {
             }
             else
             {
-                res.status(200).json({message : "Medicamento já existe no sistema"})
+                res.status(200).json("Medicamento já existe no sistema")
             }
 
         }
         catch (err)
         {
             console.log(err)
-            res.status(500).json({message: "Erro Interno no Servidor"})
+            res.status(500).json("Erro Interno no Servidor")
         }
     }
     async validateMed(req: Request, res: Response): Promise<void> {
@@ -74,7 +74,7 @@ export class MedController {
         catch (err)
         {
             console.log(err)
-            res.status(500).json({message :"Erro Interno no Servidor, Provável Erro de Conexões Limitadas"})
+            res.status(500).json("Erro Interno no Servidor, Provável Erro de Conexões Limitadas")
         }
     }
     async getAll( req : Request, res : Response) : Promise<void>
@@ -87,7 +87,7 @@ export class MedController {
         catch (err)
         {
             console.log(err)
-            res.status(500).json({message : "Erro Interno no Servidor"})
+            res.status(500).json("Erro Interno no Servidor")
         }
     }
     async deleteByNumProcesso(req : Request, res : Response)
@@ -99,17 +99,17 @@ export class MedController {
                 const medic = await this.medRepository.findByNumProcess(req.params.numProcesso)
                 if(medic == null)
                 {
-                    res.status(404).json({message : "Medicamento Not Found"})
+                    res.status(404).json("Medicamento Not Found")
                 }
                 else
                 {
                     await this.medRepository.deleteByNumProcesso(req.params.numProcesso)
-                    res.status(200).json({message : "Medicamento Deletado"})
+                    res.status(200).json("Medicamento Deletado")
                 }
             }
             else
             {
-                res.status(400).json({ message : "Insira o numProcesso do Medicamento"})
+                res.status(400).json("Insira o numProcesso do Medicamento")
             }
         }
         catch (err)
@@ -125,7 +125,7 @@ export class MedController {
                 res.status(200).json(medic)
             } 
             catch (error) {
-                res.send('Erro interno no servidor, aguarde ou contate o administrador').status(500)
+                res.status(500).json('Erro interno no servidor, aguarde ou contate o administrador')
                 console.log(error)
             }
         }
