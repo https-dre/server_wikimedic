@@ -2,13 +2,13 @@
   "name": "HttpServerWikimedic",
   "version": "1.0.0",
   "description": "",
-  "main": "./Server.js",
+  "main": "./dist/Server.js",
   "scripts": {
     "dev": "nodemon --exec ts-node Server.ts",
     "setDB": "ts-node ./src/data/mongoDB/conn.ts",
     "testEmail": "ts-node ./src/email/Transporter.ts",
     "build":"tsc",
-    "start": "node /dist/Server.js"
+    "start": "node ./dist/Server.js"
   },
   "author": "André de Oliveira Dias",
   "license": "ISC",
