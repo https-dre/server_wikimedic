@@ -83,21 +83,15 @@ export class UserRepository implements IUserRepository { //UserRepository usando
         await UserCollection.deleteOne({_id : Id as unknown as ObjectId})
     }
     
-    async updateUser(user: User): Promise<User> {
+    async updateUser(newUser: any, idUser : string): Promise<User> {
         try {
             const UserCollection = mongo.db.collection('User')
-            const result = await UserCollection.updateOne({ _id : user.id as unknown as ObjectId }, 
+            const result = await UserCollection.updateOne({ _id : idUser as unknown as ObjectId }, 
             {
-                $set:{
-                    name : user.name,
-                    email : user.email,
-                    email_reserva : user.email_reserva
-                }
+                $set: newUser
             })
-
-
             //console.log(result)
-            return user
+            return newUser
         } 
         catch (error) {
             throw error
