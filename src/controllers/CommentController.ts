@@ -23,18 +23,18 @@ export class CommentController {
     {
         
             try {
-                if(req.body.idUser != null && req.body.idMed != null && req.body.content != null)
+                if(req.body.email != null && req.body.numProcesso != null && req.body.content != null)
                 {
                     
-                    const user = await userRepository.findById(req.body.idUser)
-                    const med = await medRepository.findById(req.body.idMed)
+                    const user = await userRepository.findByEmail(req.body.email)
+                    const med = await medRepository.findByNumProcess(req.body.numProcesso)
                     
                     if(user != null && med != null)
                     {
                         const comment : Comment = {
                             id : uuidv4(),
-                            idUser : req.body.idUser,
-                            idMed : req.body.idMed,
+                            idUser : user.id,
+                            idMed : med.id,
                             content : req.body.content,
                             created_at : new Date().toUTCString()
                         }
