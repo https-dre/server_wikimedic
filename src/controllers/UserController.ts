@@ -1,6 +1,6 @@
 import { IUserRepository } from "../repositories/protocols/IUserRepository"
 import { FavoritoRepository } from "../repositories/mongo/FavoritoRepository";
-import { CommentRepository } from "../repositories/mongo/CommentRepository";
+import { CommentRepository } from '../repositories/mongo/CommentRepository';
 
 import { User } from "../models/User"
 
@@ -93,17 +93,17 @@ export class UserController {
           }
           else
           {
-            res.status(404).json({message: "O usuário não existe"})
+            res.status(404).json("O usuário não existe")
           }
         }
         else {
-          res.status(400).json({message : "Informe o id de Usuário"})
+          res.status(400).json("Informe o id de Usuário")
         }
       }
       catch (err)
       {
         console.log(err)
-        res.status(500).json({message: "Erro Interno no servidor"})
+        res.status(500).json("Erro Interno no servidor")
       }
   }
   async getAllUsers(req: Request, res: Response): Promise<void> {
@@ -114,55 +114,50 @@ export class UserController {
       catch (err)
       {
         console.log(err)
-        res.status(500).json({message : "Erro Interno No Servidor"})
+        res.status(500).json("Erro Interno No Servidor, aguarde ou contate o administrador")
       }
   }
+
   async updateUser(req: Request, res: Response): Promise<void> {
-    if(req.body.user)
+    if(req.body.newUser)
     {
       try {
-        const user = await this.userRepository.findById(req.body.user.id)
+        const user = await this.userRepository.findByEmail(req.body.auth.email)
         //console.log(user)
         if(user != null)
         {
-
-          if(req.body.user.email != "")
+          if(req.body.newUser.email)
           {
-            const emailUser = await this.userRepository.findByEmail(req.body.user.email)
+            const emailUser = await this.userRepository.findByEmail(req.body.newUser.id)
             if(emailUser == null)
             {
-              const result = await this.userRepository.updateUser({
-                id : user.id,
-                name : req.body.user.name,
-                email : req.body.user.email,
-                email_reserva : req.body.user.email_reserva,
-                password : user.password
-              })
+              const result = await this.userRepository.updateUser(req.body.newUser, user.id)
               res.status(201).json(result)
             }
             else
             {
-              res.send('Email já existe').status(400)
+              res.status(400).json('Email já existe')
             }
           }
           else
           {
-            res.send('Informe o cabeçalho user.email corretamente').status(400)
+              const result = await this.userRepository.updateUser(req.body.newUser, user.id)
+              res.status(201).json(result)
           }
         }
         else
         {
-          res.send('User not found').status(404)
+          res.status(404).json('User not Found')
         }
       } catch (error) 
       {
-        res.send('Erro interno no servidor, aguarde ou contate o administrador').status(500)
+        res.status(500).json('Erro interno no servidor, aguarde ou contate o administrador')
         console.log(error)
       }
     }
     else
     {
-      res.send("Informe um objecto User no corpo da Requisição").status(400)
+      res.status(400).json("Informe um objecto newUser no corpo da Requisição")
     }
   }
 
@@ -212,7 +207,7 @@ export class UserController {
       }
       else
       {
-        res.send('Infome o email')
+        res.send('Informe o email')
       }
     } catch (error) {
       console.log(error)
