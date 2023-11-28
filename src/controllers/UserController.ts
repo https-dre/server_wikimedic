@@ -189,7 +189,7 @@ export class UserController {
             to : email.to,
             subject : 'Recuperar Senha Wikimedic',
             text : `Seu código de recuperação é : ${email.token}. \nNão Responda esse email`,
-            html : `<center style="fontfamily: Roboto;"> <br> <p>Código de Recuperação Wikimedic</p> <h2>${email.token}</h2> <br> <p>Não Responda esse email</p></center>`
+            html : `<center style="fontfamily: Roboto;"> <br> <p>Código de Recuperação Wikimedic</p> <h2>${email.token}</h2> <br> <p>Não Responda esse email!!</p></center>`
           }
           const doc = await emailRepository.save(email)
           await EmailServive.sendMail(mailOptions)
@@ -309,12 +309,12 @@ export class UserController {
           to : user.email,
           subject : 'Verificação de Conta Wikimedic',
           text : `Olá ${user.name}, sua conta Wikimedic foi verificada!`,
-          html : `<center style="fontfamily: Roboto;"> <br> <h2>Olá ${user.name}, sua conta Wikimedic foi verificada!</h2> <br><p>Não Responda esse email</p></center>`
+          html : `<center style="fontfamily: Roboto;"> <br> <h2>Olá ${user.name}, sua conta Wikimedic foi verificada!</h2> <br><p>Não Responda esse email!!</p></center>`
         }
 
         await EmailServive.sendMail(mailOptions)
 
-        res.status(201).send(`<center style="fontfamily: Roboto;"> <br> <h2>Olá ${user.name}, sua conta Wikimedic foi verificada!</h2> <br><p>Não Responda esse email</p></center>`)
+        res.status(201).send(`<center style="fontfamily: Roboto;"> <br> <h2>Olá ${user.name}, sua conta Wikimedic foi verificada!</h2></center>`)
       }
       else if(user != null && user.verificado == true)
       {
