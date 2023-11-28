@@ -12,6 +12,7 @@ import { CommentController } from "../controllers/CommentController";
 
 import { Autentication } from '../filters/Autentication';
 import { EmailRepository } from "../repositories/mongo/EmailRepository";
+import { Email } from '../models/Email';
 
 const Router = express.Router()
 
@@ -31,9 +32,25 @@ Router.get('/users', (req, res)=>{
   userController.getAllUsers(req, res)
 })
 
-Router.post('/users/login', Autentication.AuthUser, (req, res)=>{
+Router.post('/users/login', Autentication.AuthUser, async (req, res)=>{
   //console.log('Usuário autenticado')
-  res.status(200).json({message: "Usuário Autenticado"})
+  const userRepository =  new UserRepository()
+  const user = await userRepository.findByEmail(req.body.auth.email)
+  
+  if(user)
+  {
+    res.status(200).json({
+      message : 'Usuário Autenticado',
+      user : {
+        id : user.id,
+        email : user.email
+      }
+    })
+  }
+  else
+  {
+    res.status(404).json('User not Found')
+  }
 })
 
 Router.get('/users/id/:id', (req, res)=>{
