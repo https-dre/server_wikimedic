@@ -4,12 +4,7 @@
         "src":"dist/Server.js",
         "use" : "@now/node"
       },
-    "routes": [
-      {
-        "src": "/(.*)",
-        "dest": "/"
-      }
-    ],
+    "rewrites": [{ "source": "/(.*)", "destination": "/" }],
     "buildCommand": "npm run build",
     "installCommand":"npm install"
   }
