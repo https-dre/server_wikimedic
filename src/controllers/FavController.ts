@@ -56,22 +56,22 @@ export class FavController
                     }
                     else
                     {
-                        res.send("O favorito já existe com o medicamento correspondente").status(400)
+                        res.status(400).json("O favorito já existe com o medicamento correspondente")
                     }
                 }
                 else if(userFinded == null)
                 {
-                    res.status(404).json({message : "User Not Found"})
+                    res.status(404).json( "User Not Found")
                 }
                 else if(medFinded == null)
                 {
-                    res.status(404).json({message : "Medicamento Not Found"})
+                    res.status(404).json("Medicamento Not Found")
                 }
                 
             }
             catch (err)
             {
-                res.status(500).json({message:"Erro Interno no Servidor"})
+                res.status(500).json("Erro Interno no Servidor, aguarde ou contate o administrador")
             }
         }
         
@@ -100,15 +100,15 @@ export class FavController
                 }
                 else
                 {
-                    res.status(404).json({message : "Sem resultados"})
+                    res.status(404).json("Sem resultados")
                 }
             }
             else
             {
-                res.status(400).json({message:"Informe um id de usuário"})
+                res.status(400).json("Informe um id de usuário")
             }
         } catch (error) {
-            res.status(500).json({message : "Erro Interno no Servidor"})
+            res.status(500).json("Erro Interno no Servidor")
         }
     }
     async delete(req: Request, res: Response): Promise<void> {
@@ -119,17 +119,17 @@ export class FavController
                 if(doc != null)
                 {
                     await this.favRepository.delete(doc.id)
-                    res.status(200).json({message : "Favorito deletado"})
+                    res.status(200).json( "Favorito deletado")
                 }
                 else
                 {
-                    res.status(404).json({message : "Favorito not found"})
+                    res.status(404).json( "Favorito not found")
                 }
 
             }
             else
             {
-                res.status(400).json({message : "Informe um id nos parâmetros da Requisição"})
+                res.status(400).json( "Informe um id nos parâmetros da Requisição")
             }
         } catch (error) {
             
@@ -144,7 +144,7 @@ export class FavController
         catch (error)
         {
             console.log(error)
-            res.status(500).json({message : "Erro Interno no Servidor!!"})
+            res.status(500).json("Erro Interno no Servidor!!")
         }
     }
 
@@ -176,13 +176,13 @@ export class FavController
             }
             else
             {
-                res.status(404).send('Medicamento not found')
+                res.status(404).json('Medicamento not found')
             }
 
             
         } catch (error) {
             console.log(error)
-            res.status(500).send('Erro interno no Servidor, aguarde ou contate o administrador')
+            res.status(500).json('Erro interno no Servidor, aguarde ou contate o administrador')
         }
     }
 
