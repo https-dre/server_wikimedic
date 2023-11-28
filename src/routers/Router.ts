@@ -23,7 +23,7 @@ Router.get('/', (__req, res)=>{
 Router.post('/users/register', async (req,res) => {
   const userRepository = new UserRepository()
   const userController = new UserController(userRepository)
-  userController.postUser(req, res)
+  userController.save(req, res)
 })
 
 Router.get('/users', (req, res)=>{

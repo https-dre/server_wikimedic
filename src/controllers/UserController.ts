@@ -25,25 +25,26 @@ export class UserController {
     //console.log('UserController initialized')
   }
 
-  async postUser(req: Request, res: Response) {
+  async save(req: Request, res: Response) {
     if(req.body.email != null && req.body.password != null)
     {
       const password = req.body.password
       if(password.length > 8)
       {
-        const user: User = {
-          id: uuidv4(),
-          name: req.body.name,
-          email: req.body.email,
-          email_reserva: req.body.email_reserva,
-          password: await hashPassword(req.body.password)
-        }
-    
         try {
           //valida se o email já existe
-          const userFinded = await this.userRepository.findByEmail(user.email)
+          const userFinded = await this.userRepository.findByEmail(req.body.email)
           if (userFinded == null) // se o usuário não existir, será nullo
           {
+
+            const user: User = {
+              id: uuidv4(),
+              name: req.body.name,
+              email: req.body.email,
+              email_reserva: req.body.email_reserva,
+              password: await hashPassword(req.body.password),
+              verificado : false
+            }
             const userCreated = await this.userRepository.save(user)
             const response: ResponseHttp = {
               body: userCreated,
@@ -234,7 +235,8 @@ export class UserController {
                 name : userFinded.name,
                 email : userFinded.email,
                 email_reserva : userFinded.email_reserva,
-                password : hash
+                password : hash,
+                verificado : userFinded.verificado
               }
 
               await this.userRepository.updatePassword(userFinded.id, hash)
@@ -283,6 +285,26 @@ export class UserController {
     else
     {
       res.send("Informe um id do Usuário no parâmetro da requisição").status(400)
+    }
+  }
+
+  async verificarUsuário(req : Request, res : Response) : Promise<void>
+  {
+    try {
+      const idUser = req.query.id
+      const verify = req.query.verify
+
+      const user = await this.userRepository.findById(idUser as unknown as string)
+
+      if(user)
+      {
+        const newUser = {
+          verificado : true
+        }
+        const update = this.userRepository.updateUser(newUser, user.id)
+      }
+    } catch (error) {
+      
     }
   }
 

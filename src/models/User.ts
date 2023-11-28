@@ -4,4 +4,5 @@ export interface User {
     email : string
     email_reserva : string
     password : string
+    verificado : boolean
   }
