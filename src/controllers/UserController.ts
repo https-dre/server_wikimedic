@@ -296,15 +296,37 @@ export class UserController {
 
       const user = await this.userRepository.findById(idUser as unknown as string)
 
-      if(user)
+      if(user != null && user.verificado != true)
       {
         const newUser = {
           verificado : true
         }
-        const update = this.userRepository.updateUser(newUser, user.id)
+
+        const update = await this.userRepository.updateUser(newUser, user.id)
+
+        var mailOptions = {
+          from : process.env.EMAIL,
+          to : user.email,
+          subject : 'Verificação de Conta Wikimedic',
+          text : `Olá ${user.name}, sua conta Wikimedic foi verificada!`,
+          html : `<center style="fontfamily: Roboto;"> <br> <h2>Olá ${user.name}, sua conta Wikimedic foi verificada!</h2> <br><p>Não Responda esse email</p></center>`
+        }
+
+        await EmailServive.sendMail(mailOptions)
+
+        res.status(201).send(`<center style="fontfamily: Roboto;"> <br> <h2>Olá ${user.name}, sua conta Wikimedic foi verificada!</h2> <br><p>Não Responda esse email</p></center>`)
+      }
+      else if(user != null && user.verificado == true)
+      {
+        res.status(200).send('Usuário já verificado')
+      }
+      else if(user == null)
+      {
+        res.status(404).json('User not Found')
       }
     } catch (error) {
-      
+      console.log(error)
+      res.status(500).json('Erro interno no Servidor, aguarde ou contate o administrador')
     }
   }
 

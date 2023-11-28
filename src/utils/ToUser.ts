@@ -6,6 +6,7 @@ export function toUser(obj: any): User {
       name: obj.name,
       email : obj.email,
       email_reserva : obj.email_reserva,
-      password : obj.password
+      password : obj.password,
+      verificado : obj.verificado
     };
   }

@@ -20,7 +20,8 @@ export class UserRepository implements IUserRepository { //UserRepository usando
                     name : user.name,
                     email : user.email,
                     email_reserva : user.email_reserva,
-                    password : user.password
+                    password : user.password,
+                    verificado : user.verificado
                 }
             )
 
@@ -30,7 +31,8 @@ export class UserRepository implements IUserRepository { //UserRepository usando
                 name : user.name,
                 email : user.email,
                 email_reserva : user.email_reserva,
-                password : user.password
+                password : user.password,
+                verificado : user.verificado
             }
         }
         catch (err)

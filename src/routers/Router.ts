@@ -26,6 +26,12 @@ Router.post('/users/register', async (req,res) => {
   userController.save(req, res)
 })
 
+Router.get('/verificarConta', (req, res)=>{
+  const userRepository = new UserRepository()
+  const userController = new UserController(userRepository)
+  userController.verificarUsuário(req, res)
+})
+
 Router.get('/users', (req, res)=>{
   const userRepository = new UserRepository()
   const userController = new UserController(userRepository)
