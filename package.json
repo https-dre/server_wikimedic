@@ -1,5 +1,5 @@
 {
-  "name": "HttpServerWikimedic",
+  "name": "wikimedic_http",
   "version": "1.0.0",
   "description": "HttpServer para servir a Wikimedic",
   "main": "./dist/Server.js",
