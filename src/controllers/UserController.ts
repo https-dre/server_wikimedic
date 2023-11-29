@@ -55,7 +55,7 @@ export class UserController {
                 text : `Email de Verificação de Conta da Wikimedic, seu é link de verificação: ${process.env.SERVER_URL}/verificarConta?id=${user.id}&verify=true`,
                 html : `<center style="fontfamily: Roboto;"> <p>Email de Verificação Wikimedic</p> <a href="${process.env.SERVER_URL}/verificarConta?id=${user.id}&verify=true">Verificar Conta</a> <br> <p>Não Responda esse email!!</p></center>`
               }
-              EmailServive.sendMail(emailOptions) // enviando email de verificação
+              await EmailServive.sendMail(emailOptions) // enviando email de verificação
             }
             const userCreated = await this.userRepository.save(user)
             const response: ResponseHttp = {
