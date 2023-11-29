@@ -5,8 +5,6 @@ import { transporter as EmailServive } from "../../email/Transporter";
 
 import { mongo } from "../../data/mongoDB/conn";
 
-import { getRandomInt } from "../../utils/RandomInt";
-import { v4 as uuidv4 } from 'uuid';
 import { ObjectId } from "mongodb";
 import { toEmail } from "../../utils/ToEmail";
 
@@ -18,6 +16,7 @@ export class EmailRepository implements IEmailRepository
             const EmailCollection = mongo.db.collection('Email')
             const result = await EmailCollection.insertOne({
                 _id : mail.id as unknown as ObjectId,
+                idUser : mail.idUser,
                 to : mail.to,
                 token : mail.token,
                 date : mail.date,
@@ -26,6 +25,7 @@ export class EmailRepository implements IEmailRepository
 
             const doc : Email = {
                 id : result.insertedId as unknown as string,
+                idUser : mail.idUser,
                 to : mail.to,
                 token : mail.token,
                 date : mail.date,
@@ -61,6 +61,31 @@ export class EmailRepository implements IEmailRepository
         try {
             const EmailCollection = mongo.db.collection('Email')
             await EmailCollection.deleteOne({ to : email})
+        } catch (error) {
+            throw error
+        }
+    }
+
+    async findByIdUser(idUser: string): Promise<Email | null> {
+        try {
+            const EmailCollection = mongo.db.collection('Email')
+            const doc = await EmailCollection.findOne({ idUser : idUser})
+            if(doc)
+            {
+                return toEmail(doc)
+            }
+            else {
+                return null
+            }
+        } catch (error) {
+            throw error
+        }
+    }
+
+    async deleteByIdUser(id: string): Promise<void> {
+        try {
+            const EmailCollection = mongo.db.collection('Email')
+            await EmailCollection.deleteOne({ idUser : id})
         } catch (error) {
             throw error
         }
