@@ -2,6 +2,8 @@
 
 Servidor Http que servirá a Wikimedic
 
+Link do Servidor do Render: *https://server-wikimedic.onrender.com*
+
 **Server with MongoDB**
 
 
