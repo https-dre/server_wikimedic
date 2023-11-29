@@ -115,4 +115,21 @@ export class UserRepository implements IUserRepository { //UserRepository usando
             throw error
         }
     }
+    async findByEmailReserva(email: string): Promise<User | null> {
+        try {
+            const UserCollection = mongo.db.collection('User')
+            const doc = await UserCollection.findOne({ email_reserva : email})
+
+            if(doc != null)
+            {
+                return toUser(doc)
+            }
+            else
+            {
+                return null
+            }
+        } catch (error) {
+            throw error
+        }
+    }
 }
