@@ -25,7 +25,7 @@ export class UserController {
   }
 
   async save(req: Request, res: Response) {
-    if(req.body.email != null && req.body.password != null)
+    if(req.body.email != null&& req.body.email != "" && req.body.password != "" && req.body.password != null && req.body.name != "" && req.body.name != null)
     {
       const password = req.body.password
       if(password.length > 8)
@@ -164,25 +164,36 @@ export class UserController {
   async solicitarUpdatePassword( req : Request, res : Response, emailRepository : IEmailRepository) : Promise<void>
   {
     try {
-      if(req.body.email)
+
+      if(req.body.email != null && req.body.by_recuperacao != null)
       {
         const userFinded = await this.userRepository.findByEmail(req.body.email)
         
         if(userFinded != null)
         {
+          //gerando email de recuperação
           const mailFinded = await emailRepository.findByEmail(userFinded.email)
           if(mailFinded != null && mailFinded.type == 'recuperacao')
           {
             await emailRepository.deleteByEmail(userFinded.email)
           }
+          
+          let to = userFinded.email
+          if(req.body.by_recuperacao == true) // verificando se é email por recuperação
+          {
+            to = userFinded.email_reserva
+          }
           const token = `${getRandomInt(0,10)}${getRandomInt(0,10)}${getRandomInt(0,10)}${getRandomInt(0,10)}${getRandomInt(0,10)}${getRandomInt(0,10)}`
-          const email : Email = {
+
+          const email  : Email = {
             id : uuidv4(),
-            to : userFinded.email,
+            to : to,
+            idUser: userFinded.id,
             token : token,
             date : new Date().toUTCString(),
             type : 'recuperacao'
           }
+
           var mailOptions = {
             from : process.env.EMAIL,
             to : email.to,
@@ -190,7 +201,7 @@ export class UserController {
             text : `Seu código de recuperação é : ${email.token}. \nNão Responda esse email`,
             html : `<center style="fontfamily: Roboto;"> <br> <p>Código de Recuperação Wikimedic</p> <h2>${email.token}</h2> <br> <p>Não Responda esse email!!</p></center>`
           }
-          const doc = await emailRepository.save(email)
+          const doc = await emailRepository.save(email) // salvando email
           await EmailServive.sendMail(mailOptions)
 
           res.status(201).json({ 
@@ -222,7 +233,7 @@ export class UserController {
         const userFinded = await this.userRepository.findByEmail(req.body.email)
         if(userFinded)
         {
-          const email = await emailRepository.findByEmail(userFinded.email)
+          const email = await emailRepository.findByEmail(userFinded.id)
           if(email)
           {
             if(email.type == 'recuperacao' && email.token == req.body.token)
@@ -239,7 +250,7 @@ export class UserController {
               }
 
               await this.userRepository.updatePassword(userFinded.id, hash)
-              await emailRepository.deleteByEmail(userFinded.email) // deletando emails de recuperação do histórico
+              await emailRepository.deleteByIdUser(userFinded.id) // deletando emails de recuperação do histórico
               res.status(201).json(userDocUpdated)
             }
             else if(email.token != req.body.token)
@@ -249,16 +260,16 @@ export class UserController {
           }
           else
           {
-            res.send('Email not found').status(404)
+            res.status(404).json('Email not found')
           }
         }
         else
         {
-          res.send('User not found').status(404)
+          res.status(404).json('User not found')
         }
       } 
       catch (error) {
-        res.send('Erro interno no Servidor, aguarde ou contate o administrador')
+        res.status(500).json('Erro interno no Servidor, aguarde ou contate o administrador')
         console.log(error)
       }
     }
