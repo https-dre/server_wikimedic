@@ -6,6 +6,4 @@ echo Instalando Dependencias e Realizando build
 
 npm install && npm run build
 
-echo Iniciando Servidor
-
-npm start
+echo Para iniciar o Servidor, digite: npm start
