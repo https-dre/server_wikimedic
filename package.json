@@ -4,7 +4,7 @@
   "description": "HttpServer para servir a Wikimedic",
   "main": "./dist/Server.js",
   "scripts": {
-    "dev": "nodemon --exec ts-node Server.ts",
+    "dev": "nodemon --exec ts-node ./src/Server.ts",
     "setDB": "ts-node ./src/data/mongoDB/conn.ts",
     "testEmail": "ts-node ./src/email/Transporter.ts",
     "build":"tsc",
