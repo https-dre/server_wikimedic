@@ -8,6 +8,7 @@ import { Email } from '../models/Email';
 
 import { Request, Response } from "express"
 import { IResponseHttp as ResponseHttp } from "../models/ResponseHttp"
+import * as dotenv from "dotenv"
 
 import { v4 as uuidv4 } from 'uuid';
 import hashPassword from "../crypt/crypt";
@@ -43,6 +44,18 @@ export class UserController {
               email_reserva: req.body.email_reserva,
               password: await hashPassword(req.body.password),
               verificado : false
+            }
+            dotenv.config()
+            if(process.env.SERVER_URL != null)
+            {
+              const emailOptions = {
+                from : process.env.EMAIL,
+                to : user.email,
+                subject : "Verificar Conta Wikimedic",
+                text : `Email de Verificação de Conta da Wikimedic, seu é link de verificação: ${process.env.SERVER_URL}/verificarConta?id=${user.id}&verify=true`,
+                html : `<center style="fontfamily: Roboto;"> <p>Email de Verificação Wikimedic</p> <a href="${process.env.SERVER_URL}/verificarConta?id=${user.id}&verify=true">Verificar Conta</a> <br> <p>Não Responda esse email!!</p></center>`
+              }
+              EmailServive.sendMail(emailOptions) // enviando email de verificação
             }
             const userCreated = await this.userRepository.save(user)
             const response: ResponseHttp = {
