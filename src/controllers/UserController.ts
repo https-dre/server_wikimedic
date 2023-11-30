@@ -88,6 +88,28 @@ export class UserController {
       res.status(400).send('Preencha os cabeçalhos pelo menos: email e password')
     }
   }
+
+  async getUser(req : Request, res : Response) : Promise<void>
+  {
+    try {
+      const user = await this.userRepository.findById(req.params.id)
+      const userAuth = await this.userRepository.findByEmail(req.body.email)
+      if(user != null && userAuth != null)
+      {
+        if(user.id == userAuth.id)
+        {
+          res.status(200).json(user)
+        }
+        else
+        {
+          res.status(401).json('Não tem autorização para visualizar dados de outros usuários')
+        }
+      }
+    } catch (error) {
+      console.log(error)
+      res.status(500).json("Erro Interno no Servidor, aguarde ou contate o admnistrador")
+    }
+  }
   async deleteUser(req : Request, res : Response, fav : IFavoritoRepository, comment : ICommentRepository): Promise<void> {
       try {
         //console.log(req.params.id)
