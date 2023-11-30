@@ -25,7 +25,7 @@ export class FavController
             try
             {
                 const userFinded = await userRepo.findByEmail(req.body.email)
-                const medFinded = await medRepo.findByNumProcess(req.body.numProcesso)
+                const medFinded = await medRepo.findByNumRegistro(req.body.numRegistro)
                 //console.log(userFinded)
                 //console.log(medFinded)
                 if(userFinded != null && medFinded != null)
@@ -37,7 +37,7 @@ export class FavController
                             id : uuidv4(),
                             idUser : userFinded.id,
                             idMed: medFinded.id,
-                            numProcesso : medFinded.numProcesso
+                            numRegistro : medFinded.numRegistro
                         }
                         //console.log("New Fav: \n", newFav)
                         const fav = await this.favRepository.save(newFav)
@@ -81,7 +81,7 @@ export class FavController
                     /* medic :{
                         id : fav.idMed,
                         name : med.name,
-                        numProcesso : med.numProcesso
+                        numRegistro : med.numRegistro
                     },
                     idUser : fav.idUser */
                     res.status(200).json(fav) // se tiver permissão, envie o favorito
@@ -119,7 +119,7 @@ export class FavController
                                     medic :{
                                         id : fav.idMed,
                                         name : med.name,
-                                        numProcesso : med.numProcesso
+                                        numRegistro : med.numRegistro
                                     },
                                     idUser : fav.idUser
                                 }
@@ -198,9 +198,9 @@ export class FavController
     {
         try {
             const idUser = req.query.idUser
-            const numProcesso = req.query.numProcesso
+            const numRegistro = req.query.numRegistro
 
-            const med = await medRepository.findByNumProcess(numProcesso as unknown as string)
+            const med = await medRepository.findByNumRegistro(numRegistro as unknown as string)
 
             if(med)
             {

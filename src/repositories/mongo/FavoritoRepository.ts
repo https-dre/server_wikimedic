@@ -16,14 +16,14 @@ export class FavoritoRepository implements IFavoritoRepository
                 _id : fav.id as unknown as ObjectId,
                 idUser : fav.idUser,
                 idMed : fav.idMed,
-                numProcesso : fav.numProcesso
+                numRegistro : fav.numRegistro
             })
 
             return {
                 id : doc.insertedId as unknown as string,
                 idUser : fav.idUser,
                 idMed : fav.idMed,
-                numProcesso : fav.numProcesso
+                numRegistro : fav.numRegistro
             }
         } 
         catch (err) {
