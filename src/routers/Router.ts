@@ -12,7 +12,6 @@ import { CommentController } from "../controllers/CommentController";
 
 import { Autentication } from '../filters/Autentication';
 import { EmailRepository } from "../repositories/mongo/EmailRepository";
-import { Email } from '../models/Email';
 
 const Router = express.Router()
 
