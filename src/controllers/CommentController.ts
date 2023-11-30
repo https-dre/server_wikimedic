@@ -1,6 +1,5 @@
 import { Comment } from "../models/Comment"
-import { MedicamentoRepository } from "../repositories/mongo/MedicamentoRepository"
-import { UserRepository } from '../repositories/mongo/UserRepository';
+
 
 import { ICommentRepository } from "../repositories/protocols/ICommentRepository"
 import { IMedRepository } from "../repositories/protocols/IMedRepository"
@@ -19,7 +18,7 @@ export class CommentController {
         this.commentRepository = comment
     }
 
-    async save(req : Request, res : Response, userRepository : UserRepository, medRepository : MedicamentoRepository): Promise<void>
+    async save(req : Request, res : Response, userRepository : IUserRepository, medRepository : IMedRepository): Promise<void>
     {
         
             try {
@@ -67,7 +66,7 @@ export class CommentController {
     }
     }
 
-    async findByIdMed(req : Request, res : Response, userRepository : UserRepository, medRepository : MedicamentoRepository) : Promise<void>
+    async findByIdMed(req : Request, res : Response, userRepository : IUserRepository, medRepository : IMedRepository) : Promise<void>
     {
             try {
                 if(req.params.id)
@@ -101,7 +100,7 @@ export class CommentController {
             }
     }
 
-    async findByNumProcesso(req : Request, res : Response, medRepository : MedicamentoRepository, userRepository : UserRepository) : Promise<void>
+    async findByNumProcesso(req : Request, res : Response, medRepository : IMedRepository, userRepository : IUserRepository) : Promise<void>
     {
         
             try {
@@ -113,20 +112,28 @@ export class CommentController {
                     {
                         const comments = await this.commentRepository.findByIdMed(med.id)
                         
-                        const resultado = await Promise.all(comments.map(async (c) => {
-                            const user = await userRepository.findById(c.idUser);
-                            if(user != null)
-                            {
-                                const item = {
-                                    id: c.id,
-                                    username: user.name,
-                                    content: c.content,
-                                    date : c.created_at
-                                };
-                                return item;
-                            }
-                         }));
-                         
+                        const resultado = await Promise.all(
+                            comments.map(async (c) => {
+                                const user = await userRepository.findById(c.idUser);
+                                if(user != null)
+                                {
+                                    const item = {
+                                        id: c.id,
+                                        idUser : user.id,
+                                        idMed : c.idMed,
+                                        username: user.name,
+                                        content: c.content,
+                                        date : c.created_at
+                                    };
+                                    return item;
+                                }
+                                else // se o usuário for nullo, não deve retornar, se o usuário é null, ele foi deletado
+                                {
+                                    await this.commentRepository.deleteByIdUser(c.idUser)
+                                }
+
+                            })
+                         );
                         res.status(200).json(resultado)
                     }
                     else
