@@ -6,7 +6,7 @@ export function toFavorito(obj : any): Favorito {
         id : obj._id,
         idUser : obj.idUser,
         idMed : obj.idMed,
-        numProcesso : obj.numProcesso
+        numRegistro : obj.numRegistro
     }
     //console.log(result)
     return result
