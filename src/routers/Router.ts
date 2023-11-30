@@ -47,10 +47,7 @@ Router.post('/users/login', Autentication.AuthUser, async (req, res)=>{
   {
     res.status(200).json({
       message : 'Usuário Autenticado',
-      user : {
-        id : user.id,
-        email : user.email
-      }
+      user
     })
   }
   else
@@ -180,7 +177,7 @@ Router.get('/comentarios/getByIdMed/:id', (req, res)=>{
   commentController.findByIdMed(req, res, userRepository, medRepository)
 })
 
-Router.get('/comentarios/numProcesso/:numProcesso', (req, res)=>{
+Router.get('/comentarios/numProcesso/:numProcesso', (req, res)=>{ // get Comentário por numProcesso
   const userRepository = new UserRepository()
   const medRepository = new MedicamentoRepository()
   const commentRepository = new CommentRepository()
