@@ -130,6 +130,7 @@ export class CommentController {
                                 else // se o usuário for nullo, não deve retornar, se o usuário é null, ele foi deletado
                                 {
                                     await this.commentRepository.deleteByIdUser(c.idUser)
+                                    return null
                                 }
 
                             })
