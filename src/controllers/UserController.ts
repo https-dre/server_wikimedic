@@ -131,7 +131,7 @@ export class UserController {
       }
   }
 
-  async updateUser(req: Request, res: Response): Promise<void> {
+  async updateUser(req: Request, res: Response): Promise<void> { // atualizar user
     if(req.body.newUser)
     {
       try {
@@ -141,7 +141,7 @@ export class UserController {
         {
           if(req.body.newUser.email)
           {
-            const emailUser = await this.userRepository.findByEmail(req.body.newUser.id)
+            const emailUser = await this.userRepository.findByEmail(req.body.newUser.email)
             if(emailUser == null)
             {
               const result = await this.userRepository.updateUser(req.body.newUser, user.id)
@@ -174,7 +174,7 @@ export class UserController {
     }
   }
 
-  async solicitarUpdatePassword( req : Request, res : Response, emailRepository : IEmailRepository) : Promise<void>
+  async solicitarUpdatePassword( req : Request, res : Response, emailRepository : IEmailRepository) : Promise<void> // solicitar recuperação de senha
   {
     try {
 
@@ -215,7 +215,7 @@ export class UserController {
             html : `<center style="fontfamily: Roboto;"> <br> <p>Código de Recuperação Wikimedic</p> <h2>${email.token}</h2> <br> <p>Não Responda esse email!!</p></center>`
           }
           const doc = await emailRepository.save(email) // salvando email
-          await EmailServive.sendMail(mailOptions)
+          await EmailServive.sendMail(mailOptions) // enviando email
 
           res.status(201).json({ 
             message : 'Email de recuperação enviado',
@@ -246,7 +246,7 @@ export class UserController {
         const userFinded = await this.userRepository.findByEmail(req.body.email)
         if(userFinded)
         {
-          const email = await emailRepository.findByEmail(userFinded.id)
+          const email = await emailRepository.findByIdUser(userFinded.id)
           if(email)
           {
             if(email.type == 'recuperacao' && email.token == req.body.token)
@@ -262,13 +262,17 @@ export class UserController {
                 verificado : userFinded.verificado
               }
 
-              await this.userRepository.updatePassword(userFinded.id, hash)
+              await this.userRepository.updateUser({ password : hash}, userFinded.id)
               await emailRepository.deleteByIdUser(userFinded.id) // deletando emails de recuperação do histórico
               res.status(201).json(userDocUpdated)
             }
             else if(email.token != req.body.token)
             {
               res.send('O token não corresponde').status(400)
+            }
+            else if(email.type != 'recuperacao')
+            {
+              res.status(404).json('Não emails de recuperação')
             }
           }
           else
