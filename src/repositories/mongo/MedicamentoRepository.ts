@@ -6,11 +6,11 @@ import { ObjectId } from "mongodb";
 
 export class MedicamentoRepository implements IMedRepository
 {
-    async findByNumProcess(NumProcesso : string) : Promise<Medicamento | null>
+    async findByNumRegistro(NumProcesso : string) : Promise<Medicamento | null>
     {
         try {
             const MedicamentoCollection = mongo.db.collection('Medicamento')
-            const doc = await MedicamentoCollection.findOne({numProcesso : NumProcesso})
+            const doc = await MedicamentoCollection.findOne({numRegistro : NumProcesso})
     
             if(doc)
             {
@@ -33,13 +33,13 @@ export class MedicamentoRepository implements IMedRepository
             const doc = await MedicamentoCollection.insertOne({
                 _id : med.id as unknown as ObjectId,
                 name : med.name,
-                numProcesso : med.numProcesso
+                numRegistro : med.numRegistro
             })
 
             return {
                 id : doc.insertedId as unknown as string,
                 name : med.name,
-                numProcesso : med.numProcesso
+                numRegistro : med.numRegistro
             };
             
         }   
@@ -96,12 +96,12 @@ export class MedicamentoRepository implements IMedRepository
             throw err
         }
     }
-    async deleteByNumProcesso(NumProcesso : string) : Promise<void>
+    async deleteByNumRegistro(NumProcesso : string) : Promise<void>
     {
         try
         {
             const MedicamentoCollection = mongo.db.collection('Medicamento')
-            await MedicamentoCollection.deleteOne({ numProcesso : NumProcesso})
+            await MedicamentoCollection.deleteOne({ numRegistro : NumProcesso})
         }
         catch (err)
         {

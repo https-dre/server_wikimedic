@@ -4,6 +4,6 @@ export function toMedic(obj : any) : Medicamento {
     return {
         id : obj._id,
         name : obj.name,
-        numProcesso : obj.numProcesso
+        numRegistro : obj.numRegistro
     }
 }

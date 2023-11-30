@@ -15,14 +15,14 @@ export class MedController {
     async save(req: Request, res :Response): Promise<void> {
         try 
         {
-            const medFinded = await this.medRepository.findByNumProcess(req.body.numProcesso)
+            const medFinded = await this.medRepository.findByNumRegistro(req.body.numProcesso)
             if(medFinded == null)
             {
                 //console.log(medFinded)
                 const med : Medicamento = {
                     id: uuidv4(),
                     name: req.body.name,
-                    numProcesso : req.body.numProcesso
+                    numRegistro : req.body.numRegistro
                 }
                 const medformated = await this.medRepository.save(med);
                 res.status(201).json(medformated)
@@ -42,7 +42,7 @@ export class MedController {
     async validateMed(req: Request, res: Response): Promise<void> {
         try
         {
-            const medFinded = await this.medRepository.findByNumProcess(req.body.numProcesso)
+            const medFinded = await this.medRepository.findByNumRegistro(req.body.numProcesso)
             let status = "";
             let medResponse : Medicamento;
             if(medFinded == null)
@@ -51,7 +51,7 @@ export class MedController {
                 const med : Medicamento = {
                     id: uuidv4(),
                     name: req.body.name,
-                    numProcesso : req.body.numProcesso
+                    numRegistro : req.body.numRegistro
                 }
                 const medformated = await this.medRepository.save(med);
                 status = "Medicamento Registrado Agora"
@@ -96,14 +96,14 @@ export class MedController {
         {
             if(req.params.numProcesso)
             {
-                const medic = await this.medRepository.findByNumProcess(req.params.numProcesso)
+                const medic = await this.medRepository.findByNumRegistro(req.params.numProcesso)
                 if(medic == null)
                 {
                     res.status(404).json("Medicamento Not Found")
                 }
                 else
                 {
-                    await this.medRepository.deleteByNumProcesso(req.params.numProcesso)
+                    await this.medRepository.deleteByNumRegistro(req.params.numProcesso)
                     res.status(200).json("Medicamento Deletado")
                 }
             }

@@ -26,7 +26,7 @@ export class CommentController {
                 {
                     
                     const user = await userRepository.findByEmail(req.body.email)
-                    const med = await medRepository.findByNumProcess(req.body.numProcesso)
+                    const med = await medRepository.findByNumRegistro(req.body.numRegistro)
                     
                     if(user != null && med != null)
                     {
@@ -106,7 +106,7 @@ export class CommentController {
             try {
                 if(req.params.numProcesso)
                 {
-                    const med = await medRepository.findByNumProcess(req.params.numProcesso)
+                    const med = await medRepository.findByNumRegistro(req.params.numProcesso)
                     
                     if(med != null)
                     {

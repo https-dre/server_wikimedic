@@ -1,7 +1,7 @@
 export interface Medicamento {
     id : string
     name : string
-    numProcesso : string
+    numRegistro : string
 }
 
 /* 
