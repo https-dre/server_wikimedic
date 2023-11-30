@@ -99,9 +99,9 @@ export class UserController {
           if(userFinded)
           {
             await fav.deleteByIdUser(userFinded.id)
-            await fav.deleteByIdUser(userFinded.id)
+            await comment.deleteByIdUser(userFinded.id)
             await this.userRepository.deleteUser(userFinded.id)
-            res.status(200).json({message : "Usuário, favoritos e comentários deletados!"})
+            res.status(200).json("Usuário, favoritos e comentários deletados!")
             
           }
           else
