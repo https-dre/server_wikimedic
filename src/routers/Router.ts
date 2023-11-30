@@ -116,7 +116,7 @@ Router.get('/medicamentos/id/:id', (req, res)=>{
   medController.getById(req, res)
 })
 
-Router.delete('/medicamentos/delete/numProcesso/:numProcesso', (req, res)=>{
+Router.delete('/medicamentos/delete/numRegistro/:numRegistro', (req, res)=>{
   const medRepository = new MedicamentoRepository()
   const medController = new MedController(medRepository)
   medController.deleteByNumProcesso(req, res)
@@ -185,7 +185,7 @@ Router.get('/comentarios/getByIdMed/:id', (req, res)=>{
   commentController.findByIdMed(req, res, userRepository, medRepository)
 })
 
-Router.get('/comentarios/numProcesso/:numProcesso', (req, res)=>{ // get Comentário por numProcesso
+Router.get('/comentarios/numRegistro/:numRegistro', (req, res)=>{ // get Comentário por numProcesso
   const userRepository = new UserRepository()
   const medRepository = new MedicamentoRepository()
   const commentRepository = new CommentRepository()
