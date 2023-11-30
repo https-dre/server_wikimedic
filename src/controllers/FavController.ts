@@ -66,11 +66,36 @@ export class FavController
         
     }
 
-    async getFav(req: Request, res: Response): Promise<void> 
+    async getFav(req: Request, res: Response, userRepository : IUserRepository): Promise<void> 
     {
         try
         {
+            const user = await userRepository.findByEmail(req.body.auth.email)
             
+            const fav = await this.favRepository.findById(req.params.id)
+
+            if(fav != null && user != null)
+            {
+                if(fav.idUser == user.id)
+                {
+                    /* medic :{
+                        id : fav.idMed,
+                        name : med.name,
+                        numProcesso : med.numProcesso
+                    },
+                    idUser : fav.idUser */
+                    res.status(200).json(fav) // se tiver permissão, envie o favorito
+                    
+                }
+                else
+                {
+                    res.status(401).json('Sem autorização para alterar e visualizar dados de outros usuários.')
+                }
+            }
+            else
+            {
+
+            }
         }
         catch (err)
         {
