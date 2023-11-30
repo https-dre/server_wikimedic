@@ -1,6 +1,6 @@
 import express from "express"
 
-import { UserRepository } from "../repositories/mongo/UserRepository";
+import { UserRepository } from '../repositories/mongo/UserRepository';
 import { MedicamentoRepository } from '../repositories/mongo/MedicamentoRepository';
 import { FavoritoRepository } from "../repositories/mongo/FavoritoRepository";
 import { CommentRepository } from "../repositories/mongo/CommentRepository";
@@ -130,27 +130,30 @@ Router.get('/favoritos', (req, res)=>{
   favControler.getAll(req, res)
 })
 
-Router.post('/favoritos/register', (req, res)=>{
+Router.post('/favoritos/register', Autentication.AuthUser, (req, res)=>{
   const medRepository = new MedicamentoRepository()
   const favRepository = new FavoritoRepository()
   const userRepository = new UserRepository()
-  const favController = new FavController(favRepository,userRepository, medRepository)
-  favController.save(req, res)
-})
 
-Router.get('/favoritos/getByIdUser/:id', (req,res)=>{
-  const favRepository = new FavoritoRepository()
   const favController = new FavController(favRepository)
-  favController.findByIdUser(req, res)
+  favController.save(req, res, userRepository, medRepository)
 })
 
-Router.delete('/favoritos/delete/:id',(req, res)=>{
+Router.get('/favoritos/getByUser/:id', (req,res)=>{
   const favRepository = new FavoritoRepository()
+  const medRepository = new MedicamentoRepository()
   const favController = new FavController(favRepository)
-  favController.delete(req ,res)
+  favController.findByIdUser(req, res, medRepository)
 })
 
-Router.get('/favoritos/validate', (req, res)=>{
+Router.delete('/favoritos/delete/:id', Autentication.AuthUser,(req, res)=>{
+  const favRepository = new FavoritoRepository()
+  const userRepository = new UserRepository()
+  const favController = new FavController(favRepository)
+  favController.delete(req ,res, userRepository)
+})
+
+Router.get('/favoritos/validate', Autentication.AuthUser, (req, res)=>{
   const favRepository = new FavoritoRepository()
   const medRepository = new MedicamentoRepository()
   const favController = new FavController(favRepository)
@@ -158,7 +161,7 @@ Router.get('/favoritos/validate', (req, res)=>{
 })
 
 // comentários
-Router.post('/comentarios/register', (req, res)=>{
+Router.post('/comentarios/register', Autentication.AuthUser, (req, res)=>{
   const userRepository = new UserRepository()
   const medRepository = new MedicamentoRepository()
   const commentRepository = new CommentRepository()
