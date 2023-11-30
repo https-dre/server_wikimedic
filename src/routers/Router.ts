@@ -25,6 +25,12 @@ Router.post('/users/register', async (req,res) => {
   userController.save(req, res)
 })
 
+Router.get('/users/get/:id', Autentication.AuthUser, (req, res)=>{
+  const userRepository = new UserRepository()
+  const userController = new UserController(userRepository)
+  userController.getUser(req, res)
+})
+
 Router.get('/verificarConta', (req, res)=>{
   const userRepository = new UserRepository()
   const userController = new UserController(userRepository)
