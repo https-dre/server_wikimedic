@@ -7,7 +7,7 @@
     "dev": "nodemon --exec ts-node ./src/Server.ts",
     "setDB": "ts-node ./src/data/mongoDB/conn.ts",
     "testEmail": "ts-node ./src/email/Transporter.ts",
-    "build":"tsc",
+    "build": "tsc",
     "start": "node ./dist/Server.js"
   },
   "author": "André de Oliveira Dias",
@@ -19,6 +19,7 @@
     "express": "^4.18.2",
     "mongodb": "^6.2.0",
     "nodemailer": "^6.9.7",
+    "puppeteer": "^21.5.2",
     "typescript": "^5.2.2",
     "uuid": "^9.0.1"
   },
