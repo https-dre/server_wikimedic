@@ -363,7 +363,7 @@ export class UserController {
 
         await EmailServive.sendMail(mailOptions)
 
-        res.status(201).send(`<center style="fontfamily: Roboto;"> <br> <h2>Olá ${user.name}, sua conta Wikimedic foi verificada!</h2></center>`)
+        res.status(201).json(`<center style="fontfamily: Roboto;"> <br> <h2>Olá ${user.name}, sua conta Wikimedic foi verificada!</h2></center>`)
       }
       else if(user != null && user.verificado == true)
       {
