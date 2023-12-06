@@ -110,7 +110,7 @@ export class UserController {
       res.status(500).json("Erro Interno no Servidor, aguarde ou contate o admnistrador")
     }
   }
-  async deleteUser(req : Request, res : Response, fav : IFavoritoRepository, comment : ICommentRepository): Promise<void> {
+  async deleteUser(req : Request, res : Response, fav : IFavoritoRepository, comment : ICommentRepository, email : IEmailRepository): Promise<void> {
       try {
         //console.log(req.params.id)
         if(req.params.id)
@@ -121,6 +121,7 @@ export class UserController {
           if(userFinded)
           {
             await fav.deleteByIdUser(userFinded.id)
+            await email.deleteByIdUser(userFinded.id)
             await comment.deleteByIdUser(userFinded.id)
             await this.userRepository.deleteUser(userFinded.id)
             res.status(200).json("Usuário, favoritos e comentários deletados!")
