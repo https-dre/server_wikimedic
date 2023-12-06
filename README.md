@@ -6,6 +6,13 @@ Link do Servidor do Render: *https://server-wikimedic.onrender.com*
 
 **Server with MongoDB**
 
+**Produção**
+
+Para rodar o Servidor em produção, é necessário transpilar o código TypeScript em JavaScript
+
+    npm install && npm run build  // instala dependências e transpila o código
+
+    npm start // Start da aplicação
 
 # Rotas
 
