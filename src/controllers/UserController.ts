@@ -29,7 +29,7 @@ export class UserController {
     if(req.body.email != null&& req.body.email != "" && req.body.password != "" && req.body.password != null && req.body.name != "" && req.body.name != null)
     {
       const password = req.body.password
-      if(password.length > 8)
+      if(password.length > 7)
       {
         try {
           //valida se o email já existe
