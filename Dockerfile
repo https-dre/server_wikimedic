@@ -2,12 +2,12 @@
 FROM node:14
 FROM debian:buster
 # Instalando Chromium e dependências do Bot Puppeteer
-RUN apt-get update \
-    && apt-get install -y wget gnupg \
-    && wget -q -O - https://dl-ssl.google.com/linux/linux/signing_key.pub | apt-key add - \
-    && sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list' \
-    && apt-get update \
-    && apt-get install -y google-chrome-stable
+RUN sudo apt-get update \
+    && sudo apt-get install -y wget gnupg \
+    && sudo wget -q -O - https://dl-ssl.google.com/linux/linux/signing_key.pub | apt-key add - \
+    && sudo sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list' \
+    && sudo apt-get update \
+    && sudo apt-get install -y google-chrome-stable
 
 # Instalação
 RUN npm install
