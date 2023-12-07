@@ -73,15 +73,19 @@ export class FavController {
 
                 }
                 else {
-                    res.status(401).json('Sem autorização para alterar e visualizar dados de outros usuários.')
+                    res.status(403).json('Sem autorização para alterar e visualizar dados de outros usuários.')
                 }
             }
-            else {
-
+            else if(fav == null) {
+                res.status(404).json('Favorito Not Found')
+            }
+            else if(user == null)
+            {
+                res.status(404).json('Usuário Not Found')
             }
         }
         catch (err) {
-
+            throw err
         }
     }
     async findByIdUser(req: Request, res: Response, medRepo: IMedRepository): Promise<void> {
