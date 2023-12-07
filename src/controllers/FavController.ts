@@ -76,11 +76,10 @@ export class FavController {
                     res.status(403).json('Sem autorização para alterar e visualizar dados de outros usuários.')
                 }
             }
-            else if(fav == null) {
+            else if (fav == null) {
                 res.status(404).json('Favorito Not Found')
             }
-            else if(user == null)
-            {
+            else if (user == null) {
                 res.status(404).json('Usuário Not Found')
             }
         }
@@ -168,29 +167,38 @@ export class FavController {
         try {
             const idUser = req.query.idUser
             const numRegistro = req.query.numRegistro
+            if (idUser != null && numRegistro != null) {
+                const med = await medRepository.findByNumRegistro(numRegistro as unknown as string)
 
-            const med = await medRepository.findByNumRegistro(numRegistro as unknown as string)
+                if (med) {
+                    const fav = await this.favRepository.findByUser_Medic(idUser as unknown as string, med.id)
 
-            if (med) {
-                const fav = await this.favRepository.findByUser_Medic(idUser as unknown as string, med.id)
-                if (fav) {
-                    res.status(200).json({
-                        favorited: true,
-                        message: "Medicamento já favoritado"
-                    })
+                    if (fav) {
+                        if (fav.idUser == idUser.toString()) {
+                            res.status(200).json({
+                                favorited: true,
+                                message: "Medicamento já favoritado."
+                            })
+                        }
+                        else {
+                            res.status(403).json('Sem Autorização.')
+                        }
+                    }
+                    else {
+                        res.status(200).json({
+                            favorited: false,
+                            message: "Medicamento não favoritado."
+                        })
+                    }
                 }
                 else {
-                    res.status(200).json({
-                        favorited: false,
-                        message: "Medicamento não favoritado"
-                    })
+                    res.status(404).json('Medicamento not found.')
                 }
+
             }
             else {
-                res.status(404).json('Medicamento not found')
+                res.status(400).json('Estão faltando parâmetros de Consulta.')
             }
-
-
         } catch (error) {
             console.log(error)
             res.status(500).json('Erro interno no Servidor, aguarde ou contate o administrador')
