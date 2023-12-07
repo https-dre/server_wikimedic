@@ -49,7 +49,7 @@ Para rodar o Servidor em produção, é necessário transpilar o código TypeScr
 
 /comentarios/register -- registrar comentário
 
-/comentarios/numProcesso/:numProcesso -- get comentário por medicamento usando numProcesso
+/comentarios/numRegistro/:numRegistro -- get comentário por medicamento usando numRegistro
 
 /comentarios/getByIdMed/:id -- get comentário por medicamento usando id do medicamento
 
