@@ -47,6 +47,8 @@ COPY package-lock.json .
 # Instale as dependências
 RUN npm ci
 
+RUN chmod -R o + rwx node_modules / puppeteer / .local-chromium
+
 # Copie o código do aplicativo
 COPY . .
 
