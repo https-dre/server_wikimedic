@@ -10,74 +10,59 @@ import { MedicamentoRepository } from '../repositories/mongo/MedicamentoReposito
 import { User } from '../models/User';
 
 
-export class FavController
-{
-    favRepository : IFavoritoRepository
-    
-    constructor(rep : IFavoritoRepository, repUser? : IUserRepository, md? : IMedicamentoRepository)
-    {
+export class FavController {
+    favRepository: IFavoritoRepository
+
+    constructor(rep: IFavoritoRepository, repUser?: IUserRepository, md?: IMedicamentoRepository) {
         this.favRepository = rep
     }
 
-    async save(req: Request, res: Response, userRepo : IUserRepository, medRepo : IMedRepository): Promise<void> {
-
-
-            try
-            {
-                const userFinded = await userRepo.findByEmail(req.body.email)
-                const medFinded = await medRepo.findByNumRegistro(req.body.numRegistro)
-                //console.log(userFinded)
-                //console.log(medFinded)
-                if(userFinded != null && medFinded != null)
-                {
-                    const existente = await this.favRepository.findByUser_Medic(userFinded.id, medFinded.id)
-                    if(existente == null)
-                    {
-                        const newFav : Favorito = {
-                            id : uuidv4(),
-                            idUser : userFinded.id,
-                            idMed: medFinded.id,
-                            numRegistro : medFinded.numRegistro
-                        }
-                        //console.log("New Fav: \n", newFav)
-                        const fav = await this.favRepository.save(newFav)
-                        //console.log(fav)
-                        res.status(201).json(fav)
+    async save(req: Request, res: Response, userRepo: IUserRepository, medRepo: IMedRepository): Promise<void> {
+        try {
+            const userFinded = await userRepo.findByEmail(req.body.email)
+            const medFinded = await medRepo.findByNumRegistro(req.body.numRegistro)
+            //console.log(userFinded)
+            //console.log(medFinded)
+            if (userFinded != null && medFinded != null) {
+                const existente = await this.favRepository.findByUser_Medic(userFinded.id, medFinded.id)
+                if (existente == null) {
+                    const newFav: Favorito = {
+                        id: uuidv4(),
+                        idUser: userFinded.id,
+                        idMed: medFinded.id,
+                        numRegistro: medFinded.numRegistro
                     }
-                    else
-                    {
-                        res.status(400).json("O favorito já existe com o medicamento correspondente")
-                    }
+                    //console.log("New Fav: \n", newFav)
+                    const fav = await this.favRepository.save(newFav)
+                    //console.log(fav)
+                    res.status(201).json(fav)
                 }
-                else if(userFinded == null)
-                {
-                    res.status(404).json( "User Not Found")
+                else {
+                    res.status(400).json("O favorito já existe com o medicamento correspondente")
                 }
-                else if(medFinded == null)
-                {
-                    res.status(404).json("Medicamento Not Found")
-                }
-                
             }
-            catch (err)
-            {
-                res.status(500).json("Erro Interno no Servidor, aguarde ou contate o administrador")
+            else if (userFinded == null) {
+                res.status(404).json("User Not Found")
             }
-        
+            else if (medFinded == null) {
+                res.status(404).json("Medicamento Not Found")
+            }
+
+        }
+        catch (err) {
+            res.status(500).json("Erro Interno no Servidor, aguarde ou contate o administrador")
+        }
+
     }
 
-    async getFav(req: Request, res: Response, userRepository : IUserRepository): Promise<void> 
-    {
-        try
-        {
+    async getFav(req: Request, res: Response, userRepository: IUserRepository): Promise<void> {
+        try {
             const user = await userRepository.findByEmail(req.body.auth.email)
-            
+
             const fav = await this.favRepository.findById(req.params.id)
 
-            if(fav != null && user != null)
-            {
-                if(fav.idUser == user.id)
-                {
+            if (fav != null && user != null) {
+                if (fav.idUser == user.id) {
                     /* medic :{
                         id : fav.idMed,
                         name : med.name,
@@ -85,147 +70,123 @@ export class FavController
                     },
                     idUser : fav.idUser */
                     res.status(200).json(fav) // se tiver permissão, envie o favorito
-                    
+
                 }
-                else
-                {
+                else {
                     res.status(401).json('Sem autorização para alterar e visualizar dados de outros usuários.')
                 }
             }
-            else
-            {
+            else {
 
             }
         }
-        catch (err)
-        {
+        catch (err) {
 
         }
     }
-    async findByIdUser(req : Request, res : Response, medRepo : IMedRepository) : Promise<void>
-    {
+    async findByIdUser(req: Request, res: Response, medRepo: IMedRepository): Promise<void> {
         try {
-            if(req.params.id)
-            {
+            if (req.params.id) {
                 const favs = await this.favRepository.findByIdUser(req.params.id)
-                if(favs != null)
-                {
+                if (favs != null) {
                     const result = await Promise.all(
-                        favs.map(async (fav) =>{
+                        favs.map(async (fav) => {
                             const med = await medRepo.findById(fav.idMed)
-                            if(med)
-                            {
+                            if (med) {
                                 return {
-                                    medic :{
-                                        id : fav.idMed,
-                                        name : med.name,
-                                        numRegistro : med.numRegistro
+                                    medic: {
+                                        id: fav.idMed,
+                                        name: med.name,
+                                        numRegistro: med.numRegistro
                                     },
-                                    idUser : fav.idUser
+                                    idUser: fav.idUser
                                 }
                             }
-                            else
-                            {
+                            else {
                                 return "Medicamento Deletado out Not Found"
                             }
                         })
                     );
                     res.status(200).json(result)
                 }
-                else
-                {
+                else {
                     res.status(404).json("Sem resultados")
                 }
             }
-            else
-            {
+            else {
                 res.status(400).json("Informe um id de usuário")
             }
         } catch (error) {
             res.status(500).json("Erro Interno no Servidor")
         }
     }
-    async delete(req: Request, res: Response, userRepository : IUserRepository): Promise<void> {
+    async delete(req: Request, res: Response, userRepository: IUserRepository): Promise<void> {
         try {
-            if(req.params.id)
-            {
+            if (req.params.id) {
                 const user = await userRepository.findByEmail(req.body.auth.email)
                 const fav = await this.favRepository.findById(req.params.id)
 
-                if(user != null && fav != null)
-                {
-                    if(user.id == fav.idUser)
-                    {
+                if (user != null && fav != null) {
+                    if (user.id == fav.idUser) {
                         await this.favRepository.delete(fav.id)
-                        res.status(200).json( "Favorito deletado")
+                        res.status(200).json("Favorito deletado")
                     }
-                    else
-                    {
-                        res.status(404).json( "Favorito not found")
+                    else {
+                        res.status(404).json("Favorito not found")
                     }
                 }
-                else if(user == null)
-                {
+                else if (user == null) {
                     res.status(404).json("User Not Found")
                 }
-                else if(fav == null)
-                {
+                else if (fav == null) {
                     res.status(404).json("Favorito Not Found")
                 }
             }
-            else
-            {
-                res.status(400).json( "Informe um id nos parâmetros da Requisição")
+            else {
+                res.status(400).json("Informe um id nos parâmetros da Requisição")
             }
         } catch (error) {
             throw error
         }
     }
     async getAll(req: Request, res: Response): Promise<void> {
-        try
-        {
+        try {
             const favs = await this.favRepository.getAll()
             res.status(200).json(favs)
         }
-        catch (error)
-        {
+        catch (error) {
             console.log(error)
             res.status(500).json("Erro Interno no Servidor!!")
         }
     }
 
-    async findFavorito(req : Request, res : Response, medRepository : MedicamentoRepository) : Promise<void>
-    {
+    async findFavorito(req: Request, res: Response, medRepository: MedicamentoRepository): Promise<void> {
         try {
             const idUser = req.query.idUser
             const numRegistro = req.query.numRegistro
 
             const med = await medRepository.findByNumRegistro(numRegistro as unknown as string)
 
-            if(med)
-            {
+            if (med) {
                 const fav = await this.favRepository.findByUser_Medic(idUser as unknown as string, med.id)
-                if(fav)
-                {
+                if (fav) {
                     res.status(200).json({
-                        favorited : true,
-                        message : "Medicamento já favoritado"
+                        favorited: true,
+                        message: "Medicamento já favoritado"
                     })
                 }
-                else
-                {
+                else {
                     res.status(200).json({
-                        favorited : false,
-                        message : "Medicamento não favoritado"
+                        favorited: false,
+                        message: "Medicamento não favoritado"
                     })
                 }
             }
-            else
-            {
+            else {
                 res.status(404).json('Medicamento not found')
             }
 
-            
+
         } catch (error) {
             console.log(error)
             res.status(500).json('Erro interno no Servidor, aguarde ou contate o administrador')
