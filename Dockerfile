@@ -1,6 +1,6 @@
 # Usando Imagem do Node
 FROM node:14
-FROM debian:buster
+
 # Instalando Chromium e dependências do Bot Puppeteer
 RUN apt-get update 
 
@@ -8,7 +8,7 @@ RUN apt-get install -y wget gnupg
 
 RUN  wget -q -O - https://dl-ssl.google.com/linux/linux/signing_key.pub | apt-key add - 
 
-RUN sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list' 
+RUN curl -sSL https://dl-ssl.google.com/linux/linux/signing_key.pub | apt-key add -
 
 RUN apt-get update 
 
