@@ -99,6 +99,12 @@ Router.put('/users/recuperar',(req, res)=>{
 
 // Medicamentos
 
+Router.get('/medicamentos/get/', (req, res)=>{
+  const medicamentoRepository = new MedicamentoRepository()
+  const medController = new MedController(medicamentoRepository)
+  medController.getByNumRegistro(req, res)
+} )
+
 Router.get('/medicamentos', (req, res)=>{
   const medRepository = new MedicamentoRepository()
   const medController = new MedController(medRepository)
@@ -193,6 +199,10 @@ Router.get('/comentarios/numRegistro/:numRegistro', (req, res)=>{ // get ComentÃ
 
   const commentController = new CommentController(commentRepository)
   commentController.findByNumProcesso(req, res, medRepository, userRepository)
+})
+
+Router.get('/Wikimedic', (req,res)=>{
+  res.status(200).json('https://massivo5040.github.io/Wikimedic/')
 })
 
 export default Router

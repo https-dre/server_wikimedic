@@ -2,7 +2,11 @@ import { Request, Response } from "express"
 import { Medicamento } from "../models/Medicamento"
 import { IMedRepository } from "../repositories/protocols/IMedRepository"
 
+
+import { mongo } from "../data/mongoDB/conn"
+
 import { v4 as uuidv4 } from 'uuid';
+import { toMedic } from "../utils/ToMedicamento";
 
 export class MedController {
     medRepository : IMedRepository
@@ -128,6 +132,17 @@ export class MedController {
                 res.status(500).json('Erro interno no servidor, aguarde ou contate o administrador')
                 console.log(error)
             }
+        }
+    }
+    async getByNumRegistro(req: Request, res: Response): Promise<void>
+    {
+        try {
+            const doc = await mongo.db.collection('Medicamento').findOne({ numRegistro : req.query.numRegistro?.toString()})
+            const medic = toMedic(doc)
+
+            res.status(200).json(medic)
+        } catch (error) {
+            res.status(500).json('Erro Interno no Servidor, aguarde ou contate o administrador.')
         }
     }
 
