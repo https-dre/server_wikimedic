@@ -24,7 +24,7 @@ export class Autentication {
                         next()
                     } 
                     else {
-                        res.status(401).json("Usuário não autenticado")                
+                        res.status(403).json("Usuário não autenticado")                
                     }
                 })
             }
