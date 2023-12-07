@@ -6,7 +6,12 @@ RUN apt-get update
 
 RUN apt-get install -y wget gnupg 
 
-RUN curl -sSL https://dl-ssl.google.com/linux/linux/signing_key.pub | apt-key add -
+RUN gpg --batch --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 9DC858229FC7DD38854AE2D88D81803C0EBFCD88 || \
+    gpg --batch --keyserver hkp://ipv4.pool.sks-keyservers.net --recv-keys 9DC858229FC7DD38854AE2D88D81803C0EBFCD88 || \
+    gpg --batch --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 9DC858229FC7DD38854AE2D88D81803C0EBFCD88
+
+# Adicionar a chave ao sistema
+RUN gpg --export --armor 9DC858229FC7DD38854AE2D88D81803C0EBFCD88 | apt-key add -
 
 RUN sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list' 
 
