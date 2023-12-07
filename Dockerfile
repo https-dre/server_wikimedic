@@ -1,4 +1,4 @@
-# Usando Imagem do Node
+# Usando a imagem mais recente do Node
 FROM node:latest
 
 WORKDIR /puppeteer
@@ -39,15 +39,15 @@ RUN apt-get update \
         libxtst6 \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
-# Instalando Chromium e dependências do Bot Puppeteer
 
-# Instalação
-RUN npm install
+# Copie os arquivos de configuração do npm antes de instalar as dependências para aproveitar o cache
+COPY package.json .
+COPY package-lock.json .
 
-# Configuração do diretório de trabalho do servidor
-WORKDIR /usr/src/app
+# Instale as dependências
+RUN npm ci
 
-# Copia o código para o diretório de trabalho do servidor
+# Copie o código do aplicativo
 COPY . .
 
 # Instalação de dependências Node e transpilação do projeto para JavaScript
