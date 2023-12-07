@@ -15,7 +15,7 @@ export class MedController {
     async save(req: Request, res :Response): Promise<void> {
         try 
         {
-            const medFinded = await this.medRepository.findByNumRegistro(req.body.numProcesso)
+            const medFinded = await this.medRepository.findByNumRegistro(req.body.numRegistro)
             if(medFinded == null)
             {
                 //console.log(medFinded)
@@ -42,7 +42,7 @@ export class MedController {
     async validateMed(req: Request, res: Response): Promise<void> {
         try
         {
-            const medFinded = await this.medRepository.findByNumRegistro(req.body.numProcesso)
+            const medFinded = await this.medRepository.findByNumRegistro(req.body.numRegistro)
             let status = "";
             let medResponse : Medicamento;
             if(medFinded == null)
@@ -90,26 +90,26 @@ export class MedController {
             res.status(500).json("Erro Interno no Servidor")
         }
     }
-    async deleteByNumProcesso(req : Request, res : Response)
+    async deleteByNumRegistro(req : Request, res : Response)
     {
         try
         {
-            if(req.params.numProcesso)
+            if(req.params.numRegistro)
             {
-                const medic = await this.medRepository.findByNumRegistro(req.params.numProcesso)
+                const medic = await this.medRepository.findByNumRegistro(req.params.numRegistro)
                 if(medic == null)
                 {
                     res.status(404).json("Medicamento Not Found")
                 }
                 else
                 {
-                    await this.medRepository.deleteByNumRegistro(req.params.numProcesso)
+                    await this.medRepository.deleteByNumRegistro(req.params.numRegistro)
                     res.status(200).json("Medicamento Deletado")
                 }
             }
             else
             {
-                res.status(400).json("Insira o numProcesso do Medicamento")
+                res.status(400).json("Insira o numRegistro do Medicamento")
             }
         }
         catch (err)
