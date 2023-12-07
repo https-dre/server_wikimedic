@@ -1,6 +1,6 @@
 # Usando Imagem do Node
 FROM node:14
-FROM debian:buster
+
 # Instalando Chromium e dependências do Bot Puppeteer
 RUN apt-get update 
 
