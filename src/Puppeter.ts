@@ -106,8 +106,82 @@ export class BotService {
 }
 
 async function run() {
-  const botService = new BotService(false);
-  await botService.searchMedic('Paracetamol');
+  const browser = await puppeteer.launch({
+    headless: false
+  })
+  
+  const page = await browser.newPage();
+  
+  const medic = "Paracetamol"
+  
+      await page.goto('https://consultaremedios.com.br/');
+      // Espera até que o campo de busca esteja visível antes de interagir
+      await page.waitForSelector('.BaseInput__medium_0');
+      await page.click('.BaseInput__medium_0');
+      await page.type('.BaseInput__medium_0', medic);
+      
+  
+      await page.waitForSelector('.SearchAutocomplete__suggestionTitle_0')
+  
+      const resultados = await page.evaluate((medic) => {
+        const suggestionTitles = document.querySelectorAll('.SearchAutocomplete__suggestionTitle_0');
+  
+        for (let i = 0; i < suggestionTitles.length; i++) {
+          console.log(suggestionTitles[i])
+          if (suggestionTitles[i].innerHTML.includes(medic)) {
+            suggestionTitles[i].setAttribute('id', 'alvo');
+            
+            return suggestionTitles[i].innerHTML;
+          }
+        }
+  
+        return false;
+      }, medic);
+  
+  
+      console.log(resultados);
+      if(resultados != false)
+      {
+        console.log('Selecionando Resultado Medicamento')
+        await page.waitForSelector('#alvo');
+        await page.click('#alvo');
+  
+        console.log('GET Contraindicação')
+        await page.waitForSelector('.js-scroll-to')
+        await page.click('.js-scroll-to')
+        await page.waitForSelector('.panel-body')
+
+        
+
+        const dropdownElements = await page.$$('.indication-link');
+
+        for (const dropdown of dropdownElements) {
+          await dropdown.click();
+          // Aguarde algum tempo ou realize outras operações após o clique, se necessário
+        }
+  
+        const indicacao = await page.evaluate(() => {
+          const textContent = document.querySelectorAll('.text-content') as NodeListOf<HTMLElement>;
+          let result = [];
+          for (let i = 0; i < textContent.length; i++) {
+            result.push(textContent[i].textContent);
+            
+          }
+          return result
+        });
+  
+        console.log('\nIndicação')
+        console.log(indicacao[0])
+        console.log('\nContraindicação')
+        console.log(indicacao[1])
+        
+        
+      }
+      else
+      {
+        console.log('Erro na pesquisa do Medicamento')
+        
+      }
 }
 
 run()
