@@ -34,7 +34,8 @@ export class MedController {
                     reacao_adversa : req.body.reacao_adversa,
                     posologia : req.body.posologia,
                     riscos : req.body.riscos,
-                    especiais : req.body.especiais
+                    especiais : req.body.especiais,
+                    superdose : req.body.superdose
                 }
                 const medformated = await this.medRepository.save(med);
                 res.status(201).json(medformated)
@@ -71,7 +72,8 @@ export class MedController {
                     reacao_adversa : req.body.reacao_adversa,
                     posologia : req.body.posologia,
                     riscos : req.body.riscos,
-                    especiais : req.body.especiais
+                    especiais : req.body.especiais,
+                    superdose : req.body.superdose
                 }
                 const medformated = await this.medRepository.save(med);
                 status = "Medicamento Registrado Agora"
