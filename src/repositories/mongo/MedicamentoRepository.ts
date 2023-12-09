@@ -41,7 +41,8 @@ export class MedicamentoRepository implements IMedRepository
                 reacao_adversa : med.reacao_adversa,
                 posologia : med.posologia,
                 riscos : med.riscos,
-                especiais : med.especiais
+                especiais : med.especiais,
+                superdose : med.superdose
             })
 
             return {
@@ -55,7 +56,8 @@ export class MedicamentoRepository implements IMedRepository
                 reacao_adversa : med.reacao_adversa,
                 posologia : med.posologia,
                 riscos : med.riscos,
-                especiais : med.especiais
+                especiais : med.especiais,
+                superdose : med.superdose
             };
             
         }   
