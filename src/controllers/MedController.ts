@@ -76,7 +76,6 @@ export class MedController {
                 const medformated = await this.medRepository.save(med);
                 status = "Medicamento Registrado Agora"
                 medResponse = medformated
-                //res.status(201).json(medformated)
             }
             else
             {
@@ -97,6 +96,32 @@ export class MedController {
             res.status(500).json("Erro Interno no Servidor, Provável Erro de Conexões Limitadas")
         }
     }
+
+    async updateByNumRegistro(req : Request, res : Response) : Promise<void>
+    {
+        try {
+            if(req.body.numRegistro && req.body.newMedic)
+            {
+                const medFinded = await this.medRepository.findByNumRegistro(req.body.numRegistro)
+
+                if(medFinded)
+                {
+                    const update = await this.medRepository.updateByNumRegistro(req.body.newMedic, req.body.numRegistro)
+
+                    const MedicReponse = await this.medRepository.findByNumRegistro(req.body.numRegistro)
+                    res.status(201).json(MedicReponse)
+                }
+                else
+                {
+                    res.status(404).json('Medicamento Not Found.')
+                }
+            }
+        } catch (error) {
+            res.status(500).json('Erro Interno no Servidor, aguarde ou contate o administrador.')
+            console.log(error)
+        }
+    }
+
     async getAll( req : Request, res : Response) : Promise<void>
     {
         try
@@ -106,8 +131,8 @@ export class MedController {
         }
         catch (err)
         {
-            console.log(err)
             res.status(500).json("Erro Interno no Servidor")
+            console.log(err)
         }
     }
     async deleteByNumRegistro(req : Request, res : Response)
@@ -169,8 +194,8 @@ export class MedController {
             }
             
         } catch (error) {
-            console.log(error)
             res.status(500).json('Erro Interno no Servidor, aguarde ou contate o administrador.')
+            console.log(error)
         }
     }
 
