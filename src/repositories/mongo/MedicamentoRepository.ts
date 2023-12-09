@@ -1,7 +1,7 @@
 import { mongo } from "../../data/mongoDB/conn"
 import { IMedRepository } from "../protocols/IMedRepository"
 import { toMedic } from "../../utils/ToMedicamento"
-import { Medicamento } from "../../models/Medicamento"
+import { Medicamento } from '../../models/Medicamento';
 import { ObjectId } from "mongodb";
 
 export class MedicamentoRepository implements IMedRepository
@@ -62,6 +62,17 @@ export class MedicamentoRepository implements IMedRepository
         catch (err)
         {
             throw err
+        }
+    }
+
+    async updateByNumRegistro(med: any, num: string): Promise<any> {
+        try {
+            const MedicamentoCollection = mongo.db.collection('Medicamento')
+            const update = await MedicamentoCollection.updateOne({ numRegistro : num},{$set: med})
+
+            return update
+        } catch (error) {
+            throw error
         }
     }
 
