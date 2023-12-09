@@ -12,6 +12,7 @@ export function toMedic(obj : any) : Medicamento {
         reacao_adversa : obj.reacao_adversa,
         posologia : obj.posologia,
         riscos : obj.riscos,
-        especiais : obj.especiais
+        especiais : obj.especiais,
+        superdose : obj.superdose
     }
 }
