@@ -6,11 +6,11 @@ import { ObjectId } from "mongodb";
 
 export class MedicamentoRepository implements IMedRepository
 {
-    async findByNumRegistro(NumProcesso : string) : Promise<Medicamento | null>
+    async findByNumRegistro(num : string) : Promise<Medicamento | null>
     {
         try {
             const MedicamentoCollection = mongo.db.collection('Medicamento')
-            const doc = await MedicamentoCollection.findOne({numRegistro : NumProcesso})
+            const doc = await MedicamentoCollection.findOne({numRegistro : num})
     
             if(doc)
             {
@@ -36,6 +36,7 @@ export class MedicamentoRepository implements IMedRepository
                 numRegistro : med.numRegistro,
                 indicacao : med.indicacao,
                 contraindicacao : med.contraindicacao,
+                cuidados: med.cuidados,
                 reacao_adversa : med.reacao_adversa,
                 posologia : med.posologia,
                 riscos : med.riscos,
@@ -48,6 +49,7 @@ export class MedicamentoRepository implements IMedRepository
                 numRegistro : med.numRegistro,
                 indicacao : med.indicacao,
                 contraindicacao : med.contraindicacao,
+                cuidados: med.cuidados,
                 reacao_adversa : med.reacao_adversa,
                 posologia : med.posologia,
                 riscos : med.riscos,
@@ -108,12 +110,12 @@ export class MedicamentoRepository implements IMedRepository
             throw err
         }
     }
-    async deleteByNumRegistro(NumProcesso : string) : Promise<void>
+    async deleteByNumRegistro(num : string) : Promise<void>
     {
         try
         {
             const MedicamentoCollection = mongo.db.collection('Medicamento')
-            await MedicamentoCollection.deleteOne({ numRegistro : NumProcesso})
+            await MedicamentoCollection.deleteOne({ numRegistro : num})
         }
         catch (err)
         {

@@ -7,6 +7,7 @@ export function toMedic(obj : any) : Medicamento {
         numRegistro : obj.numRegistro,
         indicacao : obj.indicacao,
         contraindicacao : obj.contraindicacao,
+        cuidados: obj.cuidados,
         reacao_adversa : obj.reacao_adversa,
         posologia : obj.posologia,
         riscos : obj.riscos,

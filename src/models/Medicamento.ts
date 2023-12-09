@@ -5,6 +5,7 @@ export interface Medicamento {
     indicacao : string
     contraindicacao : string
     reacao_adversa : string
+    cuidados : string
     posologia: string
     riscos : string
     especiais : string
