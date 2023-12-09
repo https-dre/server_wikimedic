@@ -26,7 +26,14 @@ export class MedController {
                 const med : Medicamento = {
                     id: uuidv4(),
                     name: req.body.name,
-                    numRegistro : req.body.numRegistro
+                    numRegistro : req.body.numRegistro,
+                    indicacao : req.body.indicacao,
+                    contraindicacao : req.body.contraindicacao,
+                    cuidados: req.body.cuidados,
+                    reacao_adversa : req.body.reacao_adversa,
+                    posologia : req.body.posologia,
+                    riscos : req.body.riscos,
+                    especiais : req.body.especiais
                 }
                 const medformated = await this.medRepository.save(med);
                 res.status(201).json(medformated)
@@ -55,7 +62,14 @@ export class MedController {
                 const med : Medicamento = {
                     id: uuidv4(),
                     name: req.body.name,
-                    numRegistro : req.body.numRegistro
+                    numRegistro : req.body.numRegistro,
+                    indicacao : req.body.indicacao,
+                    contraindicacao : req.body.contraindicacao,
+                    cuidados: req.body.cuidados,
+                    reacao_adversa : req.body.reacao_adversa,
+                    posologia : req.body.posologia,
+                    riscos : req.body.riscos,
+                    especiais : req.body.especiais
                 }
                 const medformated = await this.medRepository.save(med);
                 status = "Medicamento Registrado Agora"
@@ -137,11 +151,23 @@ export class MedController {
     async getByNumRegistro(req: Request, res: Response): Promise<void>
     {
         try {
-            const doc = await mongo.db.collection('Medicamento').findOne({ numRegistro : req.query.numRegistro?.toString()})
-            const medic = toMedic(doc)
-
-            res.status(200).json(medic)
+            if(req.query.numRegistro)
+            {
+                const doc = await mongo.db.collection('Medicamento').findOne({ numRegistro : req.query.numRegistro.toString()})
+                if(doc != null)
+                {
+                    const medic = toMedic(doc)
+                    res.status(200).json(medic)
+                }
+                else
+                {
+                    res.status(404).json('Medicamento Not FOund')
+                }
+                
+            }
+            
         } catch (error) {
+            console.log(error)
             res.status(500).json('Erro Interno no Servidor, aguarde ou contate o administrador.')
         }
     }
