@@ -10,4 +10,5 @@ export interface Medicamento {
     posologia: string
     riscos : string
     especiais : string
+    superdose : string
 }
