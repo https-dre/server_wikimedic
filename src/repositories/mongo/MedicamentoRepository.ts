@@ -33,13 +33,25 @@ export class MedicamentoRepository implements IMedRepository
             const doc = await MedicamentoCollection.insertOne({
                 _id : med.id as unknown as ObjectId,
                 name : med.name,
-                numRegistro : med.numRegistro
+                numRegistro : med.numRegistro,
+                indicacao : med.indicacao,
+                contraindicacao : med.contraindicacao,
+                reacao_adversa : med.reacao_adversa,
+                posologia : med.posologia,
+                riscos : med.riscos,
+                especiais : med.especiais
             })
 
             return {
                 id : doc.insertedId as unknown as string,
                 name : med.name,
-                numRegistro : med.numRegistro
+                numRegistro : med.numRegistro,
+                indicacao : med.indicacao,
+                contraindicacao : med.contraindicacao,
+                reacao_adversa : med.reacao_adversa,
+                posologia : med.posologia,
+                riscos : med.riscos,
+                especiais : med.especiais
             };
             
         }   
