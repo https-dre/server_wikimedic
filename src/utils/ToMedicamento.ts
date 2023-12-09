@@ -5,6 +5,7 @@ export function toMedic(obj : any) : Medicamento {
         id : obj._id,
         name : obj.name,
         numRegistro : obj.numRegistro,
+        categoria : obj.categoria,
         indicacao : obj.indicacao,
         contraindicacao : obj.contraindicacao,
         cuidados: obj.cuidados,
