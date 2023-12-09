@@ -117,6 +117,12 @@ Router.post('/medicamentos/register',(req,res)=>{
   medController.save(req, res)
 })
 
+Router.post('/medicamentos/update', (req, res)=>{
+  const medRepository = new MedicamentoRepository()
+  const medController = new MedController(medRepository)
+  medController.updateByNumRegistro(req, res)
+})
+
 Router.get('/medicamentos/id/:id', (req, res)=>{
   const medRepository = new MedicamentoRepository()
   const medController = new MedController(medRepository)
