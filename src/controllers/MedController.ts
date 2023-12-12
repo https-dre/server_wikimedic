@@ -52,6 +52,7 @@ export class MedController {
             res.status(500).json("Erro Interno no Servidor")
         }
     }
+    
     async validateMed(req: Request, res: Response): Promise<void> {
         try
         {
