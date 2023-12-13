@@ -137,4 +137,30 @@ export class MedicamentoRepository implements IMedRepository
             throw err
         }
     }
+
+    async include(obj: any): Promise<Medicamento[]> {
+        try {
+            const MedicamentoCollection = mongo.db.collection('Medicamento')
+            const docs = await MedicamentoCollection.find().toArray()
+            const Medics = docs.map(doc => toMedic(doc))
+            let results = [] as unknown as Medicamento[]
+            Medics.forEach((medic =>{
+                if(medic.categoria == obj.categoria)
+                {
+                    results.push(medic)
+                }
+                else if(medic.numRegistro == obj.numRegistro)
+                {
+                    results.push(medic)
+                }
+                else if(medic.name.includes(obj.name))
+                {
+                    results.push(medic)
+                }
+            }))
+            return results
+        } catch (error) {
+            throw error
+        }
+    }
 }
