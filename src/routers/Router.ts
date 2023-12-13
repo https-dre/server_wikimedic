@@ -141,6 +141,12 @@ Router.post('/medicamentos/validate', (req, res)=>{
   medController.validateMed(req, res)
 })
 
+Router.post('/medicamentos/search', async (req, res)=>{
+  const medRepository = new MedicamentoRepository()
+  const medController = new MedController(medRepository)
+  medController.search(req, res)
+})
+
 //Favorito
 
 Router.get('/favoritos', (req, res)=>{
