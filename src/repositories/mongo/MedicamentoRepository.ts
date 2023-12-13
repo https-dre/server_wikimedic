@@ -138,7 +138,7 @@ export class MedicamentoRepository implements IMedRepository
         }
     }
 
-    async include(obj: any): Promise<Medicamento[]> {
+    async include(obj: any) : Promise<Medicamento[]> {
         try {
             const MedicamentoCollection = mongo.db.collection('Medicamento')
             const docs = await MedicamentoCollection.find().toArray()
@@ -158,7 +158,9 @@ export class MedicamentoRepository implements IMedRepository
                     results.push(medic)
                 }
             }))
+            console.log(obj)
             return results
+            
         } catch (error) {
             throw error
         }
