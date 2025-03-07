@@ -4,9 +4,9 @@
   "description": "HttpServer para servir a Wikimedic",
   "main": "./dist/Server.js",
   "scripts": {
-    "dev": "nodemon --exec ts-node ./src/Server.ts",
-    "setDB": "ts-node ./src/data/mongoDB/conn.ts",
-    "testEmail": "ts-node ./src/email/Transporter.ts",
+    "dev": "tsx watch src/Server.ts",
+    "setDB": "tsx ./src/data/mongoDB/conn.ts",
+    "testEmail": "tsx ./src/email/Transporter.ts",
     "build": "tsc",
     "start": "node ./dist/Server.js"
   },
@@ -39,6 +39,8 @@
     "@typescript-eslint/parser": "^6.13.1",
     "eslint": "^8.54.0",
     "nodemon": "^3.0.1",
-    "ts-node": "^10.9.1"
+    "ts-node": "^10.9.1",
+    "tsup": "^8.4.0",
+    "tsx": "^4.19.3"
   }
 }
