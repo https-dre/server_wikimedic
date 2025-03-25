@@ -8,9 +8,9 @@ André De Oliveira Dias, Arthur Rolemberg, Beatriz Bezerra, Gabriel Moreira, Gab
 
 DESENVOLVEDORES:
 
-- [André Dias](http://github.com/https-dre)
-- [Arthur Rolemberg](https://github.com/Massivo5040/)
+@https-dre
 
+@Massivo5040
 
 ORIENTADORES:
 Marta Adelina Abad,
