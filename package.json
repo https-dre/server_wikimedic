@@ -7,7 +7,7 @@
     "dev": "tsx watch src/Server.ts",
     "setDB": "tsx ./src/data/mongoDB/conn.ts",
     "testEmail": "tsx ./src/email/Transporter.ts",
-    "build": "tsc",
+    "build": "tsup src --format esm",
     "start": "node ./dist/Server.js"
   },
   "author": "André de Oliveira Dias",
