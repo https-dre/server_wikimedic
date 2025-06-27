@@ -5,9 +5,8 @@ import { ZodTypeProvider } from 'fastify-type-provider-zod';
 import fastifySwagger from '@fastify/swagger';
 import SwaggerUi from "@fastify/swagger-ui";
 
-import { mongo as ClientMongo } from "./data/mongoDB/conn";
-import { routes } from './routers/newRouter.ts';
-
+import { mongo as Database } from "./data/mongoDB/conn";
+import { routes } from './routers/newRouter';
 
 const app = fastify().withTypeProvider<ZodTypeProvider>();
 
@@ -39,7 +38,7 @@ const port = process.env.PORT || "7711"
 
 const run = async () => {
   await app.ready();
-  //await ClientMongo.conn();
+  await Database.conn();
 
   try {
     const address = await app.listen({ port: Number(port), host: "0.0.0.0" });
