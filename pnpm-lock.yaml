@@ -15,11 +15,11 @@ importers:
         specifier: ^9.0.3
         version: 9.0.3
       '@fastify/swagger':
-        specifier: ^9.5.1
+        specifier: 9.5.1
         version: 9.5.1
       '@fastify/swagger-ui':
-        specifier: ^5.2.3
-        version: 5.2.3
+        specifier: ^5.2.2
+        version: 5.2.2
       bcrypt:
         specifier: ^5.1.1
         version: 5.1.1
@@ -36,11 +36,11 @@ importers:
         specifier: ^4.18.2
         version: 4.21.2
       fastify:
-        specifier: ^5.4.0
-        version: 5.4.0
+        specifier: ^5.3.3
+        version: 5.3.3
       fastify-type-provider-zod:
-        specifier: ^5.0.1
-        version: 5.0.1(@fastify/swagger@9.5.1)(fastify@5.4.0)(zod@3.25.67)
+        specifier: ^4.0.2
+        version: 4.0.2(fastify@5.3.3)(zod@3.25.67)
       mongodb:
         specifier: ^6.2.0
         version: 6.17.0(socks@2.8.5)
@@ -329,8 +329,8 @@ packages:
   '@fastify/static@8.2.0':
     resolution: {integrity: sha512-PejC/DtT7p1yo3p+W7LiUtLMsV8fEvxAK15sozHy9t8kwo5r0uLYmhV/inURmGz1SkHZFz/8CNtHLPyhKcx4SQ==}
 
-  '@fastify/swagger-ui@5.2.3':
-    resolution: {integrity: sha512-e7ivEJi9EpFcxTONqICx4llbpB2jmlI+LI1NQ/mR7QGQnyDOqZybPK572zJtcdHZW4YyYTBHcP3a03f1pOh0SA==}
+  '@fastify/swagger-ui@5.2.2':
+    resolution: {integrity: sha512-jf8xe+D8Xjc8TqrZhtlJImOWihd8iYFu8dhM01mGg+F04CKUM0zGB9aADE9nxzRUszyWp3wn+uWk89nbAoBMCw==}
 
   '@fastify/swagger@9.5.1':
     resolution: {integrity: sha512-EGjYLA7vDmCPK7XViAYMF6y4+K3XUy5soVTVxsyXolNe/Svb4nFQxvtuQvvoQb2Gzc9pxiF3+ZQN/iZDHhKtTg==}
@@ -1134,15 +1134,14 @@ packages:
   fastify-plugin@5.0.1:
     resolution: {integrity: sha512-HCxs+YnRaWzCl+cWRYFnHmeRFyR5GVnJTAaCJQiYzQSDwK9MgJdyAsuL3nh0EWRCYMgQ5MeziymvmAhUHYHDUQ==}
 
-  fastify-type-provider-zod@5.0.1:
-    resolution: {integrity: sha512-h2XEUakE8WCfL/Qnd0VcF1NcpKtCx7XvK8Mz0VclwSksNDpu0ggJt80HMg9oOUm/wOcfxojndBrq0QKnhyVp5A==}
+  fastify-type-provider-zod@4.0.2:
+    resolution: {integrity: sha512-FDRzSL3ZuoZ+4YDevR1YOinmDKkxOdy3QB9dDR845sK+bQvDroPKhHAXLEAOObDxL7SMA0OZN/A4osrNBTdDTQ==}
     peerDependencies:
-      '@fastify/swagger': '>=9.5.1'
       fastify: ^5.0.0
-      zod: '>=3.25.56'
+      zod: ^3.14.2
 
-  fastify@5.4.0:
-    resolution: {integrity: sha512-I4dVlUe+WNQAhKSyv15w+dwUh2EPiEl4X2lGYMmNSgF83WzTMAPKGdWEv5tPsCQOb+SOZwz8Vlta2vF+OeDgRw==}
+  fastify@5.3.3:
+    resolution: {integrity: sha512-nCBiBCw9q6jPx+JJNVgO8JVnTXeUyrGcyTKPQikRkA/PanrFcOIo4R+ZnLeOLPZPGgzjomqfVarzE0kYx7qWiQ==}
 
   fastq@1.19.1:
     resolution: {integrity: sha512-GwLTyxkCXjXbxqIhTsMI2Nui8huMPtnxg7krajPJAjnEG/iiOS7i+zCtWGZR9G0NBKbXKh6X9m9UIsYX/N6vvQ==}
@@ -2181,6 +2180,11 @@ packages:
     resolution: {integrity: sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==}
     engines: {node: '>=10'}
 
+  zod-to-json-schema@3.24.6:
+    resolution: {integrity: sha512-h/z3PKvcTcTetyjl1fkj79MHNEjm+HpD6NXheWjzOekY7kV+lwDYnHw+ivHkijnCSMz1yJaWBD9vu/Fcmk+vEg==}
+    peerDependencies:
+      zod: ^3.24.1
+
   zod@3.25.67:
     resolution: {integrity: sha512-idA2YXwpCdqUSKRCACDE6ItZD9TZzy3OZMtpfLoh6oPR47lipysRrJfjzMqFxQ3uJuUPyUeWe1r9vLH33xO/Qw==}
 
@@ -2376,7 +2380,7 @@ snapshots:
       fastq: 1.19.1
       glob: 11.0.3
 
-  '@fastify/swagger-ui@5.2.3':
+  '@fastify/swagger-ui@5.2.2':
     dependencies:
       '@fastify/static': 8.2.0
       fastify-plugin: 5.0.1
@@ -3112,14 +3116,14 @@ snapshots:
 
   fastify-plugin@5.0.1: {}
 
-  fastify-type-provider-zod@5.0.1(@fastify/swagger@9.5.1)(fastify@5.4.0)(zod@3.25.67):
+  fastify-type-provider-zod@4.0.2(fastify@5.3.3)(zod@3.25.67):
     dependencies:
       '@fastify/error': 4.2.0
-      '@fastify/swagger': 9.5.1
-      fastify: 5.4.0
+      fastify: 5.3.3
       zod: 3.25.67
+      zod-to-json-schema: 3.24.6(zod@3.25.67)
 
-  fastify@5.4.0:
+  fastify@5.3.3:
     dependencies:
       '@fastify/ajv-compiler': 4.0.2
       '@fastify/error': 4.2.0
@@ -4200,5 +4204,9 @@ snapshots:
       fd-slicer: 1.1.0
 
   yocto-queue@0.1.0: {}
+
+  zod-to-json-schema@3.24.6(zod@3.25.67):
+    dependencies:
+      zod: 3.25.67
 
   zod@3.25.67: {}
