@@ -1,8 +1,0 @@
-services:
-  wikimedic_pg:
-    image: postgres:15.3-alpine
-    environment:
-      POSTGRES_PASSWORD: root
-      POSTGRES_USER: postgres
-    ports:
-      - 5432:5432
