@@ -7,6 +7,7 @@ import SwaggerUi from "@fastify/swagger-ui";
 
 import { mongo as Database } from "./data/mongoDB/conn";
 import { routes } from './routers/newRouter';
+import { ServerErrorHandler } from './error-handler';
 
 const app = fastify().withTypeProvider<ZodTypeProvider>();
 
@@ -31,7 +32,7 @@ app.register(fastifySwagger, {
 app.register(SwaggerUi, {
     routePrefix: "/docs"
 });
-
+app.setErrorHandler(ServerErrorHandler);
 app.register(routes);
 
 const port = process.env.PORT || "7711"
