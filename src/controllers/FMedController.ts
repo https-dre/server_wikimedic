@@ -2,21 +2,20 @@ import { FastifyRequest, FastifyReply } from "fastify";
 import { Medicamento } from "../models/Medicamento";
 import { IMedRepository } from "../repositories/protocols/IMedRepository";
 import { v4 as uuidv4 } from "uuid";
-import { MedicamentoRepository } from "../repositories/mongo/MedicamentoRepository";
 
 export class FMedController {
   constructor(private medRepository: IMedRepository) {}
 
   async save(req: FastifyRequest, reply: FastifyReply): Promise<void> {
-    const { med } = req.body as any;
+    const { data } = req.body as { data: Omit<Medicamento, 'id'> };
 
     const medToSave: Medicamento = {
       id: uuidv4(),
-      ...med,
+      ...data,
     };
 
     const save_med = await this.medRepository.save(medToSave);
-    reply.code(201).send({ data: { id: save_med.id } });
+    reply.code(200).send({ data: { id: save_med.id } });
   }
 
   async getById(req: FastifyRequest, reply: FastifyReply): Promise<void> {
@@ -29,7 +28,7 @@ export class FMedController {
       return reply.code(404).send({ details: "'Medicamento' not found!" });
     }
 
-    reply.code(201).send({ data: medic });
+    reply.code(200).send({ data: medic });
   }
 
   async search(req: FastifyRequest, reply: FastifyReply): Promise<void> {
@@ -40,7 +39,8 @@ export class FMedController {
       return reply.code(404).send({ details: "'Medicamento' not found!" });
     }
 
-    return reply.code(200).send(medicamentos);
+    return reply.code(200)
+      .send({ data: medicamentos, dataLength: medicamentos.length });
   }
 
   async filter(req: FastifyRequest, reply: FastifyReply): Promise<void> {
@@ -55,6 +55,19 @@ export class FMedController {
       return reply.code(404).send('')
     }
 
-    return reply.code(200).send({ data: result})
+    return reply.code(200).send({ data: result, dataLength: result.length })
+  }
+
+  async deleteById(req: FastifyRequest, reply: FastifyReply): Promise<void> {
+    const { id } = req.params as { id: string };
+
+    const med = await this.medRepository.findById(id);
+
+    if(!med) {
+      return reply.code(404).send('Medicine not found!');
+    }
+
+    await this.medRepository.delete(id);
+    return reply.code(204).send();
   }
 }
