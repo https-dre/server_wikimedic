@@ -8,5 +8,6 @@ export interface IMedRepository {
     getAll() : Promise<Medicamento[]>;
     delete( Id : string) : Promise<void>;
     deleteByNumRegistro( NumProcesso : string) : Promise<void>
-    include(obj : any) : Promise<Medicamento[] | null>;
+    searchByName(name : string) : Promise<Medicamento[]>;
+    filter(category: string, value: string): Promise<Medicamento[]>;
 }
