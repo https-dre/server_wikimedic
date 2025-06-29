@@ -6,7 +6,7 @@ import fastifySwagger from '@fastify/swagger';
 import SwaggerUi from "@fastify/swagger-ui";
 
 import { mongo as Database } from "./data/mongoDB/conn";
-import { routes } from './routers/newRouter';
+import { routes } from './routers/Medicine';
 import { ServerErrorHandler } from './error-handler';
 
 const app = fastify().withTypeProvider<ZodTypeProvider>();
