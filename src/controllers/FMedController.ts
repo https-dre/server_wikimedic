@@ -44,12 +44,12 @@ export class FMedController {
   }
 
   async filter(req: FastifyRequest, reply: FastifyReply): Promise<void> {
-    const { category, value } = req.params as {
-      category: string;
+    const { scope, value } = req.params as {
+      scope: string;
       value: string;
     };
 
-    const result = await this.medRepository.filter(category, value);
+    const result = await this.medRepository.filter(scope, value);
 
     if (result.length == 0) {
       return reply.code(404).send('')

@@ -29,11 +29,11 @@ const getById = {
     }
 }
 
-const filterByCategory = {
+const filterByScope = {
     schema: {
-        summary: 'Filter medicine by category and value',
+        summary: 'Filter medicine by scope and value',
         params: z.object({
-            category: z.string(),
+            scope: z.string(),
             value: z.string(),
         }),
         response: {
@@ -45,16 +45,19 @@ const filterByCategory = {
 }
 
 export const routes = async (app: FastifyInstance) => {
-    app.get("/", { schema: {
-        summary: "Redirect to /docs"
-    }}, (_, reply) => {
-        reply.redirect('/docs');
-    });
+  app.get("/", {
+    schema: { summary: "Redirect to /docs" }
+  }, (_, reply) => {
+    reply.redirect('/docs');
+  });
 
-    const medRepo = new MedicamentoRepository();
-    const medController = new FMedController(medRepo);
+  const medRepo = new MedicamentoRepository();
+  const medController = new FMedController(medRepo);
 
-    app.get('/medicine/:id', getById, medController.getById.bind(medController))
-    app.get('/medicine/search/:name', search, medController.search.bind(medController))
-    app.get('/medicine/:category/:value', filterByCategory, medController.filter.bind(medController)) 
+  // Grupo de rotas com prefixo /medicine
+  app.register(async (medicineRoutes) => {
+    medicineRoutes.get('/:id', getById, medController.getById.bind(medController));
+    medicineRoutes.get('/search/:name', search, medController.search.bind(medController));
+    medicineRoutes.get('/:scope/:value', filterByScope, medController.filter.bind(medController));
+  }, { prefix: '/medicine' });
 }
