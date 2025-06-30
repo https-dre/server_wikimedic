@@ -2,12 +2,13 @@ import { FastifyRequest, FastifyReply } from "fastify";
 import { Medicamento, zMedicine } from "../models/Medicamento";
 import { IMedRepository } from "../repositories/protocols/IMedRepository";
 import { v4 as uuidv4 } from "uuid";
+import { mongo } from "../data/mongoDB/conn";
 
 export class FMedController {
   constructor(private medRepository: IMedRepository) {}
 
   async save(req: FastifyRequest, reply: FastifyReply): Promise<void> {
-    const { data } = req.body as { data: Omit<Medicamento, 'id'> };
+    const { data } = req.body as { data: Omit<Medicamento, "id"> };
 
     const medToSave: Medicamento = {
       id: uuidv4(),
@@ -39,7 +40,8 @@ export class FMedController {
       return reply.code(404).send({ details: "'Medicamento' not found!" });
     }
 
-    return reply.code(200)
+    return reply
+      .code(200)
       .send({ data: medicamentos, dataLength: medicamentos.length });
   }
 
@@ -49,22 +51,25 @@ export class FMedController {
       value: string;
     };
 
-    if(!(scope in zMedicine.shape)) {
-      return reply.code(400).send(`'Medicamento' does not have property '${scope}'`)
+    if (!(scope in zMedicine.shape)) {
+      return reply.code(400).send({
+        details: `'Medicamento' does not have property '${scope}'`,
+        Medicamento: Object.keys(zMedicine.shape)
+      });
     }
 
     const { page, limit } = req.query as {
-      page: number,
-      limit: number,
-    }
+      page: number;
+      limit: number;
+    };
 
     const result = await this.medRepository.filter(scope, value, page, limit);
 
     if (result.length == 0) {
-      return reply.code(404).send('')
+      return reply.code(404).send("");
     }
 
-    return reply.code(200).send({ data: result, dataLength: result.length })
+    return reply.code(200).send({ data: result, dataLength: result.length });
   }
 
   async deleteById(req: FastifyRequest, reply: FastifyReply): Promise<void> {
@@ -72,11 +77,28 @@ export class FMedController {
 
     const med = await this.medRepository.findById(id);
 
-    if(!med) {
-      return reply.code(404).send('Medicine not found!');
+    if (!med) {
+      return reply.code(404).send("Medicine not found!");
     }
 
     await this.medRepository.delete(id);
     return reply.code(204).send();
+  }
+
+  async distinct(req: FastifyRequest, reply: FastifyReply): Promise<void> {
+    const { scope } = req.params as {
+      scope: string;
+    };
+
+    if (!(scope in zMedicine.shape)) {
+      return reply.code(400).send({
+        details: `'Medicamento' does not have property '${scope}'`,
+        Medicamento: Object.keys(zMedicine.shape)
+      });
+    }
+
+    const result = await mongo.db.collection("Medicamento").distinct(scope);
+
+    return reply.code(200).send({ data: result});
   }
 }

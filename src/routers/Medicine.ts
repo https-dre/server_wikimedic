@@ -14,7 +14,7 @@ const search = {
     response: {
       200: z.object({
         data: z.array(zMedicine),
-        dataLength: z.number()
+        dataLength: z.number(),
       }),
     },
   },
@@ -41,12 +41,12 @@ const filterByScope = {
     }),
     query: z.object({
       page: z.coerce.number().default(0),
-      limit: z.coerce.number().default(10)
+      limit: z.coerce.number().default(10),
     }),
     response: {
       200: z.object({
         data: z.array(zMedicine),
-        dataLength: z.number()
+        dataLength: z.number(),
       }),
     },
   },
@@ -75,6 +75,14 @@ const deleteMedicine = {
     response: {
       204: z.null(),
     },
+  },
+};
+
+const distinctMedicine = {
+  schema: {
+    params: z.object({
+      scope: z.string(),
+    }),
   },
 };
 
@@ -111,6 +119,12 @@ export const routes = async (app: FastifyInstance) => {
         "/:scope/:value",
         filterByScope,
         medController.filter.bind(medController)
+      );
+
+      medicineRoutes.get(
+        "/distinct/:scope",
+        distinctMedicine,
+        medController.distinct.bind(medController)
       );
 
       medicineRoutes.post(
