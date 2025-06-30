@@ -1,5 +1,5 @@
 import { FastifyRequest, FastifyReply } from "fastify";
-import { Medicamento } from "../models/Medicamento";
+import { Medicamento, zMedicine } from "../models/Medicamento";
 import { IMedRepository } from "../repositories/protocols/IMedRepository";
 import { v4 as uuidv4 } from "uuid";
 
@@ -49,7 +49,16 @@ export class FMedController {
       value: string;
     };
 
-    const result = await this.medRepository.filter(scope, value);
+    if(!(scope in zMedicine.shape)) {
+      return reply.code(400).send(`'Medicamento' does not have property '${scope}'`)
+    }
+
+    const { page, limit } = req.query as {
+      page: number,
+      limit: number,
+    }
+
+    const result = await this.medRepository.filter(scope, value, page, limit);
 
     if (result.length == 0) {
       return reply.code(404).send('')

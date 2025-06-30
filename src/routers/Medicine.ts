@@ -39,6 +39,10 @@ const filterByScope = {
       scope: z.string(),
       value: z.string(),
     }),
+    query: z.object({
+      page: z.coerce.number().default(0),
+      limit: z.coerce.number().default(10)
+    }),
     response: {
       200: z.object({
         data: z.array(zMedicine),

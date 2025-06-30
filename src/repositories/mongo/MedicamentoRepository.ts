@@ -2,7 +2,7 @@ import { mongo } from "../../data/mongoDB/conn";
 import { IMedRepository } from "../protocols/IMedRepository";
 import { toMedic } from "../../utils/ToMedicamento";
 import { Medicamento } from "../../models/Medicamento";
-import { ObjectId } from "mongodb";
+import { ObjectId, WithId } from "mongodb";
 
 export class MedicamentoRepository implements IMedRepository {
   async findByNumRegistro(num: string): Promise<Medicamento | null> {
@@ -126,12 +126,27 @@ export class MedicamentoRepository implements IMedRepository {
     return medResults;
   }
 
-  async filter(category: string, value: string): Promise<Medicamento[]> {
+  async filter(category: string, value: string, 
+    page: number = 1, limit: number = 10): Promise<Medicamento[]> {
+    
     const medicine = mongo.db.collection("Medicamento");
-    const results = await medicine
+    let results: any = [];
+
+    if (page == 0) {
+      results = await medicine
       .find({ [category]: { $regex: value, $options: "i" } })
       .toArray();
-    const medicineResults = results.map((m) => toMedic(m));
+    } else {
+      const skip = (page - 1) * limit;
+      results = await medicine
+        .find({ [category]: { $regex: value, $options: "i" } })
+        .skip(skip)
+        .limit(limit)
+        .toArray();
+    }
+
+    
+    const medicineResults = results.map((m: any) => toMedic(m));
     return medicineResults;
   }
 }

@@ -9,5 +9,6 @@ export interface IMedRepository {
     delete( Id : string) : Promise<void>;
     deleteByNumRegistro( NumProcesso : string) : Promise<void>
     searchByName(name : string) : Promise<Medicamento[]>;
-    filter(category: string, value: string): Promise<Medicamento[]>;
+    filter(category: string, value: string, page: 
+        number, limit: number): Promise<Medicamento[]>;
 }
