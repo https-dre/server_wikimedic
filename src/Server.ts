@@ -1,41 +1,63 @@
-import fastify from 'fastify';
-import { serializerCompiler, validatorCompiler, 
-    jsonSchemaTransform } from 'fastify-type-provider-zod';
-import { ZodTypeProvider } from 'fastify-type-provider-zod';
-import fastifySwagger from '@fastify/swagger';
+import fastify from "fastify";
+import {
+  serializerCompiler,
+  validatorCompiler,
+  jsonSchemaTransform,
+} from "fastify-type-provider-zod";
+import { ZodTypeProvider } from "fastify-type-provider-zod";
+import fastifySwagger from "@fastify/swagger";
 import SwaggerUi from "@fastify/swagger-ui";
 
 import { mongo as Database } from "./data/mongoDB/conn";
-import { routes } from './routers/Medicine';
-import { ServerErrorHandler } from './error-handler';
+import { routes } from "./routers/Medicine";
+import { ServerErrorHandler } from "./error-handler";
 
 const app = fastify().withTypeProvider<ZodTypeProvider>();
 
 app.register(import("@fastify/cors"));
 
-app.register(import("@fastify/multipart"))
+app.register(import("@fastify/multipart"));
 
 app.setValidatorCompiler(validatorCompiler);
 app.setSerializerCompiler(serializerCompiler);
 
 app.register(fastifySwagger, {
-    swagger: {
-        info: {
-            title: "Wikimedic API",
-            description: "...",
-            version: "2.0.0"
-        }
+  swagger: {
+    info: {
+      title: "Wikimedic API",
+      description: "...",
+      version: "2.0.0",
     },
-    transform: jsonSchemaTransform
+  },
+  transform: jsonSchemaTransform,
 });
 
 app.register(SwaggerUi, {
-    routePrefix: "/docs"
+  routePrefix: "/docs",
 });
 app.setErrorHandler(ServerErrorHandler);
 app.register(routes);
 
-const port = process.env.PORT || "7711"
+if (!process.env.APIKEY) {
+  process.env.APIKEY = Math.random().toString();
+  console.log(`New random APIKEY: ${process.env.APIKEY}`);
+}
+
+app.addHook("onRequest", async (request, reply) => {
+  const filter = ["post", "put", "delete"];
+  const req_method = request.method.toLowerCase();
+  const methods = filter.filter((e) => e == req_method);
+
+  if (methods.length > 0) {
+    // check API token
+    const token = request.headers["apikey"];
+    if(token != process.env.APIKEY) {
+      return reply.code(401).send('Unauthorized');
+    }
+  }
+});
+
+const port = process.env.PORT || "7711";
 
 const run = async () => {
   await app.ready();
@@ -43,7 +65,7 @@ const run = async () => {
 
   try {
     const address = await app.listen({ port: Number(port), host: "0.0.0.0" });
-    console.log('Server running at: ', address);
+    console.log("Server running at: ", address);
   } catch (err) {
     console.error(err);
     process.exit(1);
