@@ -40,7 +40,7 @@ app.register(routes);
 
 if (!process.env.APIKEY) {
   process.env.APIKEY = Math.random().toString();
-  console.log(`New random APIKEY: ${process.env.APIKEY}`);
+  console.log(`Missing env APIKEY, new random APIKEY was generated: ${process.env.APIKEY}`);
 }
 
 app.addHook("onRequest", async (request, reply) => {
