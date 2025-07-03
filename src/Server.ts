@@ -25,7 +25,7 @@ app.register(fastifySwagger, {
   swagger: {
     info: {
       title: "Wikimedic API",
-      description: "...",
+      description: "To run POST, PUT and DELETE, the request must have the APIKEY header.",
       version: "2.0.0",
     },
   },
