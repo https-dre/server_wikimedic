@@ -16,7 +16,7 @@ export class FMedController {
     };
 
     const save_med = await this.medRepository.save(medToSave);
-    reply.code(200).send({ data: { id: save_med.id } });
+    reply.code(201).send({ data: { id: save_med.id } });
   }
 
   async getById(req: FastifyRequest, reply: FastifyReply): Promise<void> {
@@ -54,7 +54,7 @@ export class FMedController {
     if (!(scope in zMedicine.shape)) {
       return reply.code(400).send({
         details: `'Medicamento' does not have property '${scope}'`,
-        Medicamento: Object.keys(zMedicine.shape)
+        Medicamento: Object.keys(zMedicine.shape),
       });
     }
 
@@ -93,12 +93,26 @@ export class FMedController {
     if (!(scope in zMedicine.shape)) {
       return reply.code(400).send({
         details: `'Medicamento' does not have property '${scope}'`,
-        Medicamento: Object.keys(zMedicine.shape)
+        Medicamento: Object.keys(zMedicine.shape),
       });
     }
 
     const result = await mongo.db.collection("Medicamento").distinct(scope);
 
-    return reply.code(200).send({ data: result});
+    return reply.code(200).send({ data: result });
+  }
+
+  async updateMedicine(
+    req: FastifyRequest,
+    reply: FastifyReply
+  ): Promise<void> {
+    const { id } = req.params as { id: string };
+    const medExists = await this.medRepository.findById(id);
+    if (!medExists) {
+      return reply.code(404).send("'Medicamento' not found!");
+    }
+    const { update } = req.body as any;
+    await this.medRepository.update(update, id);
+    return reply.code(204).send();
   }
 }

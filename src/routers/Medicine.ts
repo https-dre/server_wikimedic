@@ -4,6 +4,7 @@ import { MedicamentoRepository } from "../repositories/mongo/MedicamentoReposito
 
 import { FastifyInstance } from "fastify";
 import { zMedicine } from "../models/Medicamento";
+import { response } from "express";
 
 const search = {
   schema: {
@@ -27,7 +28,9 @@ const getById = {
       id: z.string().uuid(),
     }),
     response: {
-      200: zMedicine,
+      200: z.object({
+        data: zMedicine
+      }),
     },
   },
 };
@@ -80,9 +83,40 @@ const deleteMedicine = {
 
 const distinctMedicine = {
   schema: {
+    summary: "Get distinct values",
     params: z.object({
       scope: z.string(),
     }),
+  },
+};
+
+const zMedicineOptional = z.object({
+  id: z.string().optional(),
+  name: z.string().optional(),
+  numRegistro: z.string().optional(),
+  categoria: z.string().optional(),
+  indicacao: z.string().optional(),
+  contraindicacao: z.string().optional(),
+  reacao_adversa: z.string().optional(),
+  cuidados: z.string().optional(),
+  posologia: z.string().optional(),
+  riscos: z.string().optional(),
+  especiais: z.string().optional(),
+  superdose: z.string().optional(),
+});
+
+const updateMedicine = {
+  schema: {
+    summary: "Update an medicine",
+    params: z.object({
+      id: z.string().uuid()
+    }),
+    body: z.object({
+      update: zMedicineOptional.omit({ id: true }),
+    }),
+    response: {
+      204: z.null()
+    }
   },
 };
 
@@ -137,6 +171,12 @@ export const routes = async (app: FastifyInstance) => {
         "/:id",
         deleteMedicine,
         medController.deleteById.bind(medController)
+      );
+
+      medicineRoutes.put(
+        "/:id",
+        updateMedicine,
+        medController.updateMedicine.bind(medController)
       );
     },
     { prefix: "/medicine" }

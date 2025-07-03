@@ -149,4 +149,12 @@ export class MedicamentoRepository implements IMedRepository {
     const medicineResults = results.map((m: any) => toMedic(m));
     return medicineResults;
   }
+
+  async update(update: any, id: string): Promise<void> {
+    const medicine = mongo.db.collection("Medicamento");
+    await medicine.updateOne({ _id: id as unknown as ObjectId }, { $set: update })
+    //const medUpdated = await medicine.findOne({ _id: new ObjectId(id)})
+
+    //return toMedic(medUpdated);
+  }
 }
