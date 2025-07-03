@@ -1,42 +1,53 @@
-import express from "express"
-import http from "http"
-import cors from "cors"
+import fastify from 'fastify';
+import { serializerCompiler, validatorCompiler, 
+    jsonSchemaTransform } from 'fastify-type-provider-zod';
+import { ZodTypeProvider } from 'fastify-type-provider-zod';
+import fastifySwagger from '@fastify/swagger';
+import SwaggerUi from "@fastify/swagger-ui";
 
-const app = express()
+import { mongo as Database } from "./data/mongoDB/conn";
+import { routes } from './routers/Medicine';
+import { ServerErrorHandler } from './error-handler';
 
-const httpServer = new http.Server(app)
-const port = 8080
+const app = fastify().withTypeProvider<ZodTypeProvider>();
 
-import Router from "./routers/Router"
-//import Middle from "./src/filters/filter"
+app.register(import("@fastify/cors"));
 
-import { mongo as ClientMongo } from "./data/mongoDB/conn"
+app.register(import("@fastify/multipart"))
 
-const configureCORS = () => {
-  app.use(cors());
-  app.use(function (req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    next();
-  });
-};
+app.setValidatorCompiler(validatorCompiler);
+app.setSerializerCompiler(serializerCompiler);
 
-const main = async () => {
+app.register(fastifySwagger, {
+    swagger: {
+        info: {
+            title: "Wikimedic API",
+            description: "...",
+            version: "2.0.0"
+        }
+    },
+    transform: jsonSchemaTransform
+});
+
+app.register(SwaggerUi, {
+    routePrefix: "/docs"
+});
+app.setErrorHandler(ServerErrorHandler);
+app.register(routes);
+
+const port = process.env.PORT || "7711"
+
+const run = async () => {
+  await app.ready();
+  await Database.conn();
+
   try {
-    await ClientMongo.conn(); // Conectando ao banco de dados antes de iniciar a aplicação
-    configureCORS(); // Configuração do CORS
-    app.use(express.json());
-    // app.use(Middle); // Middleware é um filtro de Acesso para o Servidor
-    app.use(Router); // Colocando o arquivo ./src/routers/Router.ts para gerenciar as rotas da aplicação
-
-    httpServer.listen(port || 3030, () => {
-      console.log("\nhttpServer listening in " + port);
-    });
+    const address = await app.listen({ port: Number(port), host: "0.0.0.0" });
+    console.log('Server running at: ', address);
   } catch (err) {
-    console.log(err);
+    console.error(err);
+    process.exit(1);
   }
 };
 
-main();
-
+run();

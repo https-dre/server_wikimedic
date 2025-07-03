@@ -2,3 +2,5 @@ node_modules/
 dist/
 outDir/puppeteer
 *.env*
+.pnpm-store/
+.vscode
