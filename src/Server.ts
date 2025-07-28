@@ -25,7 +25,8 @@ app.register(fastifySwagger, {
   swagger: {
     info: {
       title: "Wikimedic API",
-      description: "To run POST, PUT and DELETE, the request must have the APIKEY header.",
+      description:
+        "To run POST, PUT and DELETE, the request must have the APIKEY header.",
       version: "2.0.0",
     },
   },
@@ -40,7 +41,9 @@ app.register(routes);
 
 if (!process.env.APIKEY) {
   process.env.APIKEY = Math.random().toString();
-  console.log(`Missing env APIKEY, new random APIKEY was generated: ${process.env.APIKEY}`);
+  console.log(
+    `Missing env APIKEY, new random APIKEY was generated: ${process.env.APIKEY}`
+  );
 }
 
 app.addHook("onRequest", async (request, reply) => {
@@ -51,8 +54,8 @@ app.addHook("onRequest", async (request, reply) => {
   if (methods.length > 0) {
     // check API token
     const token = request.headers["apikey"];
-    if(token != process.env.APIKEY) {
-      return reply.code(401).send('Unauthorized');
+    if (token != process.env.APIKEY) {
+      return reply.code(401).send("Unauthorized");
     }
   }
 });
