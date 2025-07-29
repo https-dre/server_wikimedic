@@ -17,13 +17,13 @@ André De Oliveira Dias, Arthur Rolemberg, Beatriz Bezerra, Gabriel Moreira, Gab
 
 DESENVOLVEDORES:
 
-@https-dre
+André Dias - [@https-dre](https://github.com/https-dre): desenvolvedor Back-End;
 
-@Massivo5040
+Arthur Rolemberg - [@Massivo5040](https://github.com/Massivo5040): desenvolvedor Front-End;
 
 ORIENTADORES:
 Marta Adelina Abad,
 Júlia Naely,
-Thiago.
+Kaue
 
-Instituição: Escola Estadual De Taboão Da Serra - São Paulo, Brasil.
+Instituição: ETEC de Taboão da Serra - São Paulo, Brasil.
