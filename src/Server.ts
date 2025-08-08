@@ -10,6 +10,7 @@ import fastifySwagger from "@fastify/swagger";
 import { mongo as Database } from "./data/mongoDB/conn";
 import { routes } from "./routers/Medicine";
 import { ServerErrorHandler } from "./error-handler";
+import { logger } from "./logger";
 
 const app = fastify().withTypeProvider<ZodTypeProvider>();
 
@@ -37,7 +38,7 @@ app.register(routes);
 
 if (!process.env.APIKEY) {
   process.env.APIKEY = Math.random().toString();
-  console.log(
+  logger.info(
     `Missing env APIKEY, new random APIKEY was generated: ${process.env.APIKEY}`
   );
 }
@@ -71,9 +72,9 @@ const run = async () => {
 
   try {
     const address = await app.listen({ port: Number(port), host: "0.0.0.0" });
-    console.log("Server running at: ", address);
+    logger.info("Server running at: " + address);
   } catch (err) {
-    console.error(err);
+    logger.fatal(err);
     process.exit(1);
   }
 };

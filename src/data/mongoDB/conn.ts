@@ -1,4 +1,5 @@
 import { MongoClient, Db } from "mongodb";
+import { logger } from "../../logger";
 
 export const mongo = {
   client: undefined as unknown as MongoClient,
@@ -7,17 +8,17 @@ export const mongo = {
   async conn(): Promise<void> {
     const url = process.env.MONGO_URL;
     if (!url) {
-      console.log("Missing MONGO_URL!");
+      logger.fatal("Missing MONGO_URL!");
       process.exit(1);
     } else {
       const client = new MongoClient(url);
       this.client = client;
       await client.connect();
-      console.log("MongoDB connected");
+      logger.info("MongoDB connected");
 
       const db = client.db("cluster0");
       this.db = db;
-      console.log("Db client created and mongoDB connected");
+      logger.info("Db client created and mongoDB connected");
     }
   },
 };
