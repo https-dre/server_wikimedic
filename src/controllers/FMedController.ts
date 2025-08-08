@@ -3,6 +3,7 @@ import { Medicamento, zMedicine } from "../models/Medicamento";
 import { IMedRepository } from "../repositories/protocols/IMedRepository";
 import { v4 as uuidv4 } from "uuid";
 import { mongo } from "../data/mongoDB/conn";
+import { logger } from "../logger";
 
 export class FMedController {
   constructor(private medRepository: IMedRepository) {}
@@ -22,7 +23,7 @@ export class FMedController {
   async getById(req: FastifyRequest, reply: FastifyReply): Promise<void> {
     const { id } = req.params as any;
 
-    console.log(`Procurando medicamento ${id}`);
+    logger.info(`Procurando medicamento ${id}`);
     const medic = await this.medRepository.findById(id);
 
     if (!medic) {
