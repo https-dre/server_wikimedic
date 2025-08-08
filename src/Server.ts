@@ -6,7 +6,6 @@ import {
 } from "fastify-type-provider-zod";
 import { ZodTypeProvider } from "fastify-type-provider-zod";
 import fastifySwagger from "@fastify/swagger";
-import SwaggerUi from "@fastify/swagger-ui";
 
 import { mongo as Database } from "./data/mongoDB/conn";
 import { routes } from "./routers/Medicine";
@@ -26,16 +25,13 @@ app.register(fastifySwagger, {
     info: {
       title: "Wikimedic API",
       description:
-        "To run POST, PUT and DELETE, the request must have the APIKEY header.",
+        "To execute POST, PUT, and DELETE requests, the request must include the APIKEY header.",
       version: "2.0.0",
     },
   },
   transform: jsonSchemaTransform,
 });
 
-app.register(SwaggerUi, {
-  routePrefix: "/docs",
-});
 app.setErrorHandler(ServerErrorHandler);
 app.register(routes);
 
@@ -63,8 +59,15 @@ app.addHook("onRequest", async (request, reply) => {
 const port = process.env.PORT || "7711";
 
 const run = async () => {
+  app.register(import("@scalar/fastify-api-reference"), {
+    routePrefix: "/docs",
+    configuration: {
+      theme: "kepler"
+    }
+  });
+
   await app.ready();
-  await Database.conn();
+  //await Database.conn();
 
   try {
     const address = await app.listen({ port: Number(port), host: "0.0.0.0" });
