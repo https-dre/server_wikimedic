@@ -3,9 +3,13 @@ import { Medicamento, zMedicine } from "../models/Medicamento";
 import { IMedRepository } from "../repositories/protocols/IMedRepository";
 import { BadRequest } from "../error-handler";
 import { mongo } from "../data/mongoDB/conn";
+import { S3Provider } from '../providers/S3Provider';
 
 export class MedicService {
-  constructor(private repository: IMedRepository) { }
+  private s3Provider: S3Provider;
+  constructor(private repository: IMedRepository) {
+    this.s3Provider = new S3Provider();
+  }
 
   async save(data: Omit<Medicamento, "id">) {
     const medToSave: Medicamento = {
