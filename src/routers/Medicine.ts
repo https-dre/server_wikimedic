@@ -4,7 +4,7 @@ import { MedicamentoRepository } from "../repositories/mongo/MedicamentoReposito
 
 import { FastifyInstance } from "fastify";
 import { zMedicine } from "../models/Medicamento";
-import { response } from "express";
+import { MedicService } from "../services/medic-service";
 
 const search = {
   schema: {
@@ -132,7 +132,8 @@ export const routes = async (app: FastifyInstance) => {
   );
 
   const medRepo = new MedicamentoRepository();
-  const medController = new FMedController(medRepo);
+  const medService = new MedicService(medRepo);
+  const medController = new FMedController(medService);
 
   // Grupo de rotas com prefixo /medicine
   app.register(
