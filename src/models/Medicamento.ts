@@ -1,7 +1,13 @@
 import z from "zod";
 
+const zImage = z.object({
+  key: z.string(),
+  url: z.string().url()
+})
+
 export const zMedicine = z.object({
   id: z.string(),
+  images: z.array(zImage).optional(),
   name: z.string(),
   numRegistro: z.string(),
   categoria: z.string(),
