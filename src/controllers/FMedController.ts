@@ -46,4 +46,11 @@ export class FMedController {
     await this.service.updateMedicine(id, update);
     return reply.code(204).send();
   }
+
+  async filter(req: FastifyRequest, reply: FastifyReply) {
+    const { scope, value } = req.body as { scope: string, value: string };
+    const { page, limit } = req.query as { page: number, limit: number };
+    const result = await this.service.filterByScope(scope, value, page, limit);
+    return reply.code(200).send({ data: result, dataLength: result.length})
+  }
 }
