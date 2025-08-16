@@ -10,7 +10,5 @@ COPY . .
 # Instalação de dependências Node e transpilação do projeto para JavaScript
 RUN npm install && npm run build
 
-EXPOSE 8080
-
 # Início da aplicação
 CMD ["npm", "start"]
