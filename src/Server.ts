@@ -63,12 +63,12 @@ const run = async () => {
   app.register(import("@scalar/fastify-api-reference"), {
     routePrefix: "/docs",
     configuration: {
-      theme: "kepler"
-    }
+      theme: "kepler",
+    },
   });
 
   await app.ready();
-  //await Database.conn();
+  await Database.conn();
 
   try {
     const address = await app.listen({ port: Number(port), host: "0.0.0.0" });
