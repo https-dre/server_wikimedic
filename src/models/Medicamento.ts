@@ -22,3 +22,4 @@ export const zMedicine = z.object({
 });
 
 export type Medicamento = z.infer<typeof zMedicine>;
+export type MedicineImage = z.infer<typeof zImage>;
