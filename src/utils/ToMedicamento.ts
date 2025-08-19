@@ -1,18 +1,9 @@
-import { Medicamento } from "../models/Medicamento"
+import { Medicamento } from "../models/Medicamento";
 
-export function toMedic(obj : any) : Medicamento {
-    return {
-        id : obj._id,
-        name : obj.name,
-        numRegistro : obj.numRegistro,
-        categoria : obj.categoria,
-        indicacao : obj.indicacao,
-        contraindicacao : obj.contraindicacao,
-        cuidados: obj.cuidados,
-        reacao_adversa : obj.reacao_adversa,
-        posologia : obj.posologia,
-        riscos : obj.riscos,
-        especiais : obj.especiais,
-        superdose : obj.superdose
-    }
+export function toMedic(obj: any): Medicamento {
+  const { _id, ...rest } = obj;
+  return {
+    ...rest,
+    id: _id.toString(),
+  };
 }
