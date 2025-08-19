@@ -3,6 +3,7 @@ import { IMedRepository } from "../protocols/IMedRepository";
 import { toMedic } from "../../utils/ToMedicamento";
 import { Medicamento } from "../../models/Medicamento";
 import { ObjectId, WithId } from "mongodb";
+import { randomUUID } from "crypto";
 
 export class MedicamentoRepository implements IMedRepository {
   async findByNumRegistro(num: string): Promise<Medicamento | null> {
@@ -126,16 +127,16 @@ export class MedicamentoRepository implements IMedRepository {
     return medResults;
   }
 
-  async filter(category: string, value: string, 
+  async filter(category: string, value: string,
     page: number = 1, limit: number = 10): Promise<Medicamento[]> {
-    
+
     const medicine = mongo.db.collection("Medicamento");
     let results: any = [];
 
     if (page == 0) {
       results = await medicine
-      .find({ [category]: { $regex: value, $options: "i" } })
-      .toArray();
+        .find({ [category]: { $regex: value, $options: "i" } })
+        .toArray();
     } else {
       const skip = (page - 1) * limit;
       results = await medicine
@@ -145,7 +146,7 @@ export class MedicamentoRepository implements IMedRepository {
         .toArray();
     }
 
-    
+
     const medicineResults = results.map((m: any) => toMedic(m));
     return medicineResults;
   }
@@ -156,5 +157,20 @@ export class MedicamentoRepository implements IMedRepository {
     //const medUpdated = await medicine.findOne({ _id: new ObjectId(id)})
 
     //return toMedic(medUpdated);
+  }
+
+  async insertImage(id: string, url: string): Promise<void> {
+    const medicine = mongo.db.collection("Medicamento");
+    await medicine.updateOne(
+      { _id: new ObjectId(id) },
+      {
+        $push: {
+          images: {
+            key: randomUUID(),
+            url
+          }
+        } as any
+      }
+    );
   }
 }
