@@ -1,4 +1,4 @@
-import { Medicamento } from "../../models/Medicamento";
+import { Medicamento, MedicineImage } from "../models/Medicamento";
 
 export interface IMedRepository {
     findByNumRegistro(registro : string) : Promise<Medicamento | null>;
@@ -12,5 +12,5 @@ export interface IMedRepository {
     searchByName(name : string) : Promise<Medicamento[]>;
     filter(category: string, value: string, page: 
         number, limit: number): Promise<Medicamento[]>;
-    insertImage(id: string, url: string): Promise<void>;
+    insertImage(id: string, image: MedicineImage): Promise<void>;
 }

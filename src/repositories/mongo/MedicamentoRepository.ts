@@ -1,7 +1,7 @@
 import { mongo } from "../../data/mongoDB/conn";
-import { IMedRepository } from "../protocols/IMedRepository";
+import { IMedRepository } from "../.";
 import { toMedic } from "../../utils/ToMedicamento";
-import { Medicamento } from "../../models/Medicamento";
+import { Medicamento, MedicineImage } from "../../models/Medicamento";
 import { ObjectId, WithId } from "mongodb";
 import { randomUUID } from "crypto";
 
@@ -159,15 +159,15 @@ export class MedicamentoRepository implements IMedRepository {
     //return toMedic(medUpdated);
   }
 
-  async insertImage(id: string, url: string): Promise<void> {
+  async insertImage(id: string, image: MedicineImage): Promise<void> {
     const medicine = mongo.db.collection("Medicamento");
     await medicine.updateOne(
       { _id: new ObjectId(id) },
       {
         $push: {
           images: {
-            key: randomUUID(),
-            url
+            key: image.key,
+            url: image.url
           }
         } as any
       }
