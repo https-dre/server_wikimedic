@@ -1,6 +1,8 @@
 import { FastifyRequest, FastifyReply } from "fastify";
 import { Medicamento } from "../models/Medicamento";
 import { MedicService } from "../services/medic-service";
+import { updateMedicine } from "../routers/schemas/medicine-schemas";
+import z from "zod";
 
 export class FMedController {
   constructor(private service: MedicService) {}
@@ -12,7 +14,7 @@ export class FMedController {
   }
 
   async getById(req: FastifyRequest, reply: FastifyReply): Promise<void> {
-    const { id } = req.params as any;
+    const { id } = req.params as { id: string };
     const medic = await this.service.findById(id);
     reply.code(200).send({ data: medic });
   }
@@ -42,7 +44,7 @@ export class FMedController {
     reply: FastifyReply
   ): Promise<void> {
     const { id } = req.params as { id: string };
-    const { update } = req.body as { update: any };
+    const { update } = req.body as z.infer<typeof updateMedicine.schema.body>;
     await this.service.updateMedicine(id, update);
     return reply.code(204).send();
   }
