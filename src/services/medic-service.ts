@@ -33,7 +33,7 @@ export class MedicService {
   }
 
   async searchByName(name: string) {
-    const medicametos = await this.repository.searchByName(name);
+    const medicametos = await this.repository.filter("name", name, 1, 10);
 
     if (medicametos?.length === 0) {
       throw new BadResponse("Nenhum medicamento foi encontrado", 404);
@@ -78,7 +78,7 @@ export class MedicService {
     return result;
   }
 
-  async updateMedicine(id: string, update: any) {
+  async updateMedicine(id: string, update: Partial<Omit<Medicamento, "id">>) {
     const medFounded = await this.repository.findById(id);
 
     if (!medFounded) {
@@ -109,4 +109,3 @@ export class MedicService {
     });
   }
 }
-
