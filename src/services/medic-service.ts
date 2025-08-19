@@ -3,17 +3,20 @@ import { Medicamento, zMedicine } from "../models/Medicamento";
 import { IMedRepository } from "../repositories/.";
 import { BadResponse } from "../error-handler";
 import { mongo } from "../data/mongoDB/conn";
-import { S3Provider } from '../providers/S3Provider';
+import { StorageProvider } from "../providers/storage-provider";
+import { MultipartFile } from "@fastify/multipart";
 
 export class MedicService {
-  constructor(private repository: IMedRepository, 
-    private s3Provider: S3Provider) {}
+  constructor(
+    private repository: IMedRepository,
+    private storage: StorageProvider
+  ) {}
 
   async save(data: Omit<Medicamento, "id">) {
     const medToSave: Medicamento = {
       id: randomUUID(),
-      ...data
-    }
+      ...data,
+    };
 
     const saved_med = await this.repository.save(medToSave);
     return saved_med;
@@ -33,13 +36,18 @@ export class MedicService {
     const medicametos = await this.repository.searchByName(name);
 
     if (medicametos?.length === 0) {
-      throw new BadResponse('Nenhum medicamento foi encontrado', 404);
+      throw new BadResponse("Nenhum medicamento foi encontrado", 404);
     }
 
     return medicametos;
   }
 
-  async filterByScope(scope: string, value: string, page: number = 1, limit: number = 10) {
+  async filterByScope(
+    scope: string,
+    value: string,
+    page: number = 1,
+    limit: number = 10
+  ) {
     if (!(scope in zMedicine.shape)) {
       throw new BadResponse("Medicamento não possui este campo.");
     }
@@ -79,4 +87,26 @@ export class MedicService {
 
     await this.repository.update(update, id);
   }
+
+  async uploadMedicineImage(med_id: string, data: MultipartFile) {
+    if (!(await this.repository.findById(med_id)))
+      throw new BadResponse("Medicamento não encontrado.", 404);
+
+    const chunks: Buffer[] = [];
+    for await (const chunk of data.file) {
+      chunks.push(Buffer.from(chunk));
+    }
+
+    const content = Buffer.concat(chunks);
+    const storageData = await this.storage.uploadFile(
+      data.filename,
+      content,
+      data.mimetype
+    );
+    await this.repository.insertImage(med_id, {
+      key: storageData.filename,
+      url: storageData.url,
+    });
+  }
 }
+
