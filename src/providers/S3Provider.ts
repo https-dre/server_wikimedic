@@ -5,7 +5,7 @@ import {
   PutObjectCommand,
   S3Client
 } from "@aws-sdk/client-s3";
-import { BadRequest } from "../error-handler";
+import { BadResponse } from "../error-handler";
 
 export type PublicObject = {
 	id: string;
@@ -51,7 +51,7 @@ export class S3Provider {
     const cmd_status = response.$metadata.httpStatusCode;
     if (cmd_status !== 201 && cmd_status !== 200) {
       console.log(response.$metadata);
-      throw new BadRequest(
+      throw new BadResponse(
         `Failed to upload file to S3, command status: ${cmd_status}`,
         500
       );
@@ -80,7 +80,7 @@ export class S3Provider {
         return list;
       }
     } catch (error) {
-      throw new BadRequest(`failed in ListCommand: ${error} `, 500);
+      throw new BadResponse(`failed in ListCommand: ${error} `, 500);
     }
   
     return [];
@@ -95,7 +95,7 @@ export class S3Provider {
     try {
       await this.s3client.send(command);
     } catch (error) {
-      throw new BadRequest(`failed in DeleteCommand: ${error} `, 500);
+      throw new BadResponse(`failed in DeleteCommand: ${error} `, 500);
     }  
   }
 
@@ -118,7 +118,7 @@ export class S3Provider {
       if (error.name === "NoSuchKey") {
         return null;
       }
-      throw new BadRequest(`failed in GetObjectCommand: ${error} `, 500);
+      throw new BadResponse(`failed in GetObjectCommand: ${error} `, 500);
     }
   }
 }

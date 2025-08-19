@@ -1,7 +1,7 @@
 import { randomUUID } from "crypto";
 import { Medicamento, zMedicine } from "../models/Medicamento";
 import { IMedRepository } from "../repositories/.";
-import { BadRequest } from "../error-handler";
+import { BadResponse } from "../error-handler";
 import { mongo } from "../data/mongoDB/conn";
 import { S3Provider } from '../providers/S3Provider';
 
@@ -23,7 +23,7 @@ export class MedicService {
     const medic = await this.repository.findById(id);
 
     if (!medic) {
-      throw new BadRequest("Medicamento não encontrado", 404);
+      throw new BadResponse("Medicamento não encontrado", 404);
     }
 
     return medic;
@@ -33,7 +33,7 @@ export class MedicService {
     const medicametos = await this.repository.searchByName(name);
 
     if (medicametos?.length === 0) {
-      throw new BadRequest('Nenhum medicamento foi encontrado', 404);
+      throw new BadResponse('Nenhum medicamento foi encontrado', 404);
     }
 
     return medicametos;
@@ -41,13 +41,13 @@ export class MedicService {
 
   async filterByScope(scope: string, value: string, page: number = 1, limit: number = 10) {
     if (!(scope in zMedicine.shape)) {
-      throw new BadRequest("Medicamento não possui este campo.");
+      throw new BadResponse("Medicamento não possui este campo.");
     }
 
     const result = await this.repository.filter(scope, value, page, limit);
 
     if (result.length == 0) {
-      throw new BadRequest("Nada encontrado", 404);
+      throw new BadResponse("Nada encontrado", 404);
     }
 
     return result;
@@ -56,7 +56,7 @@ export class MedicService {
   async deleteById(id: string) {
     const medFounded = await this.repository.findById(id);
     if (!medFounded) {
-      throw new BadRequest("Medicamento não encontrado", 404);
+      throw new BadResponse("Medicamento não encontrado", 404);
     }
 
     await this.repository.delete(id);
@@ -64,7 +64,7 @@ export class MedicService {
 
   async distinct(field: string) {
     if (!(field in zMedicine.shape)) {
-      throw new BadRequest(`Medicamento não possui o campo: ${field}`);
+      throw new BadResponse(`Medicamento não possui o campo: ${field}`);
     }
     const result = await mongo.db.collection("Medicamento").distinct(field);
     return result;
@@ -74,7 +74,7 @@ export class MedicService {
     const medFounded = await this.repository.findById(id);
 
     if (!medFounded) {
-      throw new BadRequest("Medicamento não encontrado", 404);
+      throw new BadResponse("Medicamento não encontrado", 404);
     }
 
     await this.repository.update(update, id);
