@@ -2,8 +2,7 @@ import { mongo } from "../../data/mongoDB/conn";
 import { IMedRepository } from "../.";
 import { toMedic } from "../../utils/ToMedicamento";
 import { Medicamento, MedicineImage } from "../../models/Medicamento";
-import { ObjectId, WithId } from "mongodb";
-import { randomUUID } from "crypto";
+import { ObjectId } from "mongodb";
 
 export class MedicamentoRepository implements IMedRepository {
   async findByNumRegistro(num: string): Promise<Medicamento | null> {
