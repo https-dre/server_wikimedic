@@ -3,125 +3,46 @@ import { IMedRepository } from "../.";
 import { toMedic } from "../../utils/ToMedicamento";
 import { Medicamento, MedicineImage } from "../../models/Medicamento";
 import { ObjectId } from "mongodb";
+import { randomUUID } from "crypto";
 
 export class MedicamentoRepository implements IMedRepository {
   async findByNumRegistro(num: string): Promise<Medicamento | null> {
-    try {
-      const MedicamentoCollection = mongo.db.collection("Medicamento");
-      const doc = await MedicamentoCollection.findOne({ numRegistro: num });
+    const MedicamentoCollection = mongo.db.collection("Medicamento");
+    const doc = await MedicamentoCollection.findOne({ numRegistro: num });
+    if (!doc) return null;
 
-      if (doc) {
-        const medic = toMedic(doc);
-        return medic;
-      } else {
-        return null;
-      }
-    } catch (error) {
-      throw error;
-    }
+    return toMedic(doc);
   }
-  async save(med: Medicamento): Promise<Medicamento> {
-    try {
-      const MedicamentoCollection = mongo.db.collection("Medicamento");
-      const doc = await MedicamentoCollection.insertOne({
-        _id: med.id as unknown as ObjectId,
-        name: med.name,
-        numRegistro: med.numRegistro,
-        categoria: med.categoria,
-        indicacao: med.indicacao,
-        contraindicacao: med.contraindicacao,
-        cuidados: med.cuidados,
-        reacao_adversa: med.reacao_adversa,
-        posologia: med.posologia,
-        riscos: med.riscos,
-        especiais: med.especiais,
-        superdose: med.superdose,
-      });
+  async save(med: Omit<Medicamento, "id">): Promise<Medicamento> {
+    const MedicamentoCollection = mongo.db.collection("Medicamento");
+    const doc = await MedicamentoCollection.insertOne({
+      _id: randomUUID() as unknown as ObjectId,
+      ...med,
+    });
 
-      return {
-        id: doc.insertedId as unknown as string,
-        name: med.name,
-        numRegistro: med.numRegistro,
-        categoria: med.categoria,
-        indicacao: med.indicacao,
-        contraindicacao: med.contraindicacao,
-        cuidados: med.cuidados,
-        reacao_adversa: med.reacao_adversa,
-        posologia: med.posologia,
-        riscos: med.riscos,
-        especiais: med.especiais,
-        superdose: med.superdose,
-      };
-    } catch (err) {
-      throw err;
-    }
-  }
-
-  async updateByNumRegistro(med: any, num: string): Promise<any> {
-    try {
-      const MedicamentoCollection = mongo.db.collection("Medicamento");
-      const update = await MedicamentoCollection.updateOne(
-        { numRegistro: num },
-        { $set: med }
-      );
-
-      return update;
-    } catch (error) {
-      throw error;
-    }
+    return toMedic(doc);
   }
 
   async findById(Id: string): Promise<Medicamento | null> {
-    try {
-      const MedicamentoCollection = mongo.db.collection("Medicamento");
-      const doc = await MedicamentoCollection.findOne<
-        Medicamento & { _id: ObjectId }
-      >({
-        _id: Id as unknown as ObjectId,
-      });
-      if (!doc) return null;
+    const MedicamentoCollection = mongo.db.collection("Medicamento");
+    const doc = await MedicamentoCollection.findOne<
+      Medicamento & { _id: ObjectId }
+    >({
+      _id: Id as unknown as ObjectId,
+    });
+    if (!doc) return null;
 
-      return doc;
-    } catch (err) {
-      throw err;
-    }
+    return doc;
   }
   async getAll(): Promise<Medicamento[]> {
-    try {
-      const MedicamentoCollection = mongo.db.collection("Medicamento");
-      const docs = await MedicamentoCollection.find().toArray();
-      const medicamentos = docs.map((doc: any) => toMedic(doc));
-      return medicamentos;
-    } catch (err) {
-      throw err;
-    }
+    const MedicamentoCollection = mongo.db.collection("Medicamento");
+    const docs = await MedicamentoCollection.find().toArray();
+    const medicamentos = docs.map((doc) => toMedic(doc));
+    return medicamentos;
   }
   async delete(Id: string): Promise<void> {
-    try {
-      const MedicamentoCollection = mongo.db.collection("Medicamento");
-      await MedicamentoCollection.deleteOne({ _id: Id as unknown as ObjectId });
-    } catch (err) {
-      throw err;
-    }
-  }
-  async deleteByNumRegistro(num: string): Promise<void> {
-    try {
-      const MedicamentoCollection = mongo.db.collection("Medicamento");
-      await MedicamentoCollection.deleteOne({ numRegistro: num });
-    } catch (err) {
-      throw err;
-    }
-  }
-
-  async searchByName(name: string): Promise<Medicamento[]> {
-    const medicine = mongo.db.collection("Medicamento");
-    const results = await medicine
-      .find<Medicamento & { _id: ObjectId }>({
-        name: { $regex: name, $options: "i" }, // 'i' = case-insensitive
-      })
-      .toArray();
-
-    return results.map((med) => toMedic(med));
+    const MedicamentoCollection = mongo.db.collection("Medicamento");
+    await MedicamentoCollection.deleteOne({ _id: Id as unknown as ObjectId });
   }
 
   async filter(
@@ -130,8 +51,8 @@ export class MedicamentoRepository implements IMedRepository {
     page: number = 1,
     limit: number = 10
   ): Promise<Medicamento[]> {
-    const medicine = mongo.db.collection("Medicamento");
-    let results: any = [];
+    const medicine = mongo.db.collection<Medicamento>("Medicamento");
+    let results: Medicamento[] = [];
 
     if (page == 0) {
       results = await medicine
@@ -146,23 +67,23 @@ export class MedicamentoRepository implements IMedRepository {
         .toArray();
     }
 
-    const medicineResults = results.map((m: any) => toMedic(m));
+    const medicineResults = results.map((m) => toMedic(m));
     return medicineResults;
   }
 
-  async update(update: any, id: string): Promise<void> {
+  async update(
+    update: Partial<Omit<Medicamento, "id">>,
+    id: string
+  ): Promise<void> {
     const medicine = mongo.db.collection("Medicamento");
     await medicine.updateOne(
       { _id: id as unknown as ObjectId },
       { $set: update }
     );
-    //const medUpdated = await medicine.findOne({ _id: new ObjectId(id)})
-
-    //return toMedic(medUpdated);
   }
 
   async insertImage(id: string, image: MedicineImage): Promise<void> {
-    const medicine = mongo.db.collection("Medicamento");
+    const medicine = mongo.db.collection<Medicamento>("Medicamento");
     await medicine.updateOne(
       { _id: id as unknown as ObjectId },
       {
@@ -171,7 +92,7 @@ export class MedicamentoRepository implements IMedRepository {
             key: image.key,
             url: image.url,
           },
-        } as any,
+        },
       }
     );
   }

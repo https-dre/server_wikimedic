@@ -5,11 +5,7 @@ export class JwtProvider {
     return jwt.sign(payload, this.key, { expiresIn });
   }
   verifyToken(token: string) {
-    try {
       const payload = jwt.verify(token, this.key)
       return payload
-    } catch (err) {
-      throw err
-    }
   }
 }
