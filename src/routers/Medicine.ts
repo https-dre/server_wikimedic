@@ -5,6 +5,7 @@ import { MedicamentoRepository } from "../repositories/mongo/MedicamentoReposito
 import { FastifyInstance } from "fastify";
 import { zMedicine } from "../models/Medicamento";
 import { MedicService } from "../services/medic-service";
+import { S3Provider } from "../providers/S3Provider";
 
 const search = {
   schema: {
@@ -132,7 +133,8 @@ export const routes = async (app: FastifyInstance) => {
   );
 
   const medRepo = new MedicamentoRepository();
-  const medService = new MedicService(medRepo);
+  const s3Provider = new S3Provider(process.env.AWS_BUCKET_NAME!);
+  const medService = new MedicService(medRepo, s3Provider);
   const medController = new FMedController(medService);
 
   // Grupo de rotas com prefixo /medicine
