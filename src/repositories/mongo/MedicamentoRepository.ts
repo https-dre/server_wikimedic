@@ -74,15 +74,14 @@ export class MedicamentoRepository implements IMedRepository {
   async findById(Id: string): Promise<Medicamento | null> {
     try {
       const MedicamentoCollection = mongo.db.collection("Medicamento");
-      const doc = await MedicamentoCollection.findOne({
+      const doc = await MedicamentoCollection.findOne<
+        Medicamento & { _id: ObjectId }
+      >({
         _id: Id as unknown as ObjectId,
       });
-      if (doc) {
-        const medic = toMedic(doc);
-        return medic;
-      } else {
-        return null;
-      }
+      if (!doc) return null;
+
+      return doc;
     } catch (err) {
       throw err;
     }
@@ -117,18 +116,20 @@ export class MedicamentoRepository implements IMedRepository {
   async searchByName(name: string): Promise<Medicamento[]> {
     const medicine = mongo.db.collection("Medicamento");
     const results = await medicine
-      .find({
+      .find<Medicamento & { _id: ObjectId }>({
         name: { $regex: name, $options: "i" }, // 'i' = case-insensitive
       })
       .toArray();
 
-    const medResults = results.map((e) => toMedic(e));
-    return medResults;
+    return results.map((med) => toMedic(med));
   }
 
-  async filter(category: string, value: string,
-    page: number = 1, limit: number = 10): Promise<Medicamento[]> {
-
+  async filter(
+    category: string,
+    value: string,
+    page: number = 1,
+    limit: number = 10
+  ): Promise<Medicamento[]> {
     const medicine = mongo.db.collection("Medicamento");
     let results: any = [];
 
@@ -145,14 +146,16 @@ export class MedicamentoRepository implements IMedRepository {
         .toArray();
     }
 
-
     const medicineResults = results.map((m: any) => toMedic(m));
     return medicineResults;
   }
 
   async update(update: any, id: string): Promise<void> {
     const medicine = mongo.db.collection("Medicamento");
-    await medicine.updateOne({ _id: id as unknown as ObjectId }, { $set: update })
+    await medicine.updateOne(
+      { _id: id as unknown as ObjectId },
+      { $set: update }
+    );
     //const medUpdated = await medicine.findOne({ _id: new ObjectId(id)})
 
     //return toMedic(medUpdated);
@@ -161,14 +164,14 @@ export class MedicamentoRepository implements IMedRepository {
   async insertImage(id: string, image: MedicineImage): Promise<void> {
     const medicine = mongo.db.collection("Medicamento");
     await medicine.updateOne(
-      { _id: new ObjectId(id) },
+      { _id: id as unknown as ObjectId },
       {
         $push: {
           images: {
             key: image.key,
-            url: image.url
-          }
-        } as any
+            url: image.url,
+          },
+        } as any,
       }
     );
   }
