@@ -29,7 +29,7 @@ type s3ObjejctProps = {
 
 export class S3Provider {
   private s3client: S3Client;
-  constructor() {
+  constructor(public bucket: string) {
     this.s3client = new S3Client({
       region: process.env.AWS_REGION!,
       credentials: {
@@ -41,7 +41,7 @@ export class S3Provider {
 
   async putObject(object: s3ObjejctProps) {
     const command = new PutObjectCommand({
-      Bucket: object.bucket,
+      Bucket: this.bucket,
       Key: object.key,
       Body: object.content,
       ContentType: object.contentType,
@@ -58,9 +58,9 @@ export class S3Provider {
     }
   }
 
-  async listObjects(bucket: string, prefix?: string) {
+  async listObjects(prefix?: string) {
     const command = new ListObjectsV2Command({
-      Bucket: bucket,
+      Bucket: this.bucket,
       Prefix: prefix,
     });
   
@@ -71,7 +71,7 @@ export class S3Provider {
         const list: S3Object[] = response.Contents.map((object: any) => {
           return {
             key: object?.Key!,
-            url: `https://${bucket}.s3.${process.env.AWS_REGION}.amazonaws.com/${object.Key}`,
+            url: `https://${this.bucket}.s3.${process.env.AWS_REGION}.amazonaws.com/${object.Key}`,
             size: object.Size,
             lastModified: object.LastModified,
           };
@@ -86,9 +86,9 @@ export class S3Provider {
     return [];
   }
 
-  async deleteObject(bucket: string, key: string) {
+  async deleteObject(key: string) {
     const command = new DeleteObjectCommand({
-      Bucket: bucket,
+      Bucket: this.bucket,
       Key: key,
     });
   
@@ -99,9 +99,9 @@ export class S3Provider {
     }  
   }
 
-  async getObject(bucket: string, key: string) {
+  async getObject(key: string) {
     const command = new GetObjectCommand({
-      Bucket: bucket,
+      Bucket: this.bucket,
       Key: key,
     });
   
@@ -109,7 +109,7 @@ export class S3Provider {
       const response = await this.s3client.send(command);
       return {
         key: key,
-        url: `https://${bucket}.s3.${process.env.AWS_REGION}.amazonaws.com/${key}`,
+        url: `https://${this.bucket}.s3.${process.env.AWS_REGION}.amazonaws.com/${key}`,
         size: response.ContentLength,
         lastModified: response.LastModified,
       };
