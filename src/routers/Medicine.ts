@@ -5,7 +5,7 @@ import { MedicamentoRepository } from "../repositories/mongo/MedicamentoReposito
 import { FastifyInstance } from "fastify";
 import { zMedicine } from "../models/Medicamento";
 import { MedicService } from "../services/medic-service";
-import { S3Provider } from "../providers/S3Provider";
+import { StorageProvider } from "../providers/storage-provider";
 
 const search = {
   schema: {
@@ -30,7 +30,7 @@ const getById = {
     }),
     response: {
       200: z.object({
-        data: zMedicine
+        data: zMedicine,
       }),
     },
   },
@@ -110,14 +110,14 @@ const updateMedicine = {
   schema: {
     summary: "Update an medicine",
     params: z.object({
-      id: z.string().uuid()
+      id: z.string().uuid(),
     }),
     body: z.object({
       update: zMedicineOptional.omit({ id: true }),
     }),
     response: {
-      204: z.null()
-    }
+      204: z.null(),
+    },
   },
 };
 
@@ -133,8 +133,8 @@ export const routes = async (app: FastifyInstance) => {
   );
 
   const medRepo = new MedicamentoRepository();
-  const s3Provider = new S3Provider(process.env.AWS_BUCKET_NAME!);
-  const medService = new MedicService(medRepo, s3Provider);
+  const storageProvider = new StorageProvider(process.env.IMAGE_BUCKET_NAME!);
+  const medService = new MedicService(medRepo, storageProvider);
   const medController = new FMedController(medService);
 
   // Grupo de rotas com prefixo /medicine
@@ -180,6 +180,12 @@ export const routes = async (app: FastifyInstance) => {
         "/:id",
         updateMedicine,
         medController.updateMedicine.bind(medController)
+      );
+
+      medicineRoutes.put(
+        "/images/:med_id",
+        {},
+        medController.uploadMedImage.bind(medController)
       );
     },
     { prefix: "/medicine" }
