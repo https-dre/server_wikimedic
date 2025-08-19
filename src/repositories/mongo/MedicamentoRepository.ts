@@ -1,6 +1,6 @@
 import { mongo } from "../../data/mongoDB/conn";
 import { IMedRepository } from "../.";
-import { toMedic } from "../../utils/ToMedicamento";
+import { toMedic } from "../../utils/toMedic";
 import { Medicamento, MedicineImage } from "../../models/Medicamento";
 import { ObjectId } from "mongodb";
 import { randomUUID } from "crypto";
