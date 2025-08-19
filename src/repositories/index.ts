@@ -17,8 +17,9 @@ export interface IMedRepository {
 }
 
 export interface IUserRepository {
-  save(data: Omit<User, "id">): Promise<User>;
+  save(data: Omit<User, "id">): Promise<void>;
   delete(id: string): Promise<void>;
-  findByEmail(email: string): Promise<User>;
-  findById(id: string): Promise<User>;
+  findByEmail(email: string): Promise<User | null>;
+  findById(id: string): Promise<User | null>;
+  updateById(id: string, update: Partial<Omit<User, "id">>): Promise<void>;
 }
