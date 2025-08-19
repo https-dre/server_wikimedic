@@ -1,14 +1,15 @@
-# Usando a imagem mais recente do Node
-FROM node:latest
+FROM node:22 AS build
 
-# WORKDIR /puppeteer
-
-WORKDIR /usr/src/app
-
+WORKDIR /app
+COPY package*.json ./
+RUN npm install
 COPY . .
+RUN npm run build
 
-# Instalação de dependências Node e transpilação do projeto para JavaScript
-RUN npm install && npm run build
+FROM node:22-alpine AS production
 
-# Início da aplicação
+WORKDIR /app
+COPY --from=build /app/dist ./dist
+COPY package*.json ./
+RUN npm install --omit=dev
 CMD ["npm", "start"]
