@@ -12,6 +12,7 @@ import {
   postMedicine,
   search,
   updateMedicine,
+  uploadMedicineImage,
 } from "./schemas/medicine-schemas";
 
 export const routes = async (app: FastifyInstance) => {
@@ -77,7 +78,7 @@ export const routes = async (app: FastifyInstance) => {
 
       medicineRoutes.put(
         "/images/:med_id",
-        {},
+        uploadMedicineImage,
         medController.uploadMedImage.bind(medController)
       );
     },
