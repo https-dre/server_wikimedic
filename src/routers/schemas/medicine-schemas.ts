@@ -114,3 +114,13 @@ export const updateMedicine = {
     },
   },
 };
+
+export const uploadMedicineImage = {
+  schema: {
+    summary: "Upload image",
+    description: "Send multipart/form-data",
+    params: z.object({
+      med_id: z.string().uuid()
+    }),
+  }
+}
