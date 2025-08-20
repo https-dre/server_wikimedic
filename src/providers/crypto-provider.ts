@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 export class JwtProvider {
   private key: string = process.env.JWT_KEY!;
-  generateToken(payload: object, expiresIn?: "1h") {
+  generateToken(payload: object, expiresIn?: "1y") {
     return jwt.sign(payload, this.key, { expiresIn });
   }
   verifyToken(token: string) {
