@@ -6,7 +6,7 @@ const EnvConfig = new Map<string, string>(
   )
 );
 
-const vars = ["MONGO_URL", "SUPABASE_URL", "SUPABASE_KEY"];
+const vars = ["MONGO_URL", "SUPABASE_URL", "SUPABASE_KEY", "IMAGE_BUCKET_NAME"];
 
 export const verify_env = () => {
   logger.info("Checking environment...");
