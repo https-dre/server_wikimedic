@@ -5,6 +5,7 @@ import { JwtProvider } from "../providers/crypto-provider";
 import { UserController } from "../controllers/user-controller";
 import {
   createUserAccount,
+  deleteUser,
   updateUserProfile,
   userLogin,
 } from "./schemas/user-schemas";
@@ -24,21 +25,20 @@ export const user_routes = (app: FastifyInstance) => {
     { schema: userLogin },
     userController.loginAndGetToken.bind(userController)
   );
-
-  // registra as rotas que necessitam de token
-  app.register(
-    async (router) => {
-      router.delete(
-        "/users",
-        {},
-        userController.deleteUser.bind(userController)
-      );
-      router.put(
-        "/users/profile",
-        { schema: updateUserProfile },
-        userController.updateUser.bind(userController)
-      );
+  app.put(
+    "/users/profile",
+    {
+      schema: updateUserProfile,
+      preHandler: userController.preHandler.bind(userController),
     },
-    { preHandler: userController.preHandler.bind(userController) }
+    userController.updateUser.bind(userController)
+  );
+  app.delete(
+    "/users",
+    {
+      schema: deleteUser,
+      preHandler: userController.preHandler.bind(userController),
+    },
+    userController.deleteUser.bind(userController)
   );
 };

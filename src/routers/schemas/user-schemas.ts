@@ -1,6 +1,10 @@
 import { z } from "zod";
 import { zUser } from "../../models/User";
 
+const authHeaders = z.object({
+  authorization: z.string().startsWith('Bearer ')
+})
+
 export const createUserAccount = {
   summary: "Create user",
   tags: ["user"],
@@ -21,7 +25,14 @@ export const userLogin = {
 export const updateUserProfile = {
   summary: "Update profile",
   tags: ["user"],
+  headers: authHeaders,
   body: z.object({
     updatedFields: zUser.omit({ id: true }).partial(),
   }),
 };
+
+export const deleteUser = {
+  summary: "Delete user",
+  tags: ["user"],
+  headers: authHeaders
+}
