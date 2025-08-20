@@ -2,8 +2,8 @@ import fastifySwagger from "@fastify/swagger";
 import fastify from "fastify";
 import { jsonSchemaTransform, serializerCompiler, validatorCompiler, ZodTypeProvider } from "fastify-type-provider-zod";
 import { ServerErrorHandler } from "./error-handler";
-import { routes } from "./routers/Medicine";
 import { logger } from "./logger";
+import { main_router } from "./routers";
 
 export const buildApp = () => {
   const app = fastify().withTypeProvider<ZodTypeProvider>();
@@ -28,7 +28,7 @@ export const buildApp = () => {
   });
 
   app.setErrorHandler(ServerErrorHandler);
-  app.register(routes);
+  app.register(main_router);
 
   if (!process.env.APIKEY) {
     process.env.APIKEY = Math.random().toString();
