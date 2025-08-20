@@ -15,7 +15,7 @@ import {
   uploadMedicineImage,
 } from "./schemas/medicine-schemas";
 
-export const routes = async (app: FastifyInstance) => {
+export const med_routes = async (app: FastifyInstance) => {
   app.get(
     "/",
     {
