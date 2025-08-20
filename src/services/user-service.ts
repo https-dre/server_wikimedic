@@ -8,7 +8,7 @@ export class UserService {
   constructor(private repository: IUserRepository, public jwt: JwtProvider) {}
 
   async saveUser(data: Omit<User, "id">) {
-    if (!(await this.repository.findByEmail(data.email)))
+    if ((await this.repository.findByEmail(data.email)))
       throw new BadResponse("E-mail já cadastrado.");
 
     if (data.password.length < 8) {
@@ -41,7 +41,7 @@ export class UserService {
     if (!(userWithEmail.password == password))
       throw new BadResponse("Senha ou e-mail incorretos.", 403);
 
-    const token = this.jwt.generateToken({ email }, tokenAge);
+    const token = this.jwt.generateToken({ email });
     return token;
   }
 
