@@ -57,5 +57,6 @@ export const buildApp = () => {
     },
   });
 
+  app.decorateRequest("contextData", undefined);
   return app;
 }
