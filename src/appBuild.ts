@@ -37,7 +37,7 @@ export const buildApp = () => {
     );
   }
 
-  app.addHook("onRequest", async (request, reply) => {
+/*   app.addHook("onRequest", async (request, reply) => {
     const filter = ["post", "put", "delete"];
     const req_method = request.method.toLowerCase();
     const methods = filter.filter((e) => e == req_method);
@@ -49,7 +49,7 @@ export const buildApp = () => {
         return reply.code(401).send("Unauthorized");
       }
     }
-  });
+  }); */
   app.register(import("@scalar/fastify-api-reference"), {
     routePrefix: "/docs",
     configuration: {
