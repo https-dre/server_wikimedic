@@ -17,19 +17,24 @@ export class UserService {
     await this.repository.save(data);
   }
 
-  async deleteUser(id: string) {
-    if (!(await this.repository.findById(id)))
-      throw new BadResponse("Usuário não encontrado.", 404);
-    await this.repository.delete(id);
+  async deleteUser(email: string) {
+    const userWithEmail = await this.repository.findByEmail(email);
+    if (!userWithEmail) throw new BadResponse("Usuário não encontrado.", 404);
+    await this.repository.delete(userWithEmail.id);
   }
 
-  async updateById(id: string, updatedFields: Partial<Omit<User, "id">>) {
-    if (!(await this.repository.findById(id)))
-      throw new BadResponse("Usuário não encontrado.");
-    await this.repository.updateById(id, updatedFields);
+  async updateWithEmail(
+    email: string,
+    updatedFields: Partial<Omit<User, "id">>
+  ) {
+    const userWithEmail = await this.repository.findByEmail(email);
+    if (!userWithEmail)
+      return new BadResponse("Nenhum usuário encontrado.", 404);
+
+    await this.repository.updateById(userWithEmail.id, updatedFields);
   }
 
-  async signByLogin(email: string, password: string, tokenAge?: "1h") {
+  async genAuth(email: string, password: string, tokenAge?: "1h") {
     const userWithEmail = await this.repository.findByEmail(email);
     if (!userWithEmail) throw new BadResponse("E-mail não encontrado.", 404);
 
@@ -45,6 +50,7 @@ export class UserService {
       const payload = this.jwt.verifyToken(token) as { email: string };
       if (!(await this.repository.findByEmail(payload.email)))
         throw new BadResponse("E-mail não registrado, sessão inválida.", 403);
+      return payload;
     } catch (err) {
       if (err instanceof TokenExpiredError) {
         throw new BadResponse("Sessão expirou.", 403);
