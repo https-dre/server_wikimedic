@@ -1,4 +1,4 @@
-import { JsonWebTokenError, TokenExpiredError } from "jsonwebtoken";
+import Jwt from "jsonwebtoken";
 import { BadResponse } from "../error-handler";
 import { User } from "../models/User";
 import { JwtProvider } from "../providers/crypto-provider";
@@ -52,10 +52,10 @@ export class UserService {
         throw new BadResponse("E-mail não registrado, sessão inválida.", 403);
       return payload;
     } catch (err) {
-      if (err instanceof TokenExpiredError) {
+      if (err instanceof Jwt.TokenExpiredError) {
         throw new BadResponse("Sessão expirou.", 403);
       }
-      if (err instanceof JsonWebTokenError) {
+      if (err instanceof Jwt.JsonWebTokenError) {
         throw new BadResponse("Sessão inválida.", 403);
       }
       throw err;
