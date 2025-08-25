@@ -3,7 +3,7 @@ import { zMedicine } from "../../models/Medicamento";
 
 export const search = {
   schema: {
-    summary: "Search an medicine by name",
+    summary: "Search medicine by name",
     params: z.object({
       name: z.string(),
     }),
@@ -32,9 +32,9 @@ export const getById = {
 
 export const filterByScope = {
   schema: {
-    summary: "Filter medicine by scope and value",
+    summary: "Filter medicine by field and value",
     params: z.object({
-      scope: z.string(),
+      field: z.string(),
       value: z.string(),
     }),
     query: z.object({
@@ -52,7 +52,7 @@ export const filterByScope = {
 
 export const postMedicine = {
   schema: {
-    summary: "Create an medicine",
+    summary: "Create medicine",
     body: z.object({
       med: zMedicine.omit({ id: true }),
     }),
@@ -66,7 +66,7 @@ export const postMedicine = {
 
 export const deleteMedicine = {
   schema: {
-    summary: "Delete an medicine by id",
+    summary: "Delete medicine by id",
     params: z.object({
       id: z.string().uuid(),
     }),
@@ -102,7 +102,7 @@ export const zMedicineOptional = z.object({
 
 export const updateMedicine = {
   schema: {
-    summary: "Update an medicine",
+    summary: "Update medicine",
     params: z.object({
       id: z.string().uuid(),
     }),
